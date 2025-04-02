@@ -7,6 +7,6 @@ export default defineConfig({
   schema: './src/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: combinedEnv.NEXT_APP_NEON_DATABASE_URL!,
+    url: process.env.NEXT_APP_NEON_DATABASE_URL!,
   },
 });

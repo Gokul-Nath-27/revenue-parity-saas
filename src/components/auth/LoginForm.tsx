@@ -10,24 +10,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { authForm } from "@/constants/auth"
-type AuthFormProps = React.ComponentProps<"div"> & {
-  type: "signup" | "login"
-}
+export default function LoginForm() {
 
-export default function AuthForm({
-  className,
-  type = "signup",
-  ...props
-}: AuthFormProps) {
-  const { title, description, routeCta, linkText, linkHref, cta } = authForm[type]
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {type === "login" && (
-        <div>
-          <h3 className="text-md font-bold text-primary pb-2 text-center">
-            Sample User account
-          </h3>
+    <div className={cn("flex flex-col gap-6")}>
+      <div>
+        <h3 className="text-md font-bold text-primary pb-2 text-center">
+          Sample User account
+        </h3>
         <div className="flex gap-3 text-sm justify-center">
           <div className="flex gap-2 font-bold">
             <p className="font-bold flex flex-col gap-2">
@@ -43,13 +33,12 @@ export default function AuthForm({
               </span>
             </p>
           </div>
-          </div>
         </div>
-      )}
+      </div>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle className="text-xl">Login to your account</CardTitle>
+          <CardDescription>Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -59,6 +48,7 @@ export default function AuthForm({
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="m@example.com"
                     required
@@ -74,10 +64,10 @@ export default function AuthForm({
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input id="password" name="password" type="password" required />
                 </div>
                 <Button type="submit" className="w-full">
-                  {cta}
+                  Login
                 </Button>
               </div>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -93,13 +83,13 @@ export default function AuthForm({
                       fill="currentColor"
                     />
                   </svg>
-                  {cta} with Google
+                  Login with Google
                 </Button>
               </div>
               <div className="text-center text-sm">
-                {linkText}
-                <Link className="underline underline-offset-4" href={linkHref}>
-                  {routeCta}
+                Already have an account?{" "}
+                <Link className="underline underline-offset-4" href="/signup">
+                  Sign up
                 </Link>
               </div>
             </div>

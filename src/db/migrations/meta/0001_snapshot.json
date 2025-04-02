@@ -1,6 +1,6 @@
 {
-  "id": "7c992a7f-ed6e-4598-bf09-cff7d5511887",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "25c22fc7-2343-4f4f-8c48-c7c831e3de94",
+  "prevId": "7c992a7f-ed6e-4598-bf09-cff7d5511887",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -38,8 +38,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user": {
-          "name": "user",
+        "role": {
+          "name": "role",
           "type": "user_roles",
           "typeSchema": "public",
           "primaryKey": false,
