@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 
-export async function signupAction(formData) {
+export async function signupAction(formData: FormData) {
 
   const rawFormData = Object.fromEntries(formData);
 
