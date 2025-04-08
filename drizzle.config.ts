@@ -1,5 +1,4 @@
-import { loadEnvConfig } from '@next/env';
-const { combinedEnv } = loadEnvConfig(process.cwd());
+import './envConfig';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
@@ -7,6 +6,6 @@ export default defineConfig({
   schema: './src/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.NEXT_APP_NEON_DATABASE_URL!,
+    url: process.env.NEON_DATABASE_URL!,
   },
 });

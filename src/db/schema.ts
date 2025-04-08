@@ -1,7 +1,8 @@
 import { pgEnum, pgTable, timestamp, varchar, serial } from "drizzle-orm/pg-core";
 
 // Define the enum first
-export const userRolesEnum = pgEnum('user_roles', ['user', 'admin']);
+export const userRoles = ['user', 'admin'] as const
+export const userRolesEnum = pgEnum('user_roles', userRoles);
 
 // Then use it in the table definition
 export const User = pgTable("users", {
