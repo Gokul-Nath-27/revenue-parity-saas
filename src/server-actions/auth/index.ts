@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 
-export async function signupAction(formData: FormData) {
+export async function signupAction(state: string, formData: FormData) {
 
   const rawFormData = Object.fromEntries(formData);
 
@@ -42,8 +42,6 @@ export async function signupAction(formData: FormData) {
     role: User.role,
   })
 
-  console.log('user', user)
-
   if (!user) return "Failed to create user"
 
   // Session management
@@ -53,6 +51,6 @@ export async function signupAction(formData: FormData) {
   if (!session) return "Failed to create session"
 
   console.log('Ran the action')
-  redirect('/')
 
+  return "User created successfully"
 };

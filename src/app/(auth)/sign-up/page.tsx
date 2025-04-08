@@ -14,7 +14,7 @@ import { useActionState } from "react"
 import { signupAction } from "@/server-actions/auth"
 
 export default function SignUpPage() {
-  const [state, formAction, pending] = useActionState(signupAction, null)
+  const [state, formAction, pending] = useActionState((previousState, formData: FormData) => signupAction("", formData), "")
   return (
     <Card>
       <CardHeader className="text-center">
