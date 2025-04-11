@@ -1,8 +1,8 @@
 "use client"
-
 import * as React from "react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "./ui/sonner"
+
 export function ThemeProvider({
   children,
   ...props
@@ -10,7 +10,7 @@ export function ThemeProvider({
   return (
     <NextThemesProvider {...props}>
       {children}
-      <Toaster />
+      <Toaster position="top-center" />
     </NextThemesProvider>
   )
 }

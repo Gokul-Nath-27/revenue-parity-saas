@@ -1,13 +1,11 @@
 import crypto from 'crypto';
 import { sessionShema } from '@/server-actions/auth/schema'
 import { z } from 'zod';
-import { cookies } from 'next/headers';
 import { redis } from '@/redis';
 
 type UserSession = z.infer<typeof sessionShema>
 
-const SESSION_KEY = 'session-key'
-const SESSION_EXPIRATION = 1 * 60 * 1000; // 1 minute
+export const SESSION_EXPIRATION = 1 * 60 * 1000; // 1 minute
 
 export const generateSalt = (): string => {
   return crypto.randomBytes(16).toString('hex').normalize();
@@ -26,20 +24,32 @@ export const gethashedPassword = (password: string, salt: string): Promise<strin
 // It generates a random session ID and stores the user information in Redis
 export const createUserSession = async (user: UserSession) => {
   try {
-    const cookie = await cookies();
     const sessionId = crypto.randomBytes(512).toString("hex").normalize();
-
-    cookie.set(SESSION_KEY, sessionId, {
-      httpOnly: true,
-      secure: true,
-      expires: Date.now() + SESSION_EXPIRATION * 1000
-    });
-
     // Set the session in redis
-    await redis.setex(sessionId, SESSION_EXPIRATION, JSON.stringify(user));
+    try {
+      await redis.set(sessionId, JSON.stringify(user), {
+        ex: 60,
+        nx: true,
+      });
+    }
+    catch (error) {
+      console.error('Error setting session in Redis:', error);
+      return new Error('Failed to set session in Redis');
+    }
     return sessionId;
   } catch (error) {
     console.error('Error creating user session:', error);
-    throw new Error('Failed to create user session');
+    return new Error('Failed to create user session');
   }
 };
+
+export const checkValidCredentials = async (password: string, hashedPassword: string, salt: string) => {
+  const formHashPassword = await gethashedPassword(password, salt)
+  console.log({
+    formHashPassword,
+    hashedPassword,
+    isValid: formHashPassword === hashedPassword
+  })
+  return formHashPassword === hashedPassword
+
+}

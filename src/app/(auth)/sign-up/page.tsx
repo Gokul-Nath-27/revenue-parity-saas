@@ -10,11 +10,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
 import { signupAction } from "@/server-actions/auth"
+import { toast } from "sonner"
 
 export default function SignUpPage() {
-  const [state, formAction, pending] = useActionState((previousState: string, formData: FormData) => signupAction("", formData), "")
+  const [error, formAction, isPending] = useActionState(signupAction, null)
+
+  useEffect(() => {
+    if (error instanceof Error) {
+      toast.error(error.message)
+    }
+  }, [error])
+
+
   return (
     <Card>
       <CardHeader className="text-center">
@@ -22,7 +31,8 @@ export default function SignUpPage() {
         <CardDescription>Enter your email below to create your account</CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form action={formAction} autoComplete="off">
+          <input type="hidden" name="previousState" value={JSON.stringify({})} />
           <div className="grid gap-6">
             <div className="grid gap-6">
               <div className="grid gap-3">
@@ -42,7 +52,7 @@ export default function SignUpPage() {
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" name="password" type="password" />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isPending}>
                 Sign up
               </Button>
             </div>
