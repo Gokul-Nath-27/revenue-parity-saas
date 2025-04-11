@@ -80,6 +80,7 @@ export async function signoutAction() {
 
   // Delete the session from cookies
   cookieStore.delete(SESSION_KEY)
+  console.log("Session deleted from cookies")
 
   redirect('/')
 }
