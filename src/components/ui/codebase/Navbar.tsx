@@ -24,7 +24,7 @@ const AuthAction = async () => {
   const user = await getCurrentUser()
   if (user) return <SignOut />
   return (
-    <Link href="/auth/signin">
+    <Link href="/auth/sign-in">
       <Button className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
         Sign In
       </Button>
