@@ -32,7 +32,6 @@ export default function SignUpPage() {
       </CardHeader>
       <CardContent>
         <form action={formAction} autoComplete="off">
-          <input type="hidden" name="previousState" value={JSON.stringify({})} />
           <div className="grid gap-6">
             <div className="grid gap-6">
               <div className="grid gap-3">

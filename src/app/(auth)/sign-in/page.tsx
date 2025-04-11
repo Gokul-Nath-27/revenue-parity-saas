@@ -10,11 +10,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { useActionState } from "react"
-import { } from "@/server-actions/auth"
+import { useActionState, useEffect } from "react"
+import { signInAction } from "@/server-actions/auth"
+import { toast } from "sonner"
 
 export default function SignInForm() {
+  const [error, actionFn, isPending] = useActionState(signInAction, null)
 
+  useEffect(() => {
+    if (error instanceof Error) {
+      // Handle the error, e.g., show a toast notification
+      console.error("Sign In Error:", error.message)
+      toast.error(error.message)
+    }
+  }, [error])
 
 
   return (
@@ -25,7 +34,7 @@ export default function SignInForm() {
           <CardDescription>Enter your email below to Sign In to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={actionFn} autoComplete="off">
             <div className="grid gap-6">
               <div className="grid gap-6">
                 <div className="grid gap-3">
@@ -45,7 +54,7 @@ export default function SignInForm() {
                   </div>
                   <Input id="password" name="password" type="password" required />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isPending}>
                   Sign In
                 </Button>
               </div>

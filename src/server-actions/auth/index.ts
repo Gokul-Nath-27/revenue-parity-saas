@@ -7,14 +7,13 @@ import {
   gethashedPassword,
   createUserSession,
   SESSION_EXPIRATION,
+  SESSION_KEY,
   checkValidCredentials,
 } from '@/server-actions/auth/helpers';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation'
 import { redis } from '@/redis';
 import { signupSchema, signInSchema, sessionShema } from '@/server-actions/auth/schema';
-
-const SESSION_KEY: string = 'session-key'
 
 export async function signupAction(prev: Error | null, formData: FormData) {
 
@@ -85,7 +84,7 @@ export async function signoutAction() {
   redirect('/')
 }
 
-export async function signInAction(prev: Error | string, formData: FormData) {
+export async function signInAction(prev: Error | null, formData: FormData) {
   const rawFormData = Object.fromEntries(formData);
   // Validate the form data
   const validationObject = signInSchema.safeParse(rawFormData)
@@ -100,6 +99,8 @@ export async function signInAction(prev: Error | string, formData: FormData) {
       email: true,
       password: true,
       salt: true,
+      id: true,
+      role: true,
     }
   })
 
@@ -108,6 +109,19 @@ export async function signInAction(prev: Error | string, formData: FormData) {
   const { password: hashedPassword, salt } = user
 
   const isValidCredential = checkValidCredentials(password, hashedPassword, salt)
+  if (!isValidCredential) return new Error("Invalid credentials")
+  // Session management
+  const sessionId = await createUserSession(user)
+  if (sessionId instanceof Error) return new Error("Failed to create session")
+  // Set the session in cookies
+  const cookieStore = await cookies()
+
+  cookieStore.set(SESSION_KEY, sessionId, {
+    expires: new Date(Date.now() + SESSION_EXPIRATION * 2),
+    httpOnly: true,
+    sameSite: 'lax',
+  })
+  redirect('/dashboard')
 }
 
 export const getCurrentUser = async () => {
@@ -115,7 +129,7 @@ export const getCurrentUser = async () => {
   const sessionId = cookieStore.get(SESSION_KEY)?.value
   if (!sessionId) return null
 
-  const redisSession = await redis.get(sessionId)
+  const redisSession = await redis.get(`${SESSION_KEY}${sessionId}`)
   const { data: user, success } = sessionShema.safeParse(redisSession)
 
   return success ? user : null

@@ -6,6 +6,7 @@ import { redis } from '@/redis';
 type UserSession = z.infer<typeof sessionShema>
 
 export const SESSION_EXPIRATION = 1 * 60 * 1000; // 1 minute
+export const SESSION_KEY: string = 'session-key'
 
 export const generateSalt = (): string => {
   return crypto.randomBytes(16).toString('hex').normalize();
@@ -27,7 +28,7 @@ export const createUserSession = async (user: UserSession) => {
     const sessionId = crypto.randomBytes(512).toString("hex").normalize();
     // Set the session in redis
     try {
-      await redis.set(sessionId, JSON.stringify(user), {
+      await redis.set(`${SESSION_KEY}${sessionId}`, JSON.stringify(user), {
         ex: 60,
         nx: true,
       });
