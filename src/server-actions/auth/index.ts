@@ -86,6 +86,7 @@ export async function signoutAction() {
 
 export async function signInAction(prev: Error | null, formData: FormData) {
   const rawFormData = Object.fromEntries(formData);
+  console.log("rawFormData", formData.get('email'), formData.get('password'))
   // Validate the form data
   const validationObject = signInSchema.safeParse(rawFormData)
   if (!validationObject.success) {

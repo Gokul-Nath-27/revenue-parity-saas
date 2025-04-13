@@ -1,17 +1,14 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/components/ui/codebase/Navbar";
+import Navbar from "@/app/(marketing)/_components/Navbar";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import React from "react";
 import "./globals.css";
 
-
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
-
-console.log(spaceGrotesk);
 
 export const metadata: Metadata = {
   title: "Avengers",
@@ -32,16 +29,11 @@ export default function RootLayout({
       <body style={spaceGrotesk.style}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
           enableSystem
+          defaultTheme="system"
           disableTransitionOnChange
         >
-          <div className="container mx-auto px-2 w-full">
-            <Navbar />
-            <main className="h-[calc(100vh-64px)]">
-              {children}
-            </main>
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

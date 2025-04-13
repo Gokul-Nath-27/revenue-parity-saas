@@ -3,7 +3,7 @@ import CTASection from "./_components/CTASection";
 import Footer from "./_components/Footer";
 import GlobalProfitSection from "./_components/GlobalProfitSection";
 import HeroSection from "./_components/HeroSection";
-import Navbar from "../../components/ui/codebase/Navbar";
+import Navbar from "./_components/Navbar";
 import SetupFlowSection from "./_components/SetupFlowSection";
 
 export default async function Home() {

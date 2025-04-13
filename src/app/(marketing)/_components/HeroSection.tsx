@@ -15,12 +15,12 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-            <div className="inline-flex items-center px-3 py-1 mb-6 rounded-full border border-white/10 bg-white/5 text-sm text-primary">
+            <div className="inline-flex items-center px-3 py-1 mb-6 rounded-full border border-primary/10 bg-primary/5 text-sm text-primary">
               <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-primary"></span>
               Smart Pricing for Global Creators
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gradient tracking-tight">
+            <h1 className="text-foreground text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Boost Global Revenue<br />
               With Smart Pricing
             </h1>
@@ -51,7 +51,7 @@ const HeroSection = () => {
                     </div>
                   ))}
                 </div>
-                <p>Join <span className="text-white">2,000+</span> creators already using our platform</p>
+                <p>Join <span className="text-foreground">2,000+</span> creators already using our platform</p>
               </div>
             </div>
           </div>

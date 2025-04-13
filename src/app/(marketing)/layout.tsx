@@ -1,14 +1,22 @@
 import React from "react";
 import { Metadata } from "next";
+import Navbar from "@/app/(marketing)/_components/Navbar";
+
 export const metadata: Metadata = {
   title: "Easy Parity",
-  description: "Easy Parity is a simple and easy to use parity checker for Ethereum.",
-}
+  description:
+    "Easy Parity is a simple and easy to use parity checker for Ethereum.",
+};
 
 export default function MarketingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <div className="container mx-auto px-2 w-full">
+      <Navbar />
+      <main className="h-[calc(100vh-64px)]">{children}</main>
+    </div>
+  );
 }

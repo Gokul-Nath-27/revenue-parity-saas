@@ -15,7 +15,7 @@ const CTASection = () => {
 
           <Sparkles className="h-10 w-10 text-primary mx-auto mb-6" />
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
+          <h2 className="text-foreground text-3xl md:text-4xl font-bold mb-4">
             Ready to Maximize Your Global Revenue?
           </h2>
 

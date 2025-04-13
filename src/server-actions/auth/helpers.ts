@@ -46,11 +46,5 @@ export const createUserSession = async (user: UserSession) => {
 
 export const checkValidCredentials = async (password: string, hashedPassword: string, salt: string) => {
   const formHashPassword = await gethashedPassword(password, salt)
-  console.log({
-    formHashPassword,
-    hashedPassword,
-    isValid: formHashPassword === hashedPassword
-  })
   return formHashPassword === hashedPassword
-
 }
