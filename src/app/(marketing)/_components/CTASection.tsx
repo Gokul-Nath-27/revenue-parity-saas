@@ -1,7 +1,66 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Star } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+const PricingCard = ({
+  title,
+  price,
+  frequency,
+  description,
+  features,
+  buttonText,
+  buttonVariant = "default",
+  popular = false
+}: {
+  title: string;
+  price: string;
+  frequency: string;
+  description: string;
+  features: string[];
+  buttonText: string;
+  buttonVariant?: "default" | "outline" | "secondary";
+  popular?: boolean;
+}) => (
+  <Card className={`flex flex-col h-full border ${popular ? 'border-primary shadow-lg shadow-primary/20' : 'border-border'} rounded-xl relative overflow-hidden transition-all duration-300 hover:translate-y-[-5px]`}>
+    {popular && (
+      <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-bl-lg">
+        <div className="flex items-center gap-1">
+          <Star className="w-3 h-3" />
+          <span>POPULAR</span>
+        </div>
+      </div>
+    )}
+
+    <CardHeader className="pb-0">
+      <CardTitle className="text-xl font-bold">{title}</CardTitle>
+      <CardDescription className="text-muted-foreground">{description}</CardDescription>
+    </CardHeader>
+
+    <CardContent className="pt-6 flex-grow">
+      <div className="flex items-baseline mb-6">
+        <span className="text-3xl md:text-4xl font-bold">{price}</span>
+        {price !== 'Free' && <span className="text-muted-foreground ml-1">{frequency}</span>}
+      </div>
+
+      <ul className="space-y-3 text-sm">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-primary flex-shrink-0" />
+            <span className="text-muted-foreground">{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </CardContent>
+
+    <CardFooter className="pt-4">
+      <Button variant={buttonVariant} size="lg" className="w-full gap-2 font-medium">
+        {buttonText} {buttonVariant === "default" && <ArrowRight className="h-4 w-4" />}
+      </Button>
+    </CardFooter>
+  </Card>
+);
 
 const CTASection = () => {
   return (
@@ -10,55 +69,79 @@ const CTASection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/30 rounded-full blur-[120px] opacity-20" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto glass-morphism border border-white/10 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-blue-500 to-primary"></div>
-
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <Sparkles className="h-10 w-10 text-primary mx-auto mb-6" />
 
-          <h2 className="text-foreground text-3xl md:text-4xl font-bold mb-4">
-            Ready to Maximize Your Global Revenue?
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
+            Choose the Right Plan for Your Business
           </h2>
 
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-muted-foreground">
             Join thousands of creators who've increased their revenue by up to 40%
             with our intelligent pricing optimization.
           </p>
+        </div>
 
-          <div className="bg-secondary/50 rounded-lg p-6 max-w-md mx-auto mb-8 border border-white/10">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-2xl font-bold">Start Free</div>
-              <div className="px-3 py-1 bg-primary/20 text-primary rounded-full text-sm">Popular</div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {/* Free Plan */}
+          <PricingCard
+            title="Starter"
+            price="Free"
+            frequency=""
+            description="Perfect for trying out our platform"
+            features={[
+              "Up to 5,000 monthly visitors",
+              "Basic banner customization",
+              "Standard support",
+              "Manual pricing control",
+              "Single website integration"
+            ]}
+            buttonText="Start for Free"
+            buttonVariant="outline"
+          />
 
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <span className="text-4xl font-bold">$0</span>
-              <span className="text-muted-foreground">/month</span>
-            </div>
+          {/* Pro Plan */}
+          <PricingCard
+            title="Professional"
+            price="$20"
+            frequency="/month"
+            description="For growing businesses and creators"
+            features={[
+              "Up to 50,000 monthly visitors",
+              "Advanced banner customization",
+              "Priority email support",
+              "A/B testing capabilities",
+              "Multiple website integration",
+              "Advanced analytics dashboard"
+            ]}
+            buttonText="Get Started"
+            popular={true}
+          />
 
-            <ul className="space-y-3 text-left mb-6">
-              {[
-                'Up to 5,000 monthly visitors',
-                'Basic banner customization',
-                'Standard support',
-                'Manual pricing control'
-              ].map((feature, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <svg className="h-5 w-5 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-muted-foreground">{feature}</span>
-                </li>
-              ))}
-            </ul>
+          {/* Enterprise Plan */}
+          <PricingCard
+            title="Enterprise"
+            price="$60"
+            frequency="/month"
+            description="For large businesses with high volume"
+            features={[
+              "Unlimited monthly visitors",
+              "Custom banner development",
+              "24/7 dedicated support",
+              "AI-powered price optimization",
+              "Advanced revenue analytics",
+              "Multi-team collaboration",
+              "Custom integrations"
+            ]}
+            buttonText="Contact Sales"
+            buttonVariant="secondary"
+          />
+        </div>
 
-            <Button size="lg" className="w-full bg-primary hover:bg-primary/90 gap-2">
-              Start Free – No Credit Card <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-
+        <div className="mt-12 text-center max-w-xl mx-auto">
           <p className="text-sm text-muted-foreground">
-            Need more? <a href="#" className="text-primary underline">View our paid plans</a> with
-            advanced features, higher limits, and priority support.
+            All plans include a 14-day free trial. No credit card required to get started.
+            Need a custom solution? <a href="#" className="text-primary underline hover:text-primary/80 transition-colors">Contact our sales team</a>.
           </p>
         </div>
       </div>

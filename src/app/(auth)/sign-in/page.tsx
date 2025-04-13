@@ -24,7 +24,7 @@ export default function SignInPage() {
         <h1 className="text-3xl font-bold">Welcome back</h1>
         <p className="text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
       </div>
-      <form action={actionFn} className="space-y-4">
+      <form action={actionFn} className="space-y-4" autoComplete="off">
         <div className="space-y-2">
           <label
             htmlFor="email"
@@ -38,7 +38,7 @@ export default function SignInPage() {
             placeholder="m@example.com"
             type="email"
             autoCapitalize="none"
-            autoComplete="email"
+            autoComplete="off"
             autoCorrect="off"
           />
         </div>
@@ -50,26 +50,30 @@ export default function SignInPage() {
             >
               Password
             </label>
-            {/* <Link
+            <Link
               href="/forgot-password"
               className="text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
               Forgot password?
-            </Link> */}
+            </Link>
           </div>
-          <Input name="password" id="password" type="password" />
+          <Input name="password" id="password" type="password" autoComplete="off" />
         </div>
         <Button type="submit" className="w-full" disabled={isPending}>
           Sign in
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
 
-        {/* Third Party Authenticatoin */}
+        {/* Third Party Authentication */}
         <OAuth />
+
+        <div className="mt-4 text-center text-sm">
+          Don&apos;t have an account?{" "}
+          <Link href="/sign-up" className="text-primary underline-offset-4 hover:underline">
+            Sign up
+          </Link>
+        </div>
       </form>
     </div>
   )
 }
-
-
-
