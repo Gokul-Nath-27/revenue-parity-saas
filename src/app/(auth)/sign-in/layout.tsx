@@ -29,7 +29,7 @@ const SampleUser = () => {
           <p className="font-bold flex flex-col gap-2">
             <span className="text-primary text-start">
               Password:{" "}
-              <span className="text-muted-foreground">test123</span>
+              <span className="text-muted-foreground">1234567890</span>
             </span>
           </p>
         </div>
