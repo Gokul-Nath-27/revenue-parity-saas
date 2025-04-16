@@ -6,10 +6,12 @@ export default async function DashboardPage() {
   if (!currentUser) redirect('/sign-in')
 
   return (
-    <h1 className="text-2xl">
-      Welcome back, {currentUser.name}!
-      <br />
-      Your role is: {currentUser.role}
-    </h1>
+    <main className="px-4 md:px-6 md:py-4 md:min-h-screen">
+      <h1 className="text-2xl">
+        Welcome back, {currentUser.name}!
+        <br />
+        Your role is: {currentUser.role}
+      </h1>
+    </main>
   );
 }
