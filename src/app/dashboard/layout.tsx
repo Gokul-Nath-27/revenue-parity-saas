@@ -1,5 +1,6 @@
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -7,9 +8,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
+import { generateIntials } from "@/lib/utils"
 import { getCurrentUser } from "@/server-actions/auth"
+import { get } from "node:http"
 import { Suspense } from "react"
-import { redirect } from 'next/navigation'
 
 export default async function DashboardLayout({
   children,
@@ -22,11 +24,15 @@ export default async function DashboardLayout({
       <AppSidebar />
       {/* Main Content */}
       <SidebarInset>
-        <header className="md:hidden flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
+          <Suspense>
+
+            <Profile />
+          </Suspense>
         </header>
         <Suspense fallback={<DashboardSkeleton />}>
           {children}
@@ -36,6 +42,17 @@ export default async function DashboardLayout({
   )
 }
 
+const Profile = async () => {
+  const currentUser = await getCurrentUser()
+  if (!currentUser) return null
+
+  return (
+    <Avatar className="h-8 w-8 rounded-full mx-4">
+      <AvatarImage src={""} alt={currentUser.name} />
+      <AvatarFallback className="rounded-full">{generateIntials(currentUser.name)}</AvatarFallback>
+    </Avatar>
+  )
+}
 const DashboardSkeleton = () => {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

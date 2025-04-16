@@ -23,12 +23,6 @@ import { getCurrentUser } from "@/server-actions/auth"
 import { redirect } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
 
-const user = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
-};
-
 const items = [
   {
     title: "Products",
