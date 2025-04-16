@@ -184,3 +184,12 @@
 #menu-toggle:checked ~ .mobile-menu {
   max-height: 500px; /* Set this to a value larger than your menu will ever be */
 }
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

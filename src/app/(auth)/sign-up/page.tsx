@@ -74,6 +74,14 @@ import OAuth from "../_components/OAuth"
 // }
 
 export default function SignupPage() {
+  const [error, formAction, isPending] = useActionState(signupAction, null)
+  useEffect(() => {
+    if (error instanceof Error) {
+      toast.error(error.message)
+    }
+    console.log(error)
+  }, [error])
+  
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col items-center justify-center p-6">
@@ -82,15 +90,15 @@ export default function SignupPage() {
             <h1 className="text-3xl font-bold">Create an account</h1>
             <p className="text-gray-500 dark:text-gray-400">Enter your information to get started</p>
           </div>
-          <div className="space-y-4">
+          <form action={formAction} autoComplete="off">
             <div className="space-y-2">
               <label
-                htmlFor="first-name"
+                htmlFor="name"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                First name
+                Name
               </label>
-              <Input id="first-name" placeholder="John" />
+              <Input id="name" placeholder="John" name="name" />
             </div>
             <div className="space-y-2">
               <label
@@ -103,6 +111,8 @@ export default function SignupPage() {
                 id="email"
                 placeholder="m@example.com"
                 type="email"
+                name="email"
+                required
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
@@ -115,8 +125,9 @@ export default function SignupPage() {
               >
                 Password
               </label>
-              <Input id="password" type="password" />
+              <Input id="password" type="password" name="password" required />
             </div>
+            form
             <Button type="submit" className="w-full">
               Create account
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -130,7 +141,7 @@ export default function SignupPage() {
                 Sign In
               </Link>
             </div>
-          </div>
+          </form>
         </div>
       </main>
     </div>
