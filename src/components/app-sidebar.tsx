@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
   GlobeIcon,
@@ -20,6 +18,10 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Suspense } from "react"
+import { getCurrentUser } from "@/server-actions/auth"
+import { redirect } from "next/navigation"
+import { Skeleton } from "./ui/skeleton"
 
 const user = {
   name: "shadcn",
@@ -46,9 +48,6 @@ const items = [
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [selectedItem, setSelectedItem] = React.useState(items[0])
-
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -73,8 +72,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {items.map((item) => {
               const Icon = item.icon
               return (
-                <SidebarMenuItem key={item.title} onClick={() => setSelectedItem(item)}>
-                  <SidebarMenuButton asChild size="default" isActive={selectedItem.title === item.title}>
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild size="default" isActive={item.title === "Products"}>
                     <a href={item.url} className="flex items-center" key={item.title}>
                       <Icon className="mr-2" size={300} />
                       <span>{item.title}</span>
@@ -86,10 +85,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={user} />
-      </SidebarFooter>
+      <Suspense fallback={<div className="p-2"><Skeleton className="h-12 flex-1 rounded-xl bg-muted/50" /></div>}>
+        <AppSidebarFooter />
+      </Suspense>
       <SidebarRail />
     </Sidebar>
+  )
+}
+
+
+export async function AppSidebarFooter() {
+  const currentUser = await getCurrentUser()
+  if (!currentUser) redirect('/sign-in')
+  return (
+    <SidebarFooter>
+      <NavUser user={currentUser} />
+    </SidebarFooter>
   )
 }

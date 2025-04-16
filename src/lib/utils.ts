@@ -10,3 +10,14 @@ export function catchError<T>(promise: Promise<T>): Promise<[undefined, T] | [Er
     .then((data): [undefined, T] => [undefined, data])
     .catch((error): [Error] => [error]);
 }
+
+export const generateIntials = (name: string) => {
+  const nameParts = name.split(' ');
+  const firstName = nameParts[0];
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+
+  const firstNameInitial = firstName.charAt(0).toUpperCase();
+  const lastNameInitial = lastName ? lastName.charAt(0).toUpperCase() : '';
+
+  return `${firstNameInitial}${lastNameInitial}`;
+};

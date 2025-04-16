@@ -7,7 +7,7 @@ export default async function DashboardPage() {
 
   return (
     <h1 className="text-2xl">
-      Welcome to your dashboard, {currentUser.id}!
+      Welcome back, {currentUser.name}!
       <br />
       Your role is: {currentUser.role}
     </h1>

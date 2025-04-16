@@ -86,7 +86,7 @@ export async function signoutAction() {
 
 export async function signInAction(prev: Error | null, formData: FormData) {
   const rawFormData = Object.fromEntries(formData);
-  console.log("rawFormData", formData.get('email'), formData.get('password'))
+  
   // Validate the form data
   const validationObject = signInSchema.safeParse(rawFormData)
   if (!validationObject.success) {
@@ -133,5 +133,17 @@ export const getCurrentUser = async () => {
   const redisSession = await redis.get(`${SESSION_KEY}${sessionId}`)
   const { data: user, success } = sessionShema.safeParse(redisSession)
 
-  return success ? user : null
+  if (!success || !user?.id) return null
+  // Fetch the user from the database
+  const currentUser = await db.query.User.findFirst({
+    where: eq(User.id, user.id),
+    columns: {
+      name: true,
+      email: true,
+      id: true,
+      role: true,
+    }
+  })
+
+  return currentUser
 };
