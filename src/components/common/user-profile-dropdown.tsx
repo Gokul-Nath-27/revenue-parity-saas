@@ -1,9 +1,11 @@
 "use client";
 import { generateIntials } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Sparkles, LogOut } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
+import LogOut from "@/components/common/LogOut";
+import { useRouter } from 'next/navigation'
 
 type UserProfileDropdownProps = {
   currentUser: { name: string; email: string };
@@ -12,14 +14,12 @@ type UserProfileDropdownProps = {
 
 export default function UserProfileDropdown({ currentUser, trigger }: UserProfileDropdownProps) {
   const [mounted, setMounted] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
-    return trigger;
-  }
+  if (!mounted) return trigger;
 
   return (
     <DropdownMenu>
@@ -45,14 +45,11 @@ export default function UserProfileDropdown({ currentUser, trigger }: UserProfil
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/dashboard/subscription")}>
             <Sparkles />
             Upgrade to Pro
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <LogOut />
-            Logout
-          </DropdownMenuItem>
+          <LogOut />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
