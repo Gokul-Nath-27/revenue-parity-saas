@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useActionState, useEffect } from "react"
-import { signupAction } from "@/server-actions/auth"
+import { signupAction } from "@/server/actions/auth"
 import { toast } from "sonner"
 import { ArrowRight } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
@@ -127,7 +127,6 @@ export default function SignupPage() {
               </label>
               <Input id="password" type="password" name="password" required />
             </div>
-            form
             <Button type="submit" className="w-full">
               Create account
               <ArrowRight className="ml-2 h-4 w-4" />

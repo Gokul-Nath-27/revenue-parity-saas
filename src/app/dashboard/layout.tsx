@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { generateIntials } from "@/lib/utils"
-import { getCurrentUser } from "@/server-actions/auth"
+import { getCurrentUser } from "@/server/actions/session"
 import { Suspense } from "react"
 
 export default async function DashboardLayout({
@@ -34,9 +34,12 @@ export default async function DashboardLayout({
             <Profile />
           </Suspense>
         </header>
-        <Suspense fallback={<DashboardSkeleton />}>
-          {children}
-        </Suspense>
+        <main className="px-4 py-3">
+
+          <Suspense fallback={<DashboardSkeleton />}>
+            {children}
+          </Suspense>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

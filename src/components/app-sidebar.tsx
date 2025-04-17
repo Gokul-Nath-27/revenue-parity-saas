@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Suspense } from "react"
-import { getCurrentUser } from "@/server-actions/auth"
+import { getCurrentUser } from "@/server/actions/session"
 import { redirect } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
 import NavMenu from "./nav-menu"

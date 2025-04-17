@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/server-actions/auth";
+import { getCurrentUser } from "@/server/actions/session";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {

@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "RevenueParity",
+  title: "Revenue Parity",
   description: "Make your digital product more profitable",
   icons: { icon: '/coffee.svg' },
 };

@@ -1,19 +1,13 @@
 "use server"
-import db from '@/db';
-import { eq } from 'drizzle-orm';
+import db from "@/db";
+import { redis } from "@/redis";
+import { eq } from "drizzle-orm";
 import { User } from '@/db/schema';
-import {
-  generateSalt,
-  gethashedPassword,
-  createUserSession,
-  SESSION_EXPIRATION,
-  SESSION_KEY,
-  checkValidCredentials,
-} from '@/server-actions/auth/helpers';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation'
-import { redis } from '@/redis';
-import { signupSchema, signInSchema, sessionShema } from '@/server-actions/auth/schema';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { generateSalt, gethashedPassword, SESSION_KEY, SESSION_EXPIRATION, checkValidCredentials } from "../helpers/auth";
+import { signupSchema, signInSchema } from "@/schemas/auth";
+import { createUserSession } from "./session";
 
 export async function signupAction(prev: Error | null, formData: FormData) {
 
@@ -124,26 +118,3 @@ export async function signInAction(prev: Error | null, formData: FormData) {
   })
   redirect('/dashboard')
 }
-
-export const getCurrentUser = async () => {
-  const cookieStore = await cookies()
-  const sessionId = cookieStore.get(SESSION_KEY)?.value
-  if (!sessionId) return null
-
-  const redisSession = await redis.get(`${SESSION_KEY}${sessionId}`)
-  const { data: user, success } = sessionShema.safeParse(redisSession)
-
-  if (!success || !user?.id) return null
-  // Fetch the user from the database
-  const currentUser = await db.query.User.findFirst({
-    where: eq(User.id, user.id),
-    columns: {
-      name: true,
-      email: true,
-      id: true,
-      role: true,
-    }
-  })
-
-  return currentUser
-};

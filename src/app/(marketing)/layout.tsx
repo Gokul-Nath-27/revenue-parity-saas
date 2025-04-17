@@ -2,11 +2,6 @@ import React from "react";
 import { Metadata } from "next";
 import Navbar from "@/app/(marketing)/_components/Navbar";
 
-export const metadata: Metadata = {
-  title: "RevenueParity",
-  description: "Make your digital product more profitable.",
-};
-
 export default function MarketingLayout({
   children,
 }: Readonly<{

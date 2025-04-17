@@ -30,7 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { signoutAction } from "@/server-actions/auth"
+import { signoutAction } from "@/server/actions/auth"
 import { generateIntials } from "@/lib/utils"
 import Link from "next/link"
 

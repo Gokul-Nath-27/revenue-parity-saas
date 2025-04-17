@@ -1,25 +1,38 @@
-import crypto from 'crypto';
-import { sessionShema } from '@/server-actions/auth/schema'
-import { z } from 'zod';
+
+import db from '@/db';
 import { redis } from '@/redis';
+import { sessionShema } from '@/schemas/auth';
+import { eq } from 'drizzle-orm';
+import { User } from '@/db/schema';
+import { cookies } from 'next/headers';
+import { SESSION_KEY } from '../helpers/auth';
+import crypto from 'crypto';
+import { z } from 'zod';
 
 type UserSession = z.infer<typeof sessionShema>
 
-export const SESSION_EXPIRATION = 1000 * 60  * 60; // 1 hour
-export const SESSION_KEY: string = 'session-key'
+export const getCurrentUser = async () => {
+  const cookieStore = await cookies()
+  const sessionId = cookieStore.get(SESSION_KEY)?.value
+  if (!sessionId) return null
 
-export const generateSalt = (): string => {
-  return crypto.randomBytes(16).toString('hex').normalize();
-}
+  const redisSession = await redis.get(`${SESSION_KEY}${sessionId}`)
+  const { data: user, success } = sessionShema.safeParse(redisSession)
 
-export const gethashedPassword = (password: string, salt: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    crypto.scrypt(password.normalize(), salt, 64, (err, hash) => {
-      if (err) reject(err)
-      resolve(hash.toString('hex').normalize())
-    })
+  if (!success || !user?.id) return null
+  // Fetch the user from the database
+  const currentUser = await db.query.User.findFirst({
+    where: eq(User.id, user.id),
+    columns: {
+      name: true,
+      email: true,
+      id: true,
+      role: true,
+    }
   })
-}
+
+  return currentUser
+};
 
 // This function is used to create a session for the user
 // It generates a random session ID and stores the user information in Redis
@@ -44,7 +57,3 @@ export const createUserSession = async (user: UserSession) => {
   }
 };
 
-export const checkValidCredentials = async (password: string, hashedPassword: string, salt: string) => {
-  const formHashPassword = await gethashedPassword(password, salt)
-  return formHashPassword === hashedPassword
-}
