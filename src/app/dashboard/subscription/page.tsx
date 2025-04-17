@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import Image from "next/image"
+import PricingSection from "@/components/Pricing"
 
 export default function SubscriptionPage() {
   const premiumUsage = 12
@@ -90,6 +91,10 @@ export default function SubscriptionPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-8">Upgrade your plan</h2>
+        <PricingSection />
       </div>
     </div>
   )

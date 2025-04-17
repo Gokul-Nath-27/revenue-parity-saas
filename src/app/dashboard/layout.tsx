@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { generateIntials } from "@/lib/utils"
-import { getCurrentUser } from "@/server/actions/session"
 import { Suspense } from "react"
+import UserProfileDropdown from "@/components/common/user-profile-dropdown"
+import { getCurrentUser } from "@/server/actions/session"
 
 export default async function DashboardLayout({
   children,
@@ -25,17 +26,18 @@ export default async function DashboardLayout({
 
       {/* Main Content */}
       <SidebarInset>
-        <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        {/* Mobile Header */}
+        <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 z-10 bg-background/70 backdrop-blur-md">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
-          <Suspense>
-            <Profile />
+          <Suspense fallback={<Skeleton className="h-8 w-8 rounded-lg bg-muted/50 mr-4" />}>
+            <ProfileWrapper />
           </Suspense>
         </header>
+        {/* Desktop/Mobile Main Content */}
         <main className="px-4 py-3">
-
           <Suspense fallback={<DashboardSkeleton />}>
             {children}
           </Suspense>
@@ -45,17 +47,6 @@ export default async function DashboardLayout({
   )
 }
 
-const Profile = async () => {
-  const currentUser = await getCurrentUser()
-  if (!currentUser) return null
-
-  return (
-    <Avatar className="h-8 w-8 rounded-full mx-4">
-      <AvatarImage src={""} alt={currentUser.name} />
-      <AvatarFallback className="rounded-full">{generateIntials(currentUser.name)}</AvatarFallback>
-    </Avatar>
-  )
-}
 const DashboardSkeleton = () => {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -68,3 +59,24 @@ const DashboardSkeleton = () => {
     </div>
   )
 }
+
+const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
+  return (
+    <Avatar className="h-8 w-8 rounded-lg mr-4">
+      <AvatarImage src={"dawd"} alt={currentUser.name} />
+      <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
+    </Avatar>
+  );
+};
+
+const ProfileWrapper = async () => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return null;
+
+  return (
+    <UserProfileDropdown
+      currentUser={currentUser}
+      trigger={<TriggerButton currentUser={currentUser} />}
+    />
+  );
+};

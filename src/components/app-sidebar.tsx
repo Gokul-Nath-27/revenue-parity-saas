@@ -4,9 +4,9 @@ import {
   GlobeIcon,
   LayoutDashboard,
   PackagePlus,
-  CircleDollarSign
+  CircleDollarSign,
+  ChevronsUpDown
 } from "lucide-react"
-import { NavUser } from "@/components/nav-user"
 import Link from "next/link"
 import {
   Sidebar,
@@ -24,6 +24,9 @@ import { getCurrentUser } from "@/server/actions/session"
 import { redirect } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
 import NavMenu from "./nav-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { generateIntials } from "@/lib/utils"
+import UserProfileDropdown from "./common/user-profile-dropdown"
 
 const navigations = [
   {
@@ -42,6 +45,35 @@ const navigations = [
     icon: <CircleDollarSign size={16} />,
   },
 ]
+
+const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
+  return (
+    <div className="flex items-center gap-2 p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg active:bg-sidebar-accent">
+      <Avatar className="h-8 w-8 rounded-lg">
+        <AvatarImage src={""} alt={currentUser.name} />
+        <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
+      </Avatar>
+      <div className="grid flex-1 text-left text-sm leading-tight">
+        <span className="truncate font-medium">{currentUser.name}</span>
+        <span className="truncate text-xs">{currentUser.email}</span>
+      </div>
+      <ChevronsUpDown className="ml-auto size-4" />
+    </div>
+  );
+};
+
+export async function AppSidebarFooter() {
+  const currentUser = await getCurrentUser()
+  if (!currentUser) redirect('/sign-in')
+  return (
+    <SidebarFooter>
+      <UserProfileDropdown
+        currentUser={currentUser}
+        trigger={<TriggerButton currentUser={currentUser} />}
+      />
+    </SidebarFooter>
+  )
+}
 
 export function AppSidebar({ ...props }) {
   return (
@@ -71,15 +103,5 @@ export function AppSidebar({ ...props }) {
       </Suspense>
       <SidebarRail />
     </Sidebar>
-  )
-}
-
-export async function AppSidebarFooter() {
-  const currentUser = await getCurrentUser()
-  if (!currentUser) redirect('/sign-in')
-  return (
-    <SidebarFooter>
-      <NavUser user={currentUser} />
-    </SidebarFooter>
   )
 }
