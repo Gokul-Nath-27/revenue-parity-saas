@@ -2,6 +2,9 @@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import LoadingIndicator from './loading-indicator'
+import Link from 'next/link'
+
 
 type NavMenuProps = {
   navigations: {
@@ -12,19 +15,20 @@ type NavMenuProps = {
 }
 
 export default function NavMenu({ navigations }: NavMenuProps) {
-  const pathname = usePathname();
 
   return (
     <SidebarMenu className="w-full">
       {navigations.map(({ title, url, icon }) => {
-        const isActive = pathname === url
         return (
           <SidebarMenuItem key={title} >
-            <SidebarMenuButton asChild size="default" isActive={isActive}>
-              <a href={url} className={cn("flex items-center")} key={title} >
-                {icon}
-                <span>{title}</span>
-              </a>
+            <SidebarMenuButton asChild size="default">
+              <Link href={url} className={cn("flex items-center justify-between")} key={title} >
+                <div className="flex items-center gap-2">
+                  {icon}
+                  <span>{title}</span>
+                </div>
+                <LoadingIndicator />
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         );

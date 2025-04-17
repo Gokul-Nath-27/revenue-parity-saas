@@ -29,17 +29,17 @@ const navigations = [
   {
     title: "Products",
     url: "/dashboard/products",
-    icon: <PackagePlus />,
+    icon: <PackagePlus size={16} />,
   },
   {
     title: "Analytics",
     url: "/dashboard/analytics",
-    icon: <LayoutDashboard />,
+    icon: <LayoutDashboard size={16} />,
   },
   {
     title: "Subscription",
     url: "/dashboard/subscription",
-    icon: <CircleDollarSign />,
+    icon: <CircleDollarSign size={16} />,
   },
 ]
 
