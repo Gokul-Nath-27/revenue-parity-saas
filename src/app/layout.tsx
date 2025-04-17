@@ -11,11 +11,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Avengers",
-  description: "Avengers",
-  icons: {
-    icon: '/thanos.svg',
-  },
+  title: "RevenueParity",
+  description: "Make your digital product more profitable",
+  icons: { icon: '/coffee.svg' },
 };
 
 export default function RootLayout({

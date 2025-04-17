@@ -1,3 +1,4 @@
+// In app-sidebar.tsx
 import * as React from "react"
 import {
   GlobeIcon,
@@ -22,26 +23,27 @@ import { Suspense } from "react"
 import { getCurrentUser } from "@/server-actions/auth"
 import { redirect } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
+import NavMenu from "./nav-menu"
 
-const items = [
+const navigations = [
   {
     title: "Products",
-    url: "#",
-    icon: PackagePlus,
+    url: "/dashboard/products",
+    icon: <PackagePlus />,
   },
   {
     title: "Analytics",
-    url: "#",
-    icon: LayoutDashboard,
+    url: "/dashboard/analytics",
+    icon: <LayoutDashboard />,
   },
   {
-    title: "Subscriptions",
-    url: "#",
-    icon: CircleDollarSign,
+    title: "Subscription",
+    url: "/dashboard/subscription",
+    icon: <CircleDollarSign />,
   },
 ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -59,24 +61,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="w-full">
-            {items.map((item) => {
-              const Icon = item.icon
-              return (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild size="default" isActive={item.title === "Products"}>
-                    <a href={item.url} className="flex items-center" key={item.title}>
-                      <Icon className="mr-2" size={300} />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )
-            })}
-          </SidebarMenu>
+          <NavMenu navigations={navigations} />
         </SidebarGroup>
       </SidebarContent>
       <Suspense fallback={<div className="p-2"><Skeleton className="h-12 flex-1 rounded-xl bg-muted/50" /></div>}>
@@ -86,7 +73,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   )
 }
-
 
 export async function AppSidebarFooter() {
   const currentUser = await getCurrentUser()

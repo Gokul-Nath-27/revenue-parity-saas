@@ -1,8 +1,9 @@
 "use client";
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { GlobeIcon, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import Logo from '@/Icons/Logo';
 
 const Navbar = () => {
   return (
@@ -11,12 +12,7 @@ const Navbar = () => {
       <input type="checkbox" id="menu-toggle" className="hidden peer" />
 
       <div className="container mx-auto flex justify-between items-center h-16 px-4">
-        <Link href="/">
-          <div className="flex items-center gap-2">
-            <GlobeIcon className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">RevenueParity</span>
-          </div>
-        </Link>
+        <Logo to="/" />
 
         <div className="hidden md:flex items-center gap-6">
           <a href="#features" className="text-sm text-muted-foreground hover:text-white transition">Features</a>

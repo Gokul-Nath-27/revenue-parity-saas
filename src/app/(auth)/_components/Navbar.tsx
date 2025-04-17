@@ -1,18 +1,12 @@
 
 import React from 'react';
-import { GlobeIcon, Menu } from 'lucide-react';
-import Link from 'next/link';
+import Logo from '@/Icons/Logo';
 
 const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto flex justify-between items-center h-16 px-4">
-        <Link href="/">
-          <div className="flex items-center gap-2">
-            <GlobeIcon className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">RevenueParity</span>
-          </div>
-        </Link>
+        <Logo to="/" />
       </div>
     </nav>
   );

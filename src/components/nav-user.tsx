@@ -5,6 +5,7 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
+  HomeIcon,
   LogOut,
   Sparkles,
 } from "lucide-react"
@@ -31,15 +32,18 @@ import {
 } from "@/components/ui/sidebar"
 import { signoutAction } from "@/server-actions/auth"
 import { generateIntials } from "@/lib/utils"
+import Link from "next/link"
 
-export function NavUser({
-  user,
-}: {
+type NavUserProps = {
   user: {
-    name: string
-    email: string
+    name: string;
+    id: number;
+    role: "user" | "admin";
+    email: string;
   }
-}) {
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
 
   const initials = generateIntials(user.name)
@@ -101,6 +105,12 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <Link href="/">
+              <DropdownMenuItem>
+                <HomeIcon />
+                Marketing Page
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem onClick={() => signoutAction()}>
               <LogOut />
               Log out

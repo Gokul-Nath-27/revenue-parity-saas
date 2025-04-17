@@ -1,4 +1,3 @@
-
 import { AppSidebar } from "@/components/app-sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
@@ -10,7 +9,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { generateIntials } from "@/lib/utils"
 import { getCurrentUser } from "@/server-actions/auth"
-import { get } from "node:http"
 import { Suspense } from "react"
 
 export default async function DashboardLayout({
@@ -21,7 +19,10 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
+
+      {/* Sidebar */}
       <AppSidebar />
+
       {/* Main Content */}
       <SidebarInset>
         <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -30,7 +31,6 @@ export default async function DashboardLayout({
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
           <Suspense>
-
             <Profile />
           </Suspense>
         </header>
