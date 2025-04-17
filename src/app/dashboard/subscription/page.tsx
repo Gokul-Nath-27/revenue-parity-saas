@@ -1,4 +1,3 @@
-'use client'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -11,9 +10,9 @@ export default function SubscriptionPage() {
   const freeLimit = 200
 
   return (
-    <div className="min-h-screen px-6 py-10 space-y-8 bg-background text-foreground">
+    <div className="space-y-8 bg-background text-foreground md:pt-6">
       <div>
-        <h1 className="text-4xl font-bold">Settings</h1>
+        <h1 className="text-4xl font-bold">Your Subscription</h1>
         <p className="text-muted-foreground mt-2 text-lg">
           You can manage your account, billing, and team settings here.
         </p>
