@@ -60,7 +60,7 @@ const chartConfig = {
 
 export default function AnalyticsPage() {
   return (
-    <div className="flex h-full w-full flex-col gap-6 p-6">
+    <div className="flex h-full w-full flex-col gap-6 md:p-6">
       <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
       
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
