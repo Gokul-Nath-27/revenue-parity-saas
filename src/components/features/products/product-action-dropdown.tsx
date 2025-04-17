@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { EllipsisVertical } from 'lucide-react'
 import { Pencil, Trash } from 'lucide-react';
 
-
 export function ProductActions() {
   return (
     <DropdownMenu>

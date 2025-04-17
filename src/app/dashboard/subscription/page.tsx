@@ -1,8 +1,96 @@
-export default function Subscription() {
+'use client'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import Image from "next/image"
+
+export default function SubscriptionPage() {
+  const premiumUsage = 12
+  const premiumLimit = 50
+  const freeUsage = 28
+  const freeLimit = 200
+
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="flex h-full w-full flex-col">
-        <h1 className="text-2xl font-bold">Subscription</h1>
+    <div className="min-h-screen px-6 py-10 space-y-8 bg-background text-foreground">
+      <div>
+        <h1 className="text-4xl font-bold">Settings</h1>
+        <p className="text-muted-foreground mt-2 text-lg">
+          You can manage your account, billing, and team settings here.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Basic Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between">
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-semibold">Name</p>
+                <p className="text-muted-foreground">Yugandhar developer</p>
+              </div>
+              <div>
+                <p className="text-sm font-semibold">Email</p>
+                <p className="text-muted-foreground">yugandhardeveloper@gmail.com</p>
+              </div>
+            </div>
+            <Image
+              src="/avatar.jpg" // Replace with your actual avatar path
+              alt="Avatar"
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
+          </CardContent>
+        </Card>
+
+        {/* Usage */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Usage</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Premium Usage */}
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Premium models</span>
+                <span>{premiumUsage} / {premiumLimit}</span>
+              </div>
+              <Progress value={(premiumUsage / premiumLimit) * 100} />
+              <p className="text-sm text-muted-foreground mt-2">
+                You've used no requests out of your <strong>{premiumLimit}</strong> fast requests quota.
+              </p>
+            </div>
+
+            {/* Free Usage */}
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>gpt-4o-mini or cursor-small</span>
+                <span>{freeUsage} / {freeLimit}</span>
+              </div>
+              <Progress value={(freeUsage / freeLimit) * 100} />
+              <p className="text-sm text-muted-foreground mt-2">
+                You've used no requests out of your <strong>{freeLimit}</strong> monthly fast requests quota.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Account Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <Button variant="secondary">Upgrade to Pro</Button>
+            <Button>Upgrade to Business</Button>
+            <div className="text-muted-foreground mt-2 text-sm cursor-pointer">
+              Advanced <span className="text-xs">▼</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

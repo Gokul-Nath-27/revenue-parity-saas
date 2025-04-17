@@ -1,10 +1,8 @@
 import { Coffee } from "lucide-react"
 import Link from "next/link"
-
 type LogoProps = {
   to: string;
 }
-
 const Logo = ({ to }: LogoProps) => {
   return (
     <Link href={to}>
