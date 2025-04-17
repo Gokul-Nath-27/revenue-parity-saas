@@ -36,6 +36,7 @@ export default async function DashboardLayout({
             <ProfileWrapper />
           </Suspense>
         </header>
+
         {/* Desktop/Mobile Main Content */}
         <main className="px-4 py-3">
           <Suspense fallback={<DashboardSkeleton />}>
@@ -62,7 +63,7 @@ const DashboardSkeleton = () => {
 
 const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
   return (
-    <Avatar className="h-8 w-8 rounded-lg mr-4">
+    <Avatar className="h-8 w-8 rounded-lg">
       <AvatarImage src={"dawd"} alt={currentUser.name} />
       <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
     </Avatar>
@@ -77,6 +78,7 @@ const ProfileWrapper = async () => {
     <UserProfileDropdown
       currentUser={currentUser}
       trigger={<TriggerButton currentUser={currentUser} />}
+      isMobile={true}
     />
   );
 };

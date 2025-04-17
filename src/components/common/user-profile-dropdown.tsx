@@ -1,5 +1,5 @@
 "use client";
-import { generateIntials } from "@/lib/utils";
+import { cn, generateIntials } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Sparkles } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation'
 type UserProfileDropdownProps = {
   currentUser: { name: string; email: string };
   trigger: React.ReactNode;
+  isMobile: boolean;
 }
 
-export default function UserProfileDropdown({ currentUser, trigger }: UserProfileDropdownProps) {
+export default function UserProfileDropdown({ currentUser, trigger, isMobile }: UserProfileDropdownProps) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -23,13 +24,12 @@ export default function UserProfileDropdown({ currentUser, trigger }: UserProfil
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className={cn("cursor-pointer", isMobile && "mr-4")}>
         {trigger}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
         align="end"
-        sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
