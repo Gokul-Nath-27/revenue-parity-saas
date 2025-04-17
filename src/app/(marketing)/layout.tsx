@@ -3,9 +3,8 @@ import { Metadata } from "next";
 import Navbar from "@/app/(marketing)/_components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Easy Parity",
-  description:
-    "Easy Parity is a simple and easy to use parity checker for Ethereum.",
+  title: "RevenueParity",
+  description: "Make your digital product more profitable.",
 };
 
 export default function MarketingLayout({
