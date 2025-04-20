@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 type UserProfileDropdownProps = {
   currentUser: { name: string; email: string };
   trigger: React.ReactNode;
-  isMobile: boolean;
+  isMobile?: boolean;
 }
 
 export default function UserProfileDropdown({ currentUser, trigger, isMobile }: UserProfileDropdownProps) {
