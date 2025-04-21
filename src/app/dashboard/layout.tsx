@@ -11,6 +11,7 @@ import { generateIntials } from "@/lib/utils"
 import { Suspense } from "react"
 import UserProfileDropdown from "@/components/common/user-profile-dropdown"
 import { getCurrentUser } from "@/server/actions/session"
+import { AddProductDialog } from "@/components/features/products/product-dialog"
 
 export default async function DashboardLayout({
   children,
@@ -39,6 +40,13 @@ export default async function DashboardLayout({
 
         {/* Desktop/Mobile Main Content */}
         <main className="px-4 py-3">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold">Products</h2>
+              <p className="text-muted-foreground">Manage your digital products</p>
+            </div>
+            <AddProductDialog />
+          </div>
           <Suspense fallback={<DashboardSkeleton />}>
             {children}
           </Suspense>
@@ -52,11 +60,11 @@ const DashboardSkeleton = () => {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <Skeleton className="aspect-video rounded-xl bg-muted/50" />
-        <Skeleton className="aspect-video rounded-xl bg-muted/50" />
-        <Skeleton className="aspect-video rounded-xl bg-muted/50" />
+        <Skeleton className="aspect-video rounded-xl bg-muted/80" />
+        <Skeleton className="aspect-video rounded-xl bg-muted/80" />
+        <Skeleton className="aspect-video rounded-xl bg-muted/80" />
       </div>
-      <Skeleton className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+      <Skeleton className="min-h-[100vh] flex-1 rounded-xl bg-muted/80 md:min-h-min" />
     </div>
   )
 }

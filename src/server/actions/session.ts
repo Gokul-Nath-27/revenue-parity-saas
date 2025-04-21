@@ -1,3 +1,4 @@
+import "server-only"
 import db from '@/db';
 import { redis } from '@/redis';
 import { sessionShema } from '@/schemas/auth';

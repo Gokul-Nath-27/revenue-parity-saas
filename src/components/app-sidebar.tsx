@@ -98,7 +98,7 @@ export function AppSidebar({ ...props }) {
           <NavMenu navigations={navigations} />
         </SidebarGroup>
       </SidebarContent>
-      <Suspense fallback={<div className="p-2"><Skeleton className="h-12 flex-1 rounded-xl bg-muted/50" /></div>}>
+      <Suspense fallback={<div className="p-2"><Skeleton className="h-12 flex-1 rounded-xl bg-muted" /></div>}>
         <AppSidebarFooter />
       </Suspense>
       <SidebarRail />
