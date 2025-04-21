@@ -5,7 +5,7 @@ import { LogOut as LogOutIcon } from "lucide-react"
 
 export default function LogOut() {
   return (
-    <DropdownMenuItem onClick={() => signoutAction()}>
+    <DropdownMenuItem onClick={() => signoutAction()} className="cursor-pointer">
       <LogOutIcon />
       Logout
     </DropdownMenuItem>

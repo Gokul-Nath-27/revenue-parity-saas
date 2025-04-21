@@ -13,17 +13,17 @@ export function ProductActions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="cursor-pointer">
           <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
           <Pencil />
-          Edit 
+          Edit
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
           <Trash />
           Delete
         </DropdownMenuItem>

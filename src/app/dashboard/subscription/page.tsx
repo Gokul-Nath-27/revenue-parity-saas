@@ -84,8 +84,8 @@ export default function SubscriptionPage() {
             <CardTitle>Account</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            <Button variant="secondary">Upgrade to Pro</Button>
-            <Button>Upgrade to Business</Button>
+            <Button variant="secondary" className="cursor-pointer">Upgrade to Pro</Button>
+            <Button className="cursor-pointer">Upgrade to Business</Button>
             <div className="text-muted-foreground mt-2 text-sm cursor-pointer">
               Advanced <span className="text-xs">▼</span>
             </div>

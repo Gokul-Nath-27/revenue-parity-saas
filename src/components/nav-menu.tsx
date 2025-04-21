@@ -23,7 +23,7 @@ export default function NavMenu({ navigations }: NavMenuProps) {
         return (
           <SidebarMenuItem key={title}>
             <SidebarMenuButton asChild size="default" isActive={isActive}>
-              <Link href={url} className={cn("flex items-center justify-between")} key={title} >
+              <Link href={url} className={cn("flex items-center justify-between cursor-pointer")} key={title} >
                 <div className="flex items-center gap-2">
                   {icon}
                   <span>{title}</span>

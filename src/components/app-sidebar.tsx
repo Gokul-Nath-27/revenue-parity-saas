@@ -48,8 +48,8 @@ const navigations = [
 
 const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
   return (
-    <div className="flex items-center gap-2 p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg active:bg-sidebar-accent">
-      <Avatar className="h-8 w-8 rounded-lg">
+    <div className="flex items-center gap-2 p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg active:bg-sidebar-accent cursor-pointer">
+      <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
         <AvatarImage src={""} alt={currentUser.name} />
         <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
       </Avatar>
@@ -85,7 +85,7 @@ export function AppSidebar({ ...props }) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-3"
             >
-              <Link href="/" className="h-10">
+              <Link href="/" className="h-10 cursor-pointer">
                 <GlobeIcon size={30} />
                 <span className="font-bold text-xl">RevenueParity</span>
               </Link>

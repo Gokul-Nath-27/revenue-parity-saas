@@ -18,7 +18,7 @@ export const ProductMainContent: React.FC<ProductMainContentProps> = ({ products
       {products.map((product) => (
         <div
           key={product.id}
-          className="relative bg-gradient-to-b from-card to-background border border-border rounded-2xl p-4 w-full max-w-sm transition-all duration-200 hover:scale-[1.002] hover:shadow-lg hover:border-primary/20"
+          className="relative bg-gradient-to-b from-card to-background border border-border rounded-2xl p-4 w-full max-w-sm transition-all duration-200 hover:scale-[1.002] hover:shadow-lg hover:border-primary/20 cursor-pointer"
         >
           <div className="space-y-4">
             <div className='flex justify-between'>

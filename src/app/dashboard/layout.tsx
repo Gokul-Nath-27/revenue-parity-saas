@@ -29,7 +29,7 @@ export default async function DashboardLayout({
         {/* Mobile Header */}
         <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 z-10 bg-background/70 backdrop-blur-md">
           <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+            <SidebarTrigger className="-ml-1 cursor-pointer" />
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
           <Suspense fallback={<Skeleton className="h-8 w-8 rounded-lg bg-muted/50 mr-4" />}>
@@ -63,7 +63,7 @@ const DashboardSkeleton = () => {
 
 const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
   return (
-    <Avatar className="h-8 w-8 rounded-lg">
+    <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
       <AvatarImage src={"dawd"} alt={currentUser.name} />
       <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
     </Avatar>

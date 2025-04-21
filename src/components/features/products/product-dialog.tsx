@@ -33,11 +33,11 @@ export const AddProductDialog = () => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="gap-2">
+      <Button onClick={() => setOpen(true)} className="gap-2 cursor-pointer">
         <Plus className="h-4 w-4" /> Add Product
       </Button>
       <Dialog open={open} onOpenChange={setOpen} modal={true}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] [&>button]:cursor-pointer">
           <DialogHeader>
             <DialogTitle>{"Add New Product"}</DialogTitle>
             <DialogDescription>
@@ -73,7 +73,7 @@ export const AddProductDialog = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">
+              <Button type="submit" className="cursor-pointer">
                 {"Add Product"}
                 {pending && <div
                   role="status"
