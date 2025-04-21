@@ -11,7 +11,6 @@ import { generateIntials } from "@/lib/utils"
 import { Suspense } from "react"
 import UserProfileDropdown from "@/components/common/user-profile-dropdown"
 import { getCurrentUser } from "@/server/actions/session"
-import { AddProductDialog } from "@/components/features/products/product-dialog"
 
 export default async function DashboardLayout({
   children,
@@ -40,13 +39,6 @@ export default async function DashboardLayout({
 
         {/* Desktop/Mobile Main Content */}
         <main className="px-4 py-3">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-2xl font-bold">Products</h2>
-              <p className="text-muted-foreground">Manage your digital products</p>
-            </div>
-            <AddProductDialog />
-          </div>
           <Suspense fallback={<DashboardSkeleton />}>
             {children}
           </Suspense>
