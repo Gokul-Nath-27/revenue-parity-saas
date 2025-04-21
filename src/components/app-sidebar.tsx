@@ -31,7 +31,7 @@ import UserProfileDropdown from "./common/user-profile-dropdown"
 const navigations = [
   {
     title: "Products",
-    url: "/dashboard/products",
+    url: "/dashboard",
     icon: <PackagePlus size={16} />,
   },
   {

@@ -193,7 +193,6 @@
   }
 } */
 
-
 .mobile-menu {
   max-height: 0;
   overflow: hidden;
@@ -229,11 +228,27 @@
      - fadeIn: fade in after delay to prevent flashes of UI on fast navigations 
      - rotate: rotate indefinitely while rendered */
   opacity: 0;
-  animation:
-    fadeIn 500ms 150ms forwards,
-    rotate 1s linear infinite;
+  animation: fadeIn 500ms 150ms forwards, rotate 1s linear infinite;
 }
 
+.spinner-dark-mode {
+  background: conic-gradient(transparent 10deg, #333, transparent 320deg);
+
+  /* Mask to create a hollow center 🍩 */
+  --border-size: 3px;
+  mask-image: radial-gradient(
+    closest-side,
+    transparent calc(100% - var(--border-size)),
+    #1a1a1a calc(100% - var(--border-size))
+  );
+
+  /* Animation:
+     - opacity: render invisible and use animations to reveal spinner
+     - fadeIn: fade in after delay to prevent flashes of UI on fast navigations 
+     - rotate: rotate indefinitely while rendered */
+  opacity: 0;
+  animation: fadeIn 500ms 150ms forwards, rotate 1s linear infinite;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;

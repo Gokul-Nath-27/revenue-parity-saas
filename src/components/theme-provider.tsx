@@ -10,7 +10,7 @@ export function ThemeProvider({
   return (
     <NextThemesProvider {...props}>
       {children}
-      <Toaster position="top-center" />
+      <Toaster position="bottom-center" />
     </NextThemesProvider>
   )
 }

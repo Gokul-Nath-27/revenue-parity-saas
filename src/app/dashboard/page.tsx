@@ -1,3 +1,4 @@
+import ProductsPanel from "@/components/features/products/products-pannel";
 import { getCurrentUser } from "@/server/actions/session";
 import { redirect } from "next/navigation";
 
@@ -6,12 +7,8 @@ export default async function DashboardPage() {
   if (!currentUser) redirect('/sign-in')
 
   return (
-    <main className="px-4 md:px-6 md:py-4 md:min-h-screen">
-      <h1 className="text-2xl">
-        Welcome back, {currentUser.name}!
-        <br />
-        Your role is: {currentUser.role}
-      </h1>
-    </main>
+    <div className="flex h-full w-full flex-col">
+      <ProductsPanel />
+    </div>
   );
 }
