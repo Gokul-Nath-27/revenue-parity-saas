@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react"
 import OAuth from "../_components/OAuth"
 
 export default function SignInPage() {
-  const [error, actionFn, isPending] = useActionState(signInAction, null)
+  const [error, actionFn, pending] = useActionState(signInAction, null)
 
   useEffect(() => {
     if (error instanceof Error) {
@@ -59,7 +59,7 @@ export default function SignInPage() {
           </div>
           <Input name="password" id="password" type="password" autoComplete="off" />
         </div>
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button type="submit" className="w-full" disabled={pending}>
           Sign in
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

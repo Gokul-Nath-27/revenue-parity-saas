@@ -1,87 +1,22 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useActionState, useEffect } from "react"
 import { signupAction } from "@/server/actions/auth"
 import { toast } from "sonner"
 import { ArrowRight } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
 import OAuth from "../_components/OAuth"
 
-// export default function SignUpPage() {
-//   const [error, formAction, isPending] = useActionState(signupAction, null)
-
-//   useEffect(() => {
-//     if (error instanceof Error) {
-//       toast.error(error.message)
-//     }
-//   }, [error])
-
-
-//   return (
-//     <Card>
-//       <CardHeader className="text-center">
-//         <CardTitle className="text-xl">Create an account</CardTitle>
-//         <CardDescription>Enter your email below to create your account</CardDescription>
-//       </CardHeader>
-//       <CardContent>
-//         <form action={formAction} autoComplete="off">
-//           <div className="grid gap-6">
-//             <div className="grid gap-6">
-//               <div className="grid gap-3">
-//                 <Label htmlFor="name">Name</Label>
-//                 <Input id="name" name="name" type="text" placeholder="John Doe" />
-//               </div>
-//               <div className="grid gap-3">
-//                 <Label htmlFor="email">Email</Label>
-//                 <Input
-//                   id="email"
-//                   name="email"
-//                   type="email"
-//                   placeholder="m@example.com"
-//                 />
-//               </div>
-//               <div className="grid gap-3">
-//                 <Label htmlFor="password">Password</Label>
-//                 <Input id="password" name="password" type="password" />
-//               </div>
-//               <Button type="submit" className="w-full" disabled={isPending}>
-//                 Sign up
-//               </Button>
-//             </div>
-//             <div className="text-center text-sm cursor-pointer">
-//               Already have an account?{" "}
-//               <Link className="underline underline-offset-4" href="/sign-in">
-//                 <Button variant="link" className="p-0 underline">
-//                   Sign in
-//                 </Button>
-//               </Link>
-//             </div>
-//           </div>
-//         </form>
-//       </CardContent>
-//     </Card>
-//   )
-// }
-
 export default function SignupPage() {
-  const [error, formAction, isPending] = useActionState(signupAction, null)
+  const [error, formAction, pending] = useActionState(signupAction, null)
   useEffect(() => {
     if (error instanceof Error) {
       toast.error(error.message)
     }
     console.log(error)
   }, [error])
-  
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col items-center justify-center p-6">
@@ -127,7 +62,7 @@ export default function SignupPage() {
               </label>
               <Input id="password" type="password" name="password" required />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={pending}>
               Create account
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
