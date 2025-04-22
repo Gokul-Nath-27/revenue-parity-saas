@@ -13,7 +13,7 @@ const signupSchema = z.object({
 })
 
 const sessionSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   role: z.enum(userRoles)
 })
 export type UserSession = z.infer<typeof sessionSchema>

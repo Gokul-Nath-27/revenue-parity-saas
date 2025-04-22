@@ -14,7 +14,7 @@ import { getUser } from "@/server/actions/session"
 
 type UserProps = {
   user: {
-    id: number;
+    id: string;
     role: "user" | "admin";
     name: string;
     email: string;
