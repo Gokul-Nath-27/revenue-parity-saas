@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Palette, Text, LayoutGrid, SlidersHorizontal, CircleUser, Plus } from 'lucide-react';
+import { Palette, SlidersHorizontal, CircleUser, Plus } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +48,7 @@ const BannerBuilderSection = () => {
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Create beautiful, on-brand promotional banners that boost sales
-            while perfectly matching your website's design.
+            while perfectly matching your website&apos;s design.
           </p>
         </div>
 

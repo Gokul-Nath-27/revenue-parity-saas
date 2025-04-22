@@ -1,5 +1,4 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/app/(marketing)/_components/Navbar";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import React from "react";

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Sparkles } from 'lucide-react';
 import PricingSection from '@/components/Pricing';
@@ -18,7 +17,7 @@ const CTASection = () => {
           </h2>
 
           <p className="text-lg text-muted-foreground">
-            Join thousands of creators who've increased their revenue by up to 40%
+            Join thousands of creators who&apos;ve increased their revenue by up to 40%
             with our intelligent pricing optimization.
           </p>
         </div>

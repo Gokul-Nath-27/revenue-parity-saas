@@ -8,12 +8,12 @@ import LogOut from "@/components/common/LogOut";
 import { useRouter } from 'next/navigation'
 
 type UserProfileDropdownProps = {
-  currentUser: { name: string; email: string };
+  user: { name: string; email: string };
   trigger: React.ReactNode;
   isMobile?: boolean;
 }
 
-export default function UserProfileDropdown({ currentUser, trigger, isMobile }: UserProfileDropdownProps) {
+export default function UserProfileDropdown({ user, trigger, isMobile }: UserProfileDropdownProps) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -34,12 +34,12 @@ export default function UserProfileDropdown({ currentUser, trigger, isMobile }: 
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={"dawd"} alt={currentUser.name} />
-              <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
+              <AvatarImage src={"dawd"} alt={user.name} />
+              <AvatarFallback className="rounded-lg">{generateIntials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 t ext-left text-sm leading-tight">
-              <span className="truncate font-medium">{currentUser.name}</span>
-              <span className="truncate text-xs">{currentUser.email}</span>
+              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate text-xs">{user.email}</span>
             </div>
           </div>
         </DropdownMenuLabel>
@@ -49,7 +49,7 @@ export default function UserProfileDropdown({ currentUser, trigger, isMobile }: 
             <Sparkles />
             Upgrade to Pro
           </DropdownMenuItem>
-          <LogOut className="cursor-pointer" />
+          <LogOut />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

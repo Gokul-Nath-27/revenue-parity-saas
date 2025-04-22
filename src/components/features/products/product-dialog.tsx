@@ -9,13 +9,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { createProductAction } from '@/server/actions/products';
 import { toast } from 'sonner';
 
-type Product = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-};
-
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);
   const [state, createAction, pending] = useActionState(createProductAction, null);

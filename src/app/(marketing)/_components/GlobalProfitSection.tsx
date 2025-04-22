@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Globe, TrendingUp, Banknote, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

@@ -6,10 +6,7 @@ type Response = {
   errors: any;
 };
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export async function createProductAction(prev: Response | null, formData: FormData) {
-
-  await delay(2000);
 
   const rawData = Object.fromEntries(formData.entries());
 

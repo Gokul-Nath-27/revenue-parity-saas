@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
-import Link from "next/link"
 
 export default function OAuth() {
   return (

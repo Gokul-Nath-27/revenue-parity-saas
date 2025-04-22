@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Suspense } from "react"
-import { getCurrentUser } from "@/server/actions/session"
+import { getUser } from "@/server/actions/session"
 import { redirect } from "next/navigation"
 import { Skeleton } from "./ui/skeleton"
 import NavMenu from "./nav-menu"
@@ -46,16 +46,16 @@ const navigations = [
   },
 ]
 
-const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
+const TriggerButton = ({ user }: { user: { name: string; email: string } }) => {
   return (
     <div className="flex items-center gap-2 p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg active:bg-sidebar-accent cursor-pointer">
       <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
-        <AvatarImage src={""} alt={currentUser.name} />
-        <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
+        <AvatarImage src={""} alt={user.name} />
+        <AvatarFallback className="rounded-lg">{generateIntials(user.name)}</AvatarFallback>
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{currentUser.name}</span>
-        <span className="truncate text-xs">{currentUser.email}</span>
+        <span className="truncate font-medium">{user.name}</span>
+        <span className="truncate text-xs">{user.email}</span>
       </div>
       <ChevronsUpDown className="ml-auto size-4" />
     </div>
@@ -63,13 +63,13 @@ const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: st
 };
 
 export async function AppSidebarFooter() {
-  const currentUser = await getCurrentUser()
-  if (!currentUser) redirect('/sign-in')
+  const user = await getUser()
+  if (!user) redirect('/sign-in')
   return (
     <SidebarFooter>
       <UserProfileDropdown
-        currentUser={currentUser}
-        trigger={<TriggerButton currentUser={currentUser} />}
+        user={user}
+        trigger={<TriggerButton user={user} />}
       />
     </SidebarFooter>
   )

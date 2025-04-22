@@ -60,7 +60,7 @@ export default function SubscriptionPage() {
               </div>
               <Progress value={(premiumUsage / premiumLimit) * 100} />
               <p className="text-sm text-muted-foreground mt-2">
-                You've used no requests out of your <strong>{premiumLimit}</strong> fast requests quota.
+                You&apos;ve used no requests out of your <strong>{premiumLimit}</strong> fast requests quota.
               </p>
             </div>
 
@@ -72,7 +72,7 @@ export default function SubscriptionPage() {
               </div>
               <Progress value={(freeUsage / freeLimit) * 100} />
               <p className="text-sm text-muted-foreground mt-2">
-                You've used no requests out of your <strong>{freeLimit}</strong> monthly fast requests quota.
+                You&apos;ve used no requests out of your <strong>{freeLimit}</strong> monthly fast requests quota.
               </p>
             </div>
           </CardContent>

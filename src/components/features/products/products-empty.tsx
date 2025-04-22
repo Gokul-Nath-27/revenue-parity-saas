@@ -9,7 +9,7 @@ export const ProductsEmpty = () => {
     <Card className="border border-dashed border-muted-foreground/50">
       <CardContent className="flex flex-col items-center justify-center py-10">
         <p className="text-muted-foreground text-center mb-4">
-          You haven't added any products yet.
+          You haven&apos;t added any products yet.
           Add your first product to start selling globally.
         </p>
         <AddProductDialog />

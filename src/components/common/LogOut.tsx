@@ -1,18 +1,23 @@
 "use client"
-import { signoutAction } from "@/server/actions/auth"
-import { DropdownMenuItem } from "../ui/dropdown-menu"
+import { signout } from "@/server/actions/auth"
 import { LogOut as LogOutIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useActionState } from "react"
+import { Button } from "../ui/button"
 
-type LogOutProps = {
-  className?: string;
-}
+export default function LogOut() {
+  const [_, action, pending] = useActionState(signout, undefined);
 
-export default function LogOut({ className }: LogOutProps) {
   return (
-    <DropdownMenuItem onClick={() => signoutAction()} className={cn("cursor-pointer", className)}>
-      <LogOutIcon />
-      Logout
-    </DropdownMenuItem>
+    <form action={action}>
+      <Button type="submit" className="w-full cursor-pointer mt-1">
+        <LogOutIcon />
+        Logout
+        {pending && <div
+          role="status"
+          aria-label="Loading"
+          className="spinner-dark-mode ml-auto size-4 shrink-0 rounded-full"
+        />}
+      </Button>
+    </form>
   )
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Metadata } from "next";
 import Navbar from "@/app/(marketing)/_components/Navbar";
 
 export default function MarketingLayout({

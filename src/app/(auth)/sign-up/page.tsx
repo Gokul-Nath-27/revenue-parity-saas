@@ -3,19 +3,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useActionState, useEffect } from "react"
-import { signupAction } from "@/server/actions/auth"
+import { signup } from "@/server/actions/auth"
 import { toast } from "sonner"
 import { ArrowRight } from "lucide-react"
 import OAuth from "../_components/OAuth"
 
 export default function SignupPage() {
-  const [error, formAction, pending] = useActionState(signupAction, null)
+  const [state, action, pending] = useActionState(signup, {})
+
   useEffect(() => {
-    if (error instanceof Error) {
-      toast.error(error.message)
+    if (state?.message && !pending) {
+      toast.error(state.message);
     }
-    console.log(error)
-  }, [error])
+  }, [state, pending]);
+
+  // TODO: Need to add error
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -25,8 +27,8 @@ export default function SignupPage() {
             <h1 className="text-3xl font-bold">Create an account</h1>
             <p className="text-gray-500 dark:text-gray-400">Enter your information to get started</p>
           </div>
-          <form action={formAction} autoComplete="off">
-            <div className="space-y-2">
+          <form action={action} autoComplete="off" className="space-y-4">
+            <div>
               <label
                 htmlFor="name"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -35,7 +37,7 @@ export default function SignupPage() {
               </label>
               <Input id="name" placeholder="John" name="name" />
             </div>
-            <div className="space-y-2">
+            <div>
               <label
                 htmlFor="email"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -53,7 +55,7 @@ export default function SignupPage() {
                 autoCorrect="off"
               />
             </div>
-            <div className="space-y-2">
+            <div>
               <label
                 htmlFor="password"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

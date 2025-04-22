@@ -10,7 +10,16 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { generateIntials } from "@/lib/utils"
 import { Suspense } from "react"
 import UserProfileDropdown from "@/components/common/user-profile-dropdown"
-import { getCurrentUser } from "@/server/actions/session"
+import { getUser } from "@/server/actions/session"
+
+type UserProps = {
+  user: {
+    id: number;
+    role: "user" | "admin";
+    name: string;
+    email: string;
+  }
+}
 
 export default async function DashboardLayout({
   children,
@@ -61,23 +70,23 @@ const DashboardSkeleton = () => {
   )
 }
 
-const TriggerButton = ({ currentUser }: { currentUser: { name: string; email: string } }) => {
+const TriggerButton = ({ user }: UserProps) => {
   return (
     <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
-      <AvatarImage src={"dawd"} alt={currentUser.name} />
-      <AvatarFallback className="rounded-lg">{generateIntials(currentUser.name)}</AvatarFallback>
+      <AvatarImage src={"dawd"} alt={user.name} />
+      <AvatarFallback className="rounded-lg">{generateIntials(user.name)}</AvatarFallback>
     </Avatar>
   );
 };
 
 const ProfileWrapper = async () => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) return null;
+  const user = await getUser();
+  if (!user) return null;
 
   return (
     <UserProfileDropdown
-      currentUser={currentUser}
-      trigger={<TriggerButton currentUser={currentUser} />}
+      user={user}
+      trigger={<TriggerButton user={user} />}
       isMobile={true}
     />
   );

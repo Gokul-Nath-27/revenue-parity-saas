@@ -12,7 +12,7 @@ export default function ForgotPasswordPage() {
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">Forgot password</h1>
             <p className="text-gray-500 dark:text-gray-400">
-              Enter your email address and we'll send you a link to reset your password
+              Enter your email address and we&apos;ll send you a link to reset your password
             </p>
           </div>
           <div className="space-y-4">
@@ -47,4 +47,3 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
-  
