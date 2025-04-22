@@ -1,30 +1,32 @@
 "use server"
 import db from '@/db';
 import { redis } from '@/redis';
-import { sessionShema } from '@/schemas/auth';
+import { sessionSchema, type UserSession } from '@/schemas/auth';
 import { eq } from 'drizzle-orm';
 import { User } from '@/db/schema';
 import { cookies } from 'next/headers';
 import { SESSION_EXPIRATION, SESSION_KEY } from '../helpers/auth';
 import crypto from 'crypto';
 import { z } from 'zod';
+import { redirect } from 'next/navigation';
 
-type UserSession = z.infer<typeof sessionShema>
 
 export const getUser = async () => {
+
+  const cookie = (await cookies()).get(SESSION_KEY);
+
+  const sessionId = cookie?.value;
+  if (!sessionId) return redirect('/');
+
+  const redisKey = `${SESSION_KEY}${sessionId}`;
+
   try {
-    const cookieStore = await cookies();
-    const sessionId = cookieStore.get(SESSION_KEY)?.value;
-
-    if (!sessionId) return null;
-
-    const redisKey = `${SESSION_KEY}${sessionId}`;
     const redisSession = await redis.get(redisKey);
 
-    if (!redisSession) return null;
+    if (!redisSession) return redirect('/');
 
-    const parsed = sessionShema.safeParse(redisSession);
-    if (!parsed.success || !parsed.data?.id) return null;
+    const parsed = sessionSchema.safeParse(redisSession);
+    if (!parsed.success || !parsed.data?.id) return redirect('/');
 
     const userId = parsed.data.id;
 
@@ -38,10 +40,13 @@ export const getUser = async () => {
       },
     });
 
+    if (!currentUser) return redirect('/');
+    
     return currentUser;
+    
   } catch (error) {
-    console.error('Error fetching user from session:', error);
-    return null;
+    console.error('Error fetching user session:', error);
+    return redirect('/');
   }
 };
 

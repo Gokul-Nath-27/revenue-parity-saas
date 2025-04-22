@@ -12,9 +12,10 @@ const signupSchema = z.object({
   password: z.string().min(8, { message: "Be at least 8 characters long" })
 })
 
-const sessionShema = z.object({
+const sessionSchema = z.object({
   id: z.number(),
   role: z.enum(userRoles)
 })
+export type UserSession = z.infer<typeof sessionSchema>
 
-export { signInSchema, signupSchema, sessionShema }
+export { signInSchema, signupSchema, sessionSchema }

@@ -1,8 +1,8 @@
 import crypto from 'crypto';
-import { sessionShema } from '@/schemas/auth'
+import { sessionSchema } from '@/schemas/auth'
 import { z } from 'zod';
 
-type UserSession = z.infer<typeof sessionShema>
+type UserSession = z.infer<typeof sessionSchema>
 
 export const SESSION_EXPIRATION = 1000 * 60  * 60; // 1 hour
 export const SESSION_KEY: string = 'session-key'

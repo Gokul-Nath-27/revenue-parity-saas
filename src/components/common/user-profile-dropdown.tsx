@@ -34,7 +34,7 @@ export default function UserProfileDropdown({ user, trigger, isMobile }: UserPro
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarImage src={"dawd"} alt={user.name} />
+              <AvatarImage src="" alt={user.name} />
               <AvatarFallback className="rounded-lg">{generateIntials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 t ext-left text-sm leading-tight">

@@ -66,9 +66,12 @@ export default function SignupPage() {
             </div>
             <Button type="submit" className="w-full" disabled={pending}>
               Create account
-              <ArrowRight className="ml-2 h-4 w-4" />
+              {pending ? <div
+                role="status"
+                aria-label="Loading"
+                className="spinner-dark-mode size-4 shrink-0 rounded-full"
+              /> : <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
-
             {/* Third Party Authentication */}
             <OAuth />
             <div className="mt-4 text-center text-sm">

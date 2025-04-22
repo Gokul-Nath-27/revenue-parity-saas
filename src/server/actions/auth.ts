@@ -77,7 +77,6 @@ export async function signout() {
     await redis.del(redisKey);
     cookieStore.delete(SESSION_KEY);
 
-    redirect('/');  
   } catch (error) {
     console.error('Error during signout:', error);
     return { message: 'Error signing out' };

@@ -73,7 +73,7 @@ const DashboardSkeleton = () => {
 const TriggerButton = ({ user }: UserProps) => {
   return (
     <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
-      <AvatarImage src={"dawd"} alt={user.name} />
+      <AvatarImage src={""} alt={user.name} />
       <AvatarFallback className="rounded-lg">{generateIntials(user.name)}</AvatarFallback>
     </Avatar>
   );
@@ -81,7 +81,7 @@ const TriggerButton = ({ user }: UserProps) => {
 
 const ProfileWrapper = async () => {
   const user = await getUser();
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <UserProfileDropdown
