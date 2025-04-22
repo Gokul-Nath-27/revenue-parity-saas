@@ -1,35 +1,36 @@
 import { relations } from "drizzle-orm";
-import { pgEnum, pgTable, timestamp, varchar, serial, text, numeric, integer } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, timestamp, varchar, text, numeric, integer, uuid } from "drizzle-orm/pg-core";
 
 export const userRoles = ['user', 'admin'] as const;
 export const userRolesEnum = pgEnum('user_roles', userRoles);
-
+const created_at = timestamp({ withTimezone: true }).notNull().defaultNow();
+const updated_at = timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
 /**
  *  Table Schema
  */
 export const User = pgTable("users", {
-  id: serial().primaryKey(),
+  id: uuid().primaryKey().defaultRandom(),
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 255 }).notNull(),
   salt: varchar({ length: 255 }).notNull(),
   role: userRolesEnum().notNull().default('user'),
-  created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updated_at: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+  created_at,
+  updated_at,
 });
 
 export const Product = pgTable("products", {
-  id: serial().primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: varchar({ length: 255 }).notNull(),
-  desc: text(),
+  description: text(),
   price: numeric().notNull(),
-  created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updated_at: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+  created_at,
+  updated_at,
 });
 
-export const Customization = pgTable("customization", {
-  id: serial().primaryKey(),
-  product_id: integer().notNull().references(() => Product.id),
+export const Customization = pgTable("customizations", {
+  id: uuid().primaryKey().defaultRandom(),
+  product_id: integer().notNull().references(() => Product.id, { onDelete: 'cascade' }),
   bg_color: varchar({ length: 225 }),
   text_color: varchar({ length: 225 }),
 });
@@ -38,7 +39,7 @@ export const Customization = pgTable("customization", {
  *  Table Relations
  */
 export const productRelations = relations(Product, ({ one }) => ({
-  customization: one(Customization, {
+  customizations: one(Customization, {
     fields: [Product.id],
     references: [Customization.product_id],
   }),
