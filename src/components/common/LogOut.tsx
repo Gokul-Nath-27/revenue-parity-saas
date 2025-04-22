@@ -15,7 +15,7 @@ export default function LogOut() {
         {pending && <div
           role="status"
           aria-label="Loading"
-          className="spinner-dark-mode ml-auto size-4 shrink-0 rounded-full"
+          className="spinner-dark-mode size-4 shrink-0 rounded-full"
         />}
       </Button>
     </form>

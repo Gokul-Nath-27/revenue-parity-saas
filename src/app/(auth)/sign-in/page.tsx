@@ -54,7 +54,11 @@ export default function SignInPage() {
         </div>
         <Button type="submit" className="w-full" disabled={pending}>
           Sign in
-          <ArrowRight className="ml-2 h-4 w-4" />
+          {pending ? <div
+            role="status"
+            aria-label="Loading"
+            className="spinner-dark-mode size-4 shrink-0 rounded-full"
+          /> : <ArrowRight className="ml-2 h-4 w-4" />}
         </Button>
 
         {/* Third Party Authentication */}
