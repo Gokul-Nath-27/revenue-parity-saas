@@ -8,7 +8,7 @@ type Product = {
   price: number;
 };
 
-export default async () => {
+const ProductContent = async () => {
   const user = await getUser();
   if (!user) return null;
 
@@ -22,3 +22,5 @@ export default async () => {
     <>{products.length === 0 ? <ProductsEmpty /> : <ProductMainContent products={products} />}</>
   )
 }
+
+export default ProductContent

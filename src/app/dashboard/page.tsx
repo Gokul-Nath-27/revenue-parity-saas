@@ -1,4 +1,4 @@
-import DynamicContent from "@/components/features/products/dynamic-content";
+import ProductContent from "@/components/features/products/product-content";
 import { AddProductDialog } from "@/components/features/products/product-dialog";
 import { ProductSkeleton } from "@/components/features/products/product-skeleton";
 import { Suspense } from "react";
@@ -14,7 +14,7 @@ export default async function DashboardPage() {
         <AddProductDialog />
       </div>
       <Suspense fallback={<ProductSkeleton />}>
-        <DynamicContent />
+        <ProductContent />
       </Suspense>
     </div>
   );
