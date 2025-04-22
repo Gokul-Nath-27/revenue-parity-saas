@@ -15,6 +15,13 @@
       "when": 1743611509784,
       "tag": "0001_cool_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745332393299,
+      "tag": "0002_shallow_dorian_gray",
+      "breakpoints": true
     }
   ]
 }
