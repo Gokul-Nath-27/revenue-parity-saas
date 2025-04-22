@@ -7,48 +7,53 @@ import { User } from '@/db/schema';
 import { cookies } from 'next/headers';
 import { SESSION_EXPIRATION, SESSION_KEY } from '../helpers/auth';
 import crypto from 'crypto';
-import { z } from 'zod';
 import { redirect } from 'next/navigation';
+import { unstable_cache } from 'next/cache';
 
+export const getUser = unstable_cache(
+  async () => {
+    const cookie = (await cookies()).get(SESSION_KEY);
 
-export const getUser = async () => {
+    const sessionId = cookie?.value;
+    if (!sessionId) return redirect('/');
 
-  const cookie = (await cookies()).get(SESSION_KEY);
+    const redisKey = `${SESSION_KEY}${sessionId}`;
 
-  const sessionId = cookie?.value;
-  if (!sessionId) return redirect('/');
+    try {
+      const redisSession = await redis.get(redisKey);
 
-  const redisKey = `${SESSION_KEY}${sessionId}`;
+      if (!redisSession) return redirect('/');
 
-  try {
-    const redisSession = await redis.get(redisKey);
+      const parsed = sessionSchema.safeParse(redisSession);
+      if (!parsed.success || !parsed.data?.id) return redirect('/');
 
-    if (!redisSession) return redirect('/');
+      const userId = parsed.data.id;
 
-    const parsed = sessionSchema.safeParse(redisSession);
-    if (!parsed.success || !parsed.data?.id) return redirect('/');
+      const currentUser = await db.query.User.findFirst({
+        where: eq(User.id, userId),
+        columns: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      });
 
-    const userId = parsed.data.id;
-
-    const currentUser = await db.query.User.findFirst({
-      where: eq(User.id, userId),
-      columns: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
-    });
-
-    if (!currentUser) return redirect('/');
-    
-    return currentUser;
-    
-  } catch (error) {
-    console.error('Error fetching user session:', error);
-    return redirect('/');
+      if (!currentUser) return redirect('/');
+      
+      return currentUser;
+      
+    } catch (error) {
+      console.error('Error fetching user session:', error);
+      return redirect('/');
+    }
+  },
+  [],
+  {
+    revalidate: 3600, // Revalidate every hour
+    tags: ['user-session']
   }
-};
+);
 
 export const createSession = async (user: UserSession) => {
   try {
