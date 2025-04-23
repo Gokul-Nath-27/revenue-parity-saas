@@ -2,7 +2,14 @@ import { relations } from "drizzle-orm";
 import { pgEnum, pgTable, timestamp, varchar, text, numeric, integer, uuid } from "drizzle-orm/pg-core";
 
 export const userRoles = ['user', 'admin'] as const;
+export const subscriptions = ['free', 'basic', 'standard', 'premium'] as const
+
+/**
+ *  Enums
+ */
 export const userRolesEnum = pgEnum('user_roles', userRoles);
+export const subscriptionPlanEnum = pgEnum('subscription_plan', subscriptions);
+
 const created_at = timestamp({ withTimezone: true }).notNull().defaultNow();
 const updated_at = timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
 /**
