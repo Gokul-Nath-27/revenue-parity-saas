@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "@/app/(marketing)/_components/Navbar";
+import Navbar from "@/components/features/marketing/Navbar";
 
 export default function MarketingLayout({
   children,
