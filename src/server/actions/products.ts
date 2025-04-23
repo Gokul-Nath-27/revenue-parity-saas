@@ -7,7 +7,7 @@ type Response = {
   errors: z.ZodError["flatten"] | null;
 };
 
-export async function createProductAction(prev: Response | null, formData: FormData) {
+export async function createProductAction(prev: Response | null, formData: FormData): Promise<Response> {
   const rawData = Object.fromEntries(formData.entries());
 
   const { data, success, error } = productSchema.safeParse(rawData);
