@@ -1,5 +1,5 @@
 "use server"
-import db from "@/drizzle";
+import db from "@/drizzle/db";
 import { redis } from "@/server/lib/redis";
 import { eq } from "drizzle-orm";
 import { User } from '@/drizzle/schema';
