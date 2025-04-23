@@ -1,4 +1,3 @@
-// In app-sidebar.tsx
 import * as React from "react"
 import {
   GlobeIcon,
@@ -22,11 +21,11 @@ import {
 import { Suspense } from "react"
 import { getUser } from "@/server/lib/user"
 import { redirect } from "next/navigation"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "../ui/skeleton"
 import NavMenu from "./nav-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { generateIntials } from "@/lib/utils"
-import UserProfileDropdown from "./common/user-profile-dropdown"
+import UserProfileDropdown from "../common/user-profile-dropdown"
 
 const navigations = [
   {

@@ -10,7 +10,8 @@ export async function createProductAction(prev: Response | null, formData: FormD
 
   const rawData = Object.fromEntries(formData.entries());
 
-  const { data, success, error  } = productSchema.safeParse(rawData);
+  const { data, success, error } = productSchema.safeParse(rawData);
+  console.log(data)
 
   if (!success) {
     console.log(error.flatten().formErrors)

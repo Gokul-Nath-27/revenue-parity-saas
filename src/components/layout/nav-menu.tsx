@@ -2,7 +2,7 @@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils";
 import { usePathname } from 'next/navigation';
-import LoadingIndicator from './loading-indicator'
+import LoadingIndicator from '../common/loading-indicator'
 import Link from 'next/link'
 
 type NavMenuProps = {

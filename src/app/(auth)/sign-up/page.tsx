@@ -6,7 +6,7 @@ import { useActionState, useEffect } from "react"
 import { signup } from "@/server/actions/auth"
 import { toast } from "sonner"
 import { ArrowRight } from "lucide-react"
-import OAuth from "../_components/OAuth"
+import OAuth from "../OAuth"
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, {})
