@@ -1,4 +1,4 @@
-import { getUser } from "@/server/actions/session";
+import { getUser } from "@/server/lib/user";
 import { ProductsEmpty } from "./products-empty";
 import { ProductMainContent } from "./product-grid";
 type Product = {

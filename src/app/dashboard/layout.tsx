@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { generateIntials } from "@/lib/utils"
 import { Suspense } from "react"
 import UserProfileDropdown from "@/components/common/user-profile-dropdown"
-import { getUser } from "@/server/actions/session"
+import { getUser } from "@/server/lib/user"
 
 type UserProps = {
   user: {

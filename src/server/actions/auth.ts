@@ -5,9 +5,10 @@ import { eq } from "drizzle-orm";
 import { User } from '@/db/schema';
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { generateSalt, gethashedPassword, SESSION_KEY, checkCredential } from "../helpers/auth";
+import { generateSalt, gethashedPassword, checkCredential } from "@/server/lib/auth";
+import { createSession } from "@/server/lib/session";
 import { signupSchema, signInSchema } from "@/schemas/auth";
-import { createSession } from "./session";
+import { SESSION_KEY } from '@/server/constant'
 
 type FormState = {
   errors?: Record<string, string[]>;
