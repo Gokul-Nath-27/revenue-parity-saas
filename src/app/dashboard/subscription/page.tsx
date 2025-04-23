@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import Image from "next/image"
-import PricingSection from "@/components/Pricing"
+import PricingSection from "@/components/common/Pricing"
 
 export default function SubscriptionPage() {
   const premiumUsage = 12
