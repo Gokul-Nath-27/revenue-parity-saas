@@ -1,6 +1,6 @@
 "use server"
 import db from "@/drizzle";
-import { redis } from "@/redis";
+import { redis } from "@/server/lib/redis";
 import { eq } from "drizzle-orm";
 import { User } from '@/drizzle/schema';
 import { cookies } from "next/headers";
