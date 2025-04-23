@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
-import PricingSection from '@/components/Pricing';
+import PricingSection from '@/components/common/Pricing';
 
 const CTASection = () => {
   return (
