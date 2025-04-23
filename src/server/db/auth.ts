@@ -1,5 +1,5 @@
-import db from "@/db";
-import { User } from "@/db/schema";
+import db from "@/drizzle";
+import { User } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export async function getUserById(userId: string) {

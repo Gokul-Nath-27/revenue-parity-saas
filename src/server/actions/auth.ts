@@ -1,8 +1,8 @@
 "use server"
-import db from "@/db";
+import db from "@/drizzle";
 import { redis } from "@/redis";
 import { eq } from "drizzle-orm";
-import { User } from '@/db/schema';
+import { User } from '@/drizzle/schema';
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { generateSalt, gethashedPassword, checkCredential } from "@/server/lib/auth";
