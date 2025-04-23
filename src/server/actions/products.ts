@@ -1,13 +1,12 @@
 "use server"
 import { productSchema } from "@/schemas/product";
-import { z } from "zod";
 
 type Response = {
   success: boolean;
-  errors: z.ZodError["flatten"] | null;
+  errors: null
 };
 
-export async function createProductAction(prev: Response | null, formData: FormData): Promise<Response> {
+export async function createProductAction(prev: Response | null, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
 
   const { data, success, error } = productSchema.safeParse(rawData);
@@ -17,7 +16,7 @@ export async function createProductAction(prev: Response | null, formData: FormD
     console.log(error.flatten().formErrors)
     return {
       success: false,
-      errors: error.flatten(),
+      errors: null,
     }
   }
 

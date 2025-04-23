@@ -18,9 +18,9 @@ export const AddProductDialog = () => {
       toast.success('Product created successfully');
       setOpen(false);
     } else if (state?.errors && !pending && !state.success) {
-      Object.values(state.errors).forEach((value) => {
-        toast.error(value);
-      });
+      // Object.values(state.errors).forEach((value) => {
+      //   toast.error(value);
+      // });
     }
   }, [state, pending]);
 
