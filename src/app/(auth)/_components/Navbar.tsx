@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Logo from '@/Icons/Logo';
+import Logo from '@/assets/Icons/Logo';
 
 const Navbar = () => {
   return (

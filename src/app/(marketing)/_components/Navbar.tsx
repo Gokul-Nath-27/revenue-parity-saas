@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
-import Logo from '@/Icons/Logo';
+import Logo from '@/assets/Icons/Logo';
 
 const Navbar = () => {
   return (
