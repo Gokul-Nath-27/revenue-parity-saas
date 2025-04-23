@@ -14,7 +14,9 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "eslint --max-warnings=0"
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --max-warnings=0"
+    ]
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
