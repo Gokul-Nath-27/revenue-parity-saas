@@ -1,3 +1,4 @@
+"use cache"
 import React from 'react';
 import { ProductActions } from './action-dropdown';
 
