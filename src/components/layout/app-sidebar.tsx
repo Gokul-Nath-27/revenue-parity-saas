@@ -26,6 +26,7 @@ import NavMenu from "./nav-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { generateIntials } from "@/lib/utils"
 import UserProfileDropdown from "../common/user-profile-dropdown"
+import { getSessionIdFromCookie } from "@/server/lib/session"
 
 const navigations = [
   {
@@ -62,7 +63,7 @@ const TriggerButton = ({ user }: { user: { name: string; email: string } }) => {
 };
 
 export async function AppSidebarFooter() {
-  const user = await getUser()
+  const user = await getUser(await getSessionIdFromCookie());
   if (!user) redirect('/sign-in')
   return (
     <SidebarFooter>

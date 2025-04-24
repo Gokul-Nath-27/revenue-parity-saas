@@ -11,6 +11,7 @@ import { generateIntials } from "@/lib/utils"
 import { Suspense } from "react"
 import UserProfileDropdown from "@/components/common/user-profile-dropdown"
 import { getUser } from "@/server/lib/user"
+import { getSessionIdFromCookie } from "@/server/lib/session"
 
 type UserProps = {
   user: {
@@ -80,7 +81,7 @@ const TriggerButton = ({ user }: UserProps) => {
 };
 
 const ProfileWrapper = async () => {
-  const user = await getUser();
+  const user = await getUser(await getSessionIdFromCookie());
   if (!user) return null
 
   return (

@@ -66,7 +66,7 @@ export async function saveSessionToRedis(sessionId: string, user: UserSession) {
 export async function setSessionCookie(sessionId: string) {
   const cookieStore = await cookies();
   cookieStore.set(SESSION_KEY, sessionId, {
-    expires: new Date(Date.now() + SESSION_EXPIRATION * 1000),
+    expires: new Date(Date.now() + SESSION_EXPIRATION),
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',

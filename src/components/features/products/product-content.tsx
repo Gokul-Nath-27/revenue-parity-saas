@@ -1,6 +1,7 @@
 import { getUser } from "@/server/lib/user";
 import { ProductsEmpty } from "./products-empty";
 import { ProductMainContent } from "./product-grid";
+import { getSessionIdFromCookie } from "@/server/lib/session";
 type Product = {
   id: string;
   name: string;
@@ -9,7 +10,7 @@ type Product = {
 };
 
 const ProductContent = async () => {
-  const user = await getUser();
+  const user = await getUser(await getSessionIdFromCookie());
   if (!user) return null;
 
   const products: Product[] = [{

@@ -1,13 +1,12 @@
 "use server"
-import { cache } from "react";
 import { redirect } from "next/navigation";
-import { getSessionIdFromCookie, getValidatedSession } from "@/server/lib/session";
+import { getValidatedSession } from "@/server/lib/session";
 import { getUserById } from '@/server/db/auth';
 
-export const getUser = cache(async () => {
+export const getUser = async (sessionId: string | null) => {
+  "use cache"
   console.log("Loading the current user");
 
-  const sessionId = await getSessionIdFromCookie();
   if (!sessionId) return redirect('/');
 
   const session = await getValidatedSession(sessionId);
@@ -17,4 +16,4 @@ export const getUser = cache(async () => {
   if (!user) return redirect('/');
 
   return user;
-});
+};
