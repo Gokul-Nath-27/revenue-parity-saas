@@ -1,10 +1,10 @@
-import BannerBuilderSection from "../../components/features/marketing/BannerBuilderSection";
-import CTASection from "../../components/features/marketing/CTASection";
-import Footer from "../../components/features/marketing/Footer";
-import GlobalProfitSection from "../../components/features/marketing/GlobalProfitSection";
-import HeroSection from "../../components/features/marketing/HeroSection";
-import Navbar from "../../components/features/marketing/Navbar";
-import SetupFlowSection from "../../components/features/marketing/SetupFlowSection";
+import BannerBuilderSection from "@/features/marketing/components/BannerBuilderSection";
+import CTASection from "@/features/marketing/components/CTASection";
+import Footer from "@/features/marketing/components/Footer";
+import GlobalProfitSection from "@/features/marketing/components/GlobalProfitSection";
+import HeroSection from "@/features/marketing/components/HeroSection";
+import Navbar from "@/features/marketing/components/Navbar";
+import SetupFlowSection from "@/features/marketing/components/SetupFlowSection";
 
 export default async function Home() {
   return (

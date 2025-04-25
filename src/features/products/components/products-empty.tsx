@@ -1,7 +1,9 @@
 "use client"
 
 import React from 'react';
+
 import { Card, CardContent } from '@/components/ui/card';
+
 import { AddProductDialog } from './product-dialog';
 
 export const ProductsEmpty = () => {

@@ -1,9 +1,12 @@
 "use client"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation';
+
+import LoadingIndicator from '@/components/loading-indicator'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils";
-import { usePathname } from 'next/navigation';
-import LoadingIndicator from '../common/loading-indicator'
-import Link from 'next/link'
+
+
 
 type NavMenuProps = {
   navigations: {

@@ -1,5 +1,6 @@
-import React from 'react';
 import { Globe, TrendingUp, Banknote, CheckCircle } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/ui/button';
 
 const chartData = (() => Array.from({ length: 30 }).map(() => 20 + Math.random() * 80))();

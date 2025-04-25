@@ -1,4 +1,3 @@
-import * as React from "react"
 import {
   GlobeIcon,
   LayoutDashboard,
@@ -7,6 +6,10 @@ import {
   ChevronsUpDown
 } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
+import * as React from "react"
+
 import {
   Sidebar,
   SidebarContent,
@@ -18,15 +21,15 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Suspense } from "react"
-import { getUser } from "@/lib/user"
-import { redirect } from "next/navigation"
-import { Skeleton } from "../ui/skeleton"
-import NavMenu from "./nav-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import UserProfileDropdown from "@/components/user-profile-dropdown"
+import { getSessionIdFromCookie , getUser } from "@/lib/session"
 import { generateIntials } from "@/lib/utils"
-import UserProfileDropdown from "../common/user-profile-dropdown"
-import { getSessionIdFromCookie } from "@/lib/session"
+
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Skeleton } from "../ui/skeleton"
+
+import NavMenu from "./nav-menu"
+
 
 const navigations = [
   {

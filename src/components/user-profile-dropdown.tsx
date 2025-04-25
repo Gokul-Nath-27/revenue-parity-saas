@@ -1,11 +1,16 @@
 "use client";
-import { cn, generateIntials } from "@/lib/utils";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Sparkles } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
-import LogOut from "@/components/common/LogOut";
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from "react";
+
+import LogOut from "@/components/LogOut";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { cn, generateIntials } from "@/lib/utils";
+
+
+
+
 
 type UserProfileDropdownProps = {
   user: { name: string; email: string };

@@ -1,11 +1,14 @@
 'use client'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useActionState, useEffect } from "react"
-import { signIn } from "@/server/actions/auth"
 import { toast } from "sonner"
-import { ArrowRight } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { signIn } from "@/features/account/actions"
+
+
 import OAuth from "../OAuth"
 
 export default function SignInPage() {

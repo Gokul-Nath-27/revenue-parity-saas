@@ -1,9 +1,16 @@
 "use server"
-import { redis } from '@/lib/redis';
-import { sessionSchema, type UserSession } from '@/schemas/auth';
-import { cookies } from 'next/headers';
-import { SESSION_EXPIRATION, SESSION_KEY } from '@/server/constant';
 import crypto from 'crypto';
+
+import { cookies } from 'next/headers';
+import { redirect } from "next/navigation";
+import { cache } from 'react';
+
+import { getUserById } from '@/features/account/db';
+import { sessionSchema, type UserSession } from '@/features/account/schema';
+import { redis } from '@/lib/redis';
+
+const SESSION_EXPIRATION = 1000 * 60  * 60; // 1 hour
+const SESSION_KEY: string = 'session-key'
 
 const generateSessionId = () => {
   return crypto.randomBytes(64).toString('hex').normalize();
@@ -72,3 +79,17 @@ export async function setSessionCookie(sessionId: string) {
     path: '/',
   });
 }
+
+export const getUser = cache(async (sessionId: string | null) => {
+  console.log("Loading the current user");
+
+  if (!sessionId) redirect('/');
+
+  const session = await getValidatedSession(sessionId);
+  if (!session?.id) redirect('/');
+
+  const user = await getUserById(session.id);
+  if (!user) redirect('/');
+
+  return user;
+});

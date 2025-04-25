@@ -1,13 +1,15 @@
 "use client"
 
-import React, { useActionState, useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import React, { useActionState, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createProductAction } from '@/server/actions/products';
-import { toast } from 'sonner';
+import { createProductAction } from '@/features/products/actions';
+
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);

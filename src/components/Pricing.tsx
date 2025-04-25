@@ -1,6 +1,7 @@
 import { Star, Check, ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card";
+
+import { Button } from "./ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
 
 const PricingCard = ({
   title,

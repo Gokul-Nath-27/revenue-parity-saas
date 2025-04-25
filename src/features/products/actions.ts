@@ -1,5 +1,5 @@
 "use server"
-import { productSchema } from "@/schemas/product";
+import { productSchema } from "@/features/products/schema";
 
 type Response = {
   success: boolean;

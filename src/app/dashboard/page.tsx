@@ -1,7 +1,8 @@
-import ProductContent from "@/components/features/products/product-content";
-import { AddProductDialog } from "@/components/features/products/product-dialog";
-import { ProductSkeleton } from "@/components/features/products/product-skeleton";
-import { Suspense } from "react";
+import { Suspense  } from "react";
+
+import ProductContent from "@/features/products/components/product-content";
+import { AddProductDialog } from "@/features/products/components/product-dialog";
+import { ProductSkeleton } from "@/features/products/components/product-skeleton";
 
 export default async function DashboardPage() {
   return (

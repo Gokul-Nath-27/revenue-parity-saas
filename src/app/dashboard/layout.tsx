@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import { AppSidebar } from "@/components/layout/app-sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
@@ -7,11 +9,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
+import UserProfileDropdown from "@/components/user-profile-dropdown"
+import { getSessionIdFromCookie , getUser } from "@/lib/session"
 import { generateIntials } from "@/lib/utils"
-import { Suspense } from "react"
-import UserProfileDropdown from "@/components/common/user-profile-dropdown"
-import { getUser } from "@/lib/user"
-import { getSessionIdFromCookie } from "@/lib/session"
+
+
 
 type UserProps = {
   user: {

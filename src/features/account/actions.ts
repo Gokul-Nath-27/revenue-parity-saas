@@ -1,14 +1,15 @@
 "use server"
-import db from "@/drizzle/db";
-import { redis } from "@/lib/redis";
 import { eq } from "drizzle-orm";
-import { User } from '@/drizzle/schema';
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import db from "@/drizzle/db";
+import { User } from '@/drizzle/schema';
+import { signupSchema, signInSchema } from "@/features/account/schema";
 import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
+import { redis } from "@/lib/redis";
 import { createSession } from "@/lib/session";
-import { signupSchema, signInSchema } from "@/schemas/auth";
-import { SESSION_KEY } from '@/server/constant'
+const SESSION_KEY: string = 'session-key'
 
 type FormState = {
   errors?: Record<string, string[]>;

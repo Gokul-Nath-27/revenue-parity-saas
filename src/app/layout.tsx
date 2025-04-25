@@ -1,8 +1,9 @@
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import React from "react";
+
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({

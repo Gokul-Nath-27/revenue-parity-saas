@@ -1,6 +1,7 @@
 
-import React from 'react';
 import { ArrowRight, Globe, Code, Settings, CheckCircle } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/ui/button';
 
 const SetupFlowSection = () => {

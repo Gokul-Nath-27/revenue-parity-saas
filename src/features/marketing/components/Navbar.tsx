@@ -1,9 +1,10 @@
 "use client";
-import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
+
 import Logo from '@/assets/Icons/Logo';
+import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
   return (

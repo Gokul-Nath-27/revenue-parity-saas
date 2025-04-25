@@ -1,6 +1,6 @@
 
-import React from 'react';
 import { GlobeIcon, Twitter, Instagram, Linkedin } from 'lucide-react';
+import React from 'react';
 
 const year = new Date().getFullYear();
 

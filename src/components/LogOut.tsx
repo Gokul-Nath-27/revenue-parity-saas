@@ -1,8 +1,11 @@
-import { signout } from "@/server/actions/auth"
 import { LogOut as LogOutIcon } from "lucide-react"
-import { useTransition } from "react"
-import { Button } from "../ui/button"
 import { redirect } from "next/navigation";
+import { useTransition } from "react"
+
+import { signout } from "@/features/account/actions"
+
+import { Button } from "./ui/button"
+
 
 export default function LogOut() {
   const [pending, startTransition] = useTransition();
