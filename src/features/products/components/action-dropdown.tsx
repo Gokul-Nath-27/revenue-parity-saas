@@ -1,4 +1,5 @@
-import { EllipsisVertical , Pencil, Trash } from 'lucide-react'
+import { EllipsisVertical, Pencil, Trash } from 'lucide-react'
+import Link from 'next/link'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -18,10 +19,12 @@ export function ProductActions() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem className="cursor-pointer">
-          <Pencil />
-          Edit
-        </DropdownMenuItem>
+        <Link href="dashboard/products/das">
+          <DropdownMenuItem className="cursor-pointer">
+            <Pencil />
+            Edit
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">
           <Trash />
