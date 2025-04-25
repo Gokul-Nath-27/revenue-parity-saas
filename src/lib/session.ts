@@ -1,5 +1,5 @@
 "use server"
-import { redis } from '@/server/lib/redis';
+import { redis } from '@/lib/redis';
 import { sessionSchema, type UserSession } from '@/schemas/auth';
 import { cookies } from 'next/headers';
 import { SESSION_EXPIRATION, SESSION_KEY } from '@/server/constant';
