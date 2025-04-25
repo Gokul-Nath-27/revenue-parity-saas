@@ -81,7 +81,6 @@ export async function setSessionCookie(sessionId: string) {
 }
 
 export const getUser = cache(async (sessionId: string | null) => {
-  console.log("Loading the current user");
 
   if (!sessionId) redirect('/');
 

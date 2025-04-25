@@ -65,7 +65,6 @@ export async function signup(prev: FormState, formData: FormData): Promise<FormS
 
 export async function signout() {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     const cookieStore = await cookies();
     const session = cookieStore.get(SESSION_KEY);
 

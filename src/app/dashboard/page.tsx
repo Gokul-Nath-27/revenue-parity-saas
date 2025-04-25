@@ -1,10 +1,7 @@
-import { Suspense  } from "react";
-
 import ProductContent from "@/features/products/components/product-content";
 import { AddProductDialog } from "@/features/products/components/product-dialog";
-import { ProductSkeleton } from "@/features/products/components/product-skeleton";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex justify-between items-center mb-6">
@@ -14,9 +11,9 @@ export default async function DashboardPage() {
         </div>
         <AddProductDialog />
       </div>
-      <Suspense fallback={<ProductSkeleton />}>
-        <ProductContent />
-      </Suspense>
+      {/* <Suspense fallback={<ProductSkeleton />}> */}
+      <ProductContent />
+      {/* </Suspense> */}
     </div>
   );
 }
