@@ -1,12 +1,12 @@
 "use server"
 import db from "@/drizzle/db";
-import { redis } from "@/server/lib/redis";
+import { redis } from "@/lib/redis";
 import { eq } from "drizzle-orm";
 import { User } from '@/drizzle/schema';
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { generateSalt, gethashedPassword, checkCredential } from "@/server/lib/auth";
-import { createSession } from "@/server/lib/session";
+import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
+import { createSession } from "@/lib/session";
 import { signupSchema, signInSchema } from "@/schemas/auth";
 import { SESSION_KEY } from '@/server/constant'
 

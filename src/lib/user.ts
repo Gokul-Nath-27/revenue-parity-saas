@@ -1,6 +1,6 @@
 "use server"
 import { redirect } from "next/navigation";
-import { getValidatedSession } from "@/server/lib/session";
+import { getValidatedSession } from "@/lib/session";
 import { getUserById } from '@/server/db/auth';
 
 export const getUser = async (sessionId: string | null) => {

@@ -1,7 +1,7 @@
-import { getUser } from "@/server/lib/user";
+import { getUser } from "@/lib/user";
 import { ProductsEmpty } from "./products-empty";
 import { ProductMainContent } from "./product-grid";
-import { getSessionIdFromCookie } from "@/server/lib/session";
+import { getSessionIdFromCookie } from "@/lib/session";
 type Product = {
   id: string;
   name: string;
