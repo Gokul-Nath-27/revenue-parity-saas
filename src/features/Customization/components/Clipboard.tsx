@@ -20,7 +20,7 @@ export function Clipboard() {
   return (
     <>
       <div className="bg-muted p-3 rounded-md text-xs font-mono overflow-x-auto">
-        <code>{`<script src="https://revenueparity.com/embed.js" data-color="${bannerColor}" data-style="${bannerStyle}" data-position="${bannerPosition}"></script>`}</code>
+        <code className="hide-scrollbar">{`<script src="https://revenueparity.com/embed.js" data-color="${bannerColor}" data-style="${bannerStyle}" data-position="${bannerPosition}"></script>`}</code>
       </div>
 
       <Button
