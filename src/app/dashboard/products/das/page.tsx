@@ -11,11 +11,11 @@ export default function ProductCustomizationTabs(): React.ReactNode {
       <TabsList className="md:grid-cols-5 bg-muted p-1 h-auto">
         <TabsTrigger value="site" className="flex items-center gap-2 py-3">
           <Settings className="h-4 w-4" />
-          <span className="hidden md:inline">Site Config</span>
+          <span>Site Config</span>
         </TabsTrigger>
         <TabsTrigger value="banner" className="flex items-center gap-2 py-3">
           <Palette className="h-4 w-4" />
-          <span className="hidden md:inline">Banner</span>
+          <span>Banner</span>
         </TabsTrigger>
       </TabsList>
 
