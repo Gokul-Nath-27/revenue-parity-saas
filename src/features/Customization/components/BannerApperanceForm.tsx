@@ -59,8 +59,10 @@ export function BannerApperanceForm() {
   }, [state]);
 
   return (
-    <Card className="md:col-span-2 h-full">
-      <CardContent className="h-full flex flex-col">
+    <Card className="md:col-span-2 h-full relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background opacity-80"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary-rgb),0.1),transparent_50%)]"></div>
+      <CardContent className="h-full flex flex-col relative z-10">
         <div className="space-y-6 flex-grow">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Banner Appearance</h3>
