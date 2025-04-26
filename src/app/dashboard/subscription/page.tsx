@@ -1,6 +1,6 @@
-import Image from "next/image"
 
 import PricingSection from "@/components/Pricing"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -39,13 +39,9 @@ export default function SubscriptionPage() {
                 <p className="text-muted-foreground">yugandhardeveloper@gmail.com</p>
               </div>
             </div>
-            <Image
-              src="/avatar.jpg" // Replace with your actual avatar path
-              alt="Avatar"
-              width={50}
-              height={50}
-              className="rounded-full"
-            />
+            <Avatar>
+              <AvatarFallback className="rounded-lg">{'DM'}</AvatarFallback>
+            </Avatar>
           </CardContent>
         </Card>
 
