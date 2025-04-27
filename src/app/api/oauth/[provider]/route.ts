@@ -11,7 +11,7 @@ export async function GET(
 ) {
   try {
     // Validate provider using zod
-    const provider = z.enum(oAuthProviders).parse(params.provider);
+    const provider = await z.enum(oAuthProviders).parseAsync(params.provider);
 
     // Get the authorization code from the URL
     const searchParams = request.nextUrl.searchParams;
@@ -31,14 +31,17 @@ export async function GET(
         { status: 400 }
       );
     }
-
+    
     // Get the OAuth client for the provider
     const oauthClient = getOAuthClient(provider);
-
+    
     // Exchange the code for user information
     const user = await oauthClient.fetchUser(code);
 
-    console.log(user)
+    return NextResponse.json(
+      { user },
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error("OAuth callback error:", error);

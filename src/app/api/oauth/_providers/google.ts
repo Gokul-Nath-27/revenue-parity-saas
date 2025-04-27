@@ -8,13 +8,12 @@ const envSchema = z.object({
 });
 
 const googleUserSchema = z.object({
-  sub: z.string(),
+  id: z.string(),
+  email: z.string().email(),
   name: z.string().optional(),
   given_name: z.string().optional(),
   family_name: z.string().optional(),
   picture: z.string().url().optional(),
-  email: z.string().email(),
-  email_verified: z.boolean().optional(),
   locale: z.string().optional()
 });
 
@@ -40,9 +39,10 @@ export function createGoogleOAuthClient() {
     userInfo: {
       schema: googleUserSchema,
       parser: user => ({
-        id: user.sub,
+        id: user.id,
         name: user.name ?? ((`${user.given_name ?? ''} ${user.family_name ?? ''}`.trim()) || user.email),
         email: user.email,
+        image: user.picture ?? ""
       }),
     },
   });

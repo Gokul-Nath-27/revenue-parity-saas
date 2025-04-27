@@ -3,8 +3,9 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { getOAuthClient } from "@/app/api/oauth/_providers/base";
 import db from "@/drizzle/db";
-import { User } from '@/drizzle/schemas';
+import { type OAuthProvider, User } from '@/drizzle/schemas';
 import { signupSchema, signInSchema } from "@/features/account/schema";
 import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
 import { redis } from "@/lib/redis";
@@ -110,4 +111,10 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
   }
 
   redirect('/dashboard')
+}
+
+
+export async function oAuthSignIn(provider: OAuthProvider) {
+  const oAuthClient = getOAuthClient(provider)
+  redirect(oAuthClient.createAuthUrl())
 }

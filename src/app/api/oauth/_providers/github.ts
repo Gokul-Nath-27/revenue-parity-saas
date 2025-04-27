@@ -3,35 +3,42 @@ import { z } from "zod"
 import { OAuthClient } from "./base"
 
 const envSchema = z.object({
-  DISCORD_CLIENT_ID: z.string(),
-  DISCORD_CLIENT_SECRET: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
 });
+
+const githubUserSchema = z.object({
+  id: z.number(),
+  name: z.string().nullable(),
+  login: z.string(),
+  email: z.string().email().nullable(),
+  avatar_url: z.string().url()
+})
+
+type GithubUser = z.infer<typeof githubUserSchema>;
 
 export function createGithubOAuthClient() {
   const env = envSchema.parse(process.env);
 
-  return new OAuthClient({
+  return new OAuthClient<GithubUser>({
     provider: "github",
-    clientId: env.DISCORD_CLIENT_ID,
-    clientSecret: env.DISCORD_CLIENT_SECRET,
-    scopes: ["identify", "email"],
+    clientId: env.GITHUB_CLIENT_ID,
+    clientSecret: env.GITHUB_CLIENT_SECRET,
+    scopes: ["user:email", "read:user"],
     urls: {
-      auth: "https://discord.com/oauth2/authorize",
-      token: "https://discord.com/api/oauth2/token",
-      user: "https://discord.com/api/users/@me",
+      auth: "https://github.com/login/oauth/authorize",
+      token: "https://github.com/login/oauth/access_token",
+      user: "https://api.github.com/user",
     },
     userInfo: {
-      schema: z.object({
-        id: z.string(),
-        username: z.string(),
-        global_name: z.string().nullable(),
-        email: z.string().email(),
-      }),
+      schema: githubUserSchema,
       parser: user => ({
-        id: user.id,
-        name: user.global_name ?? user.username,
-        email: user.email,
+        id: user.id.toString(),
+        name: user.name ?? user.login,
+        email: user.email ?? `${user.login}@users.noreply.github.com`,
+        imgage: user.avatar_url ?? ""
       }),
     },
   })
 }
+

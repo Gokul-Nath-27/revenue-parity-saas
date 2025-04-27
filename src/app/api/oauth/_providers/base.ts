@@ -48,21 +48,15 @@ export class OAuthClient<T> {
   }
 
   private get redirectUrl() {
-    const baseUrl = process.env.OAUTH_REDIRECT_URL_BASE;
-    if (!baseUrl) {
-      throw new Error('OAUTH_REDIRECT_URL_BASE environment variable is not defined');
-    }
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? process.env.OAUTH_REDIRECT_URL_BASE_PROD
+      : process.env.OAUTH_REDIRECT_URL_BASE_DEV;
     
-    // Ensure OAUTH_REDIRECT_URL_BASE ends with a '/' if providers don't start with one
-    const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-    return new URL(this.provider, base);
+    return new URL(`/api/oauth/${this.provider}`, baseUrl);
   }
 
   /* Step 1: */
   createAuthUrl() {
-    // State is removed - WARNING: Increases CSRF risk
-    // Code Verifier (PKCE) is removed - WARNING: Increases code interception risk
-
     const url = new URL(this.urls.auth);
     url.searchParams.set("client_id", this.clientId);
     url.searchParams.set("redirect_uri", this.redirectUrl.toString());
@@ -117,20 +111,22 @@ export class OAuthClient<T> {
         Accept: 'application/json'
       },
     });
-
+    
+    
     if (!userResponse.ok) {
-        const errorBody = await userResponse.text();
-        throw new Error(`Failed to fetch user info: ${userResponse.status} ${userResponse.statusText} - ${errorBody}`);
+      const errorBody = await userResponse.text();
+      throw new Error(`Failed to fetch user info: ${userResponse.status} ${userResponse.statusText} - ${errorBody}`);
     }
 
     const rawData = await userResponse.json();
-    const parsedUserInfo = this.userInfo.schema.safeParse(rawData);
-
-    if (!parsedUserInfo.success) {
-      throw new InvalidUserError(parsedUserInfo.error);
+    
+    const { success, data, error } = this.userInfo.schema.safeParse(rawData);
+    
+    if (!success) {
+      throw new InvalidUserError(error);
     }
 
-    return this.userInfo.parser(parsedUserInfo.data);
+    return this.userInfo.parser(data);
   }
 }
 
