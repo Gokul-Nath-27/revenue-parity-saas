@@ -5,54 +5,46 @@ import { OAuthProvider } from "@/drizzle/schemas/enums";
 import { createGithubOAuthClient } from "./github";
 import { createGoogleOAuthClient } from "./google";
 
+// Type definitions
+type OAuthUrls = {
+  auth: string;
+  token: string;
+  user: string;
+};
+
+type UserInfo<T> = {
+  schema: z.ZodSchema<T>;
+  parser: (data: T) => { id: string; email: string; name: string };
+};
+
+type OAuthClientConfig<T> = {
+  provider: OAuthProvider;
+  clientId: string;
+  clientSecret: string;
+  scopes: string[];
+  urls: OAuthUrls;
+  userInfo: UserInfo<T>;
+};
 
 export class OAuthClient<T> {
   private readonly provider: OAuthProvider;
   private readonly clientId: string;
   private readonly clientSecret: string;
   private readonly scopes: string[];
-  private readonly urls: {
-    auth: string;
-    token: string;
-    user: string;
-  };
-  private readonly userInfo: {
-    schema: z.ZodSchema<T>;
-    parser: (data: T) => { id: string; email: string; name: string };
-  };
+  private readonly urls: OAuthUrls;
+  private readonly userInfo: UserInfo<T>;
   private readonly tokenSchema = z.object({
     access_token: z.string(),
     token_type: z.string(),
   });
 
-  constructor({
-    provider,
-    clientId,
-    clientSecret,
-    scopes,
-    urls,
-    userInfo,
-  }: {
-    provider: OAuthProvider;
-    clientId: string;
-    clientSecret: string;
-    scopes: string[];
-    urls: {
-      auth: string;
-      token: string;
-      user: string;
-    };
-    userInfo: {
-      schema: z.ZodSchema<T>;
-      parser: (data: T) => { id: string; email: string; name: string };
-    };
-  }) {
-    this.provider = provider;
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
-    this.scopes = scopes;
-    this.urls = urls;
-    this.userInfo = userInfo;
+  constructor(config: OAuthClientConfig<T>) {
+    this.provider = config.provider;
+    this.clientId = config.clientId;
+    this.clientSecret = config.clientSecret;
+    this.scopes = config.scopes;
+    this.urls = config.urls;
+    this.userInfo = config.userInfo;
   }
 
   private get redirectUrl() {
@@ -66,6 +58,7 @@ export class OAuthClient<T> {
     return new URL(this.provider, base);
   }
 
+  /* Step 1: */
   createAuthUrl() {
     // State is removed - WARNING: Increases CSRF risk
     // Code Verifier (PKCE) is removed - WARNING: Increases code interception risk
@@ -78,39 +71,8 @@ export class OAuthClient<T> {
 
     return url.toString();
   }
-
-  // Removed 'state' and 'cookies' arguments as they are no longer used for validation here
-  async fetchUser(code: string) {
-    // Removed state validation logic
-
-    // Removed code_verifier retrieval logic
-    const { accessToken, tokenType } = await this.fetchToken(code);
-
-    const userResponse = await fetch(this.urls.user, {
-      headers: {
-        // Ensure correct capitalization based on provider requirements
-        Authorization: `${tokenType} ${accessToken}`,
-        // Some APIs might require other headers like 'Accept: application/json'
-        'Accept': 'application/json'
-      },
-    });
-
-    if (!userResponse.ok) {
-        // Handle non-successful responses (e.g., 401 Unauthorized, 403 Forbidden)
-        const errorBody = await userResponse.text();
-        throw new Error(`Failed to fetch user info: ${userResponse.status} ${userResponse.statusText} - ${errorBody}`);
-    }
-
-    const rawData = await userResponse.json();
-    const parsedUserInfo = this.userInfo.schema.safeParse(rawData);
-
-    if (!parsedUserInfo.success) {
-      throw new InvalidUserError(parsedUserInfo.error);
-    }
-
-    return this.userInfo.parser(parsedUserInfo.data);
-  }
-
+  
+  /* Step 2: */
   private async fetchToken(code: string) {
     const body = new URLSearchParams({
       code,
@@ -144,6 +106,32 @@ export class OAuthClient<T> {
       tokenType: tokenType,
     };
   }
+
+  /* Step 3: */
+  async fetchUser(code: string) {
+    const { accessToken, tokenType } = await this.fetchToken(code);
+
+    const userResponse = await fetch(this.urls.user, {
+      headers: {
+        Authorization: `${tokenType} ${accessToken}`,
+        Accept: 'application/json'
+      },
+    });
+
+    if (!userResponse.ok) {
+        const errorBody = await userResponse.text();
+        throw new Error(`Failed to fetch user info: ${userResponse.status} ${userResponse.statusText} - ${errorBody}`);
+    }
+
+    const rawData = await userResponse.json();
+    const parsedUserInfo = this.userInfo.schema.safeParse(rawData);
+
+    if (!parsedUserInfo.success) {
+      throw new InvalidUserError(parsedUserInfo.error);
+    }
+
+    return this.userInfo.parser(parsedUserInfo.data);
+  }
 }
 
 export function getOAuthClient(provider: OAuthProvider) {
@@ -157,12 +145,9 @@ export function getOAuthClient(provider: OAuthProvider) {
   }
 }
 
-// --- Error Classes ---
-
 class InvalidTokenError extends Error {
   public cause: z.ZodError;
   constructor(zodError: z.ZodError) {
-    // Provide more context in the error message
     super(`Invalid Token response structure: ${zodError.message}`);
     this.name = 'InvalidTokenError';
     this.cause = zodError;

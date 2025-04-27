@@ -2,11 +2,18 @@ import { z } from "zod"
 
 import { OAuthClient } from "./base"
 
+const envSchema = z.object({
+  DISCORD_CLIENT_ID: z.string(),
+  DISCORD_CLIENT_SECRET: z.string(),
+});
+
 export function createGithubOAuthClient() {
+  const env = envSchema.parse(process.env);
+
   return new OAuthClient({
     provider: "github",
-    clientId: process.env.DISCORD_CLIENT_ID as string,
-    clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    clientId: env.DISCORD_CLIENT_ID,
+    clientSecret: env.DISCORD_CLIENT_SECRET,
     scopes: ["identify", "email"],
     urls: {
       auth: "https://discord.com/oauth2/authorize",
