@@ -1,8 +1,5 @@
-import { getSessionIdFromCookie , getUser } from "@/lib/session";
-
-import { ProductMainContent } from "./product-grid";
-import { ProductsEmpty } from "./products-empty";
-
+import { ProductMainContent } from './product-grid';
+import { ProductsEmpty } from './products-empty';
 
 type Product = {
   id: string;
@@ -11,10 +8,7 @@ type Product = {
   price: number;
 };
 
-const ProductContent = async () => {
-  const user = await getUser(await getSessionIdFromCookie());
-  if (!user) return null;
-
+export default function ProductContent() {
   const products: Product[] = [{
     id: "112",
     name: "adwa",
@@ -25,5 +19,3 @@ const ProductContent = async () => {
     <>{products.length === 0 ? <ProductsEmpty /> : <ProductMainContent products={products} />}</>
   )
 }
-
-export default ProductContent
