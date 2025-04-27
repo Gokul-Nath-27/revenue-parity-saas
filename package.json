@@ -7,10 +7,10 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "next lint --fix",
-    "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
+    "studio": "drizzle-kit studio",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "push": "drizzle-kit push",
     "prepare": "husky"
   },
   "lint-staged": {
