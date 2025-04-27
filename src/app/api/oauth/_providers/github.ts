@@ -36,7 +36,7 @@ export function createGithubOAuthClient() {
         id: user.id.toString(),
         name: user.name ?? user.login,
         email: user.email ?? `${user.login}@users.noreply.github.com`,
-        imgage: user.avatar_url ?? ""
+        image: user.avatar_url ?? ""
       }),
     },
   })
