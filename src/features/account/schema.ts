@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { userRoles } from '@/drizzle/schema';
+import { userRoles } from '@/drizzle/schemas';
 
 const signInSchema = z.object({
   email: z.string().email(),

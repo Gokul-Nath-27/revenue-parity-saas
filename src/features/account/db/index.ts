@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import db from "@/drizzle/db";
-import { User } from "@/drizzle/schema";
+import { User } from "@/drizzle/schemas";
 
 export async function getUserById(userId: string) {
   try {

@@ -4,11 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import db from "@/drizzle/db";
-import { User } from '@/drizzle/schema';
+import { User } from '@/drizzle/schemas';
 import { signupSchema, signInSchema } from "@/features/account/schema";
 import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
 import { redis } from "@/lib/redis";
 import { createSession } from "@/lib/session";
+
 const SESSION_KEY: string = 'session-key'
 
 type FormState = {
