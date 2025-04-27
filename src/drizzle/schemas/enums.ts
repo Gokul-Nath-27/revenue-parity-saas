@@ -2,7 +2,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 
 export const userRoles = ['user', 'admin'] as const;
 export const subscriptions = ['free', 'basic', 'standard', 'premium'] as const;
-export const oAuthProviders = ["discord", "github"] as const;
+export const oAuthProviders = ["google", "github"] as const;
 
 export type OAuthProvider = (typeof oAuthProviders)[number];
 
