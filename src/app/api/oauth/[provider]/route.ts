@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { oAuthProviders } from "@/drizzle/schemas/enums";
 
-import { getOAuthClient } from "./_providers/base";
+import { getOAuthClient } from "../_providers/base";
 
 export async function GET(
   request: NextRequest,
