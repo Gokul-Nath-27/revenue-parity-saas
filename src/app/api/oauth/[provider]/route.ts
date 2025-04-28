@@ -2,23 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { oAuthProviders } from "@/drizzle/schemas/enums";
-import { connectUserToAccount } from '@/features/account/db'
+import { connectUserToAccount } from '@/features/account/db';
 
 import { getOAuthClient } from "../_providers/base";
 
+export const dynamic = 'force-dynamic';
+
+const providerSchema = z.enum(oAuthProviders);
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { provider: string } }
-) {
+  { params }: { params: Promise<{ provider: string }> }) {
   try {
+    const { provider: oauthProvider } = await params;
+    const code = request.nextUrl.searchParams.get("code")
+    const error = request.nextUrl.searchParams.get("error")
 
-    const { provider: oauthProvider  } = await params
-    const provider = await z.enum(oAuthProviders).parseAsync(oauthProvider);
+    // Validate the provider
+    if (!oauthProvider || oauthProvider === "[provider]") {
+      return NextResponse.json(
+        { error: "Invalid OAuth provider" },
+        { status: 400 }
+      );
+    }
 
-    // Get the authorization code from the URL
-    const searchParams = await request.nextUrl.searchParams;
-    const code = searchParams.get("code");
-    const error = searchParams.get("error");
+    const provider = providerSchema.parse(oauthProvider);
+
 
     if (error) {
       return NextResponse.json(
@@ -33,14 +42,12 @@ export async function GET(
         { status: 400 }
       );
     }
-    
-    // Get the OAuth client for the provider
-    const oauthClient = getOAuthClient(provider);
-    
-    // Exchange the code for user information
-    const oAuthUser = await oauthClient.fetchUser(code);
-    const user = await connectUserToAccount(oAuthUser, provider)
 
+    const oauthClient = getOAuthClient(provider);
+
+    const oAuthUser = await oauthClient.fetchUser(code as string);
+
+    const user = await connectUserToAccount(oAuthUser, provider);
 
     return NextResponse.json(
       { user },
