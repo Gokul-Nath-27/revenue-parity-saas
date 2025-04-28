@@ -1,5 +1,5 @@
 "use client";
-import { Sparkles } from "lucide-react";
+import { Home, Sparkles } from "lucide-react";
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from "react";
 
@@ -54,6 +54,11 @@ export default function UserProfileDropdown({ user, trigger, isMobile }: UserPro
             <Sparkles />
             Upgrade to Pro
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/")} className="cursor-pointer">
+            <Home />
+            Go to Marketing Page
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <LogOut />
         </DropdownMenuGroup>
       </DropdownMenuContent>

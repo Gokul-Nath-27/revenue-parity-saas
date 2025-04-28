@@ -1,14 +1,11 @@
 import {
-  GlobeIcon,
   LayoutDashboard,
   PackagePlus,
   CircleDollarSign,
   ChevronsUpDown
 } from "lucide-react"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
-import * as React from "react"
 
 import {
   Sidebar,
@@ -22,12 +19,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import UserProfileDropdown from "@/components/user-profile-dropdown"
-import { getSessionIdFromCookie , getUser } from "@/lib/session"
+import { getSessionIdFromCookie, getUser } from "@/lib/session"
 import { generateIntials } from "@/lib/utils"
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Skeleton } from "../ui/skeleton"
 
+import Branding from "./Branding"
 import NavMenu from "./nav-menu"
 
 
@@ -88,10 +86,7 @@ export function AppSidebar({ ...props }) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-3"
             >
-              <Link href="/" className="h-10 cursor-pointer">
-                <GlobeIcon size={30} />
-                <span className="font-bold text-xl">RevenueParity</span>
-              </Link>
+              <Branding />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
