@@ -12,13 +12,20 @@ const envSchema = z.object({
 
 const githubUserSchema = z.object({
   id: z.number(),
-  name: z.string().nullable(),
+  name: z.string(),
   login: z.string(),
-  email: z.string().email().nullable(),
+  email: z.string().email(),
   avatar_url: z.string().url()
 })
 
 type GithubUser = z.infer<typeof githubUserSchema>;
+
+export type GitHubEmail = {
+  email: string
+  primary: boolean
+  verified: boolean
+  visibility: "public" | "private"
+}
 
 export function createGithubOAuthClient() {
   const env = envSchema.parse(process.env);
@@ -40,7 +47,7 @@ export function createGithubOAuthClient() {
       parser: user => ({
         id: user.id.toString(),
         name: user.name ?? user.login,
-        email: user.email ?? `${user.login}@users.noreply.github.com`,
+        email: user.email,
         image: user.avatar_url ?? ""
       }),
     },

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { OAuthProvider } from "@/drizzle/schemas/enums";
 
-import { createGithubOAuthClient } from "./github";
+import { createGithubOAuthClient, GitHubEmail } from "./github";
 import { createGoogleOAuthClient } from "./google";
 
 // Type definitions
@@ -37,6 +37,7 @@ export class OAuthClient<T> {
     access_token: z.string(),
     token_type: z.string(),
   });
+  private readonly userDataSchema: z.ZodSchema<T>;
 
   constructor(config: OAuthClientConfig<T>) {
     this.provider = config.provider;
@@ -45,6 +46,7 @@ export class OAuthClient<T> {
     this.scopes = config.scopes;
     this.urls = config.urls;
     this.userInfo = config.userInfo;
+    this.userDataSchema = config.userInfo.schema;
   }
 
   private get redirectUrl() {
@@ -74,6 +76,8 @@ export class OAuthClient<T> {
       grant_type: "authorization_code",
       client_id: this.clientId,
       client_secret: this.clientSecret,
+      access_type: "offline",
+      approval_prompt:'force'
     });
 
     const res = await fetch(this.urls.token, {
@@ -90,6 +94,7 @@ export class OAuthClient<T> {
       throw new Error(`Failed to fetch token: ${res.status} ${res.statusText} - ${errorBody}`);
     }
     const rawData = await res.json();
+
     const parsedToken = this.tokenSchema.safeParse(rawData);
     if (!parsedToken.success) {
       throw new InvalidTokenError(parsedToken.error);
@@ -119,14 +124,27 @@ export class OAuthClient<T> {
     }
 
     const rawData = await userResponse.json();
-    
-    const { success, data, error } = this.userInfo.schema.safeParse(rawData);
-    
-    if (!success) {
-      throw new InvalidUserError(error);
+    const parsedData = this.userDataSchema.safeParse(rawData);
+
+    if (!parsedData.success && this.provider === 'github') {  // this is cause, github made the email not a public info to access even we provide the scope
+      const emailResponse = await fetch('https://api.github.com/user/emails', {
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`,
+          Accept: 'application/json',
+        },
+      });
+  
+      if (emailResponse.ok) {
+        const emails: GitHubEmail[] = await emailResponse.json()
+        rawData.email = (emails.find((e) => e.primary) ?? emails[0]).email
+      }
     }
 
-    return this.userInfo.parser(data);
+    if (!parsedData.success) {
+      throw new InvalidUserError(parsedData.error);
+    }
+
+    return this.userInfo.parser(parsedData.data);
   }
 }
 

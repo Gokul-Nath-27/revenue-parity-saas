@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { oAuthProviders } from "@/drizzle/schemas/enums";
+import { connectUserToAccount } from '@/features/account/db'
 
 import { getOAuthClient } from "../_providers/base";
 
@@ -10,11 +11,12 @@ export async function GET(
   { params }: { params: { provider: string } }
 ) {
   try {
-    // Validate provider using zod
-    const provider = await z.enum(oAuthProviders).parseAsync(params.provider);
+
+    const { provider: oauthProvider  } = await params
+    const provider = await z.enum(oAuthProviders).parseAsync(oauthProvider);
 
     // Get the authorization code from the URL
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = await request.nextUrl.searchParams;
     const code = searchParams.get("code");
     const error = searchParams.get("error");
 
@@ -36,11 +38,13 @@ export async function GET(
     const oauthClient = getOAuthClient(provider);
     
     // Exchange the code for user information
-    const user = await oauthClient.fetchUser(code);
+    const oAuthUser = await oauthClient.fetchUser(code);
+    const user = await connectUserToAccount(oAuthUser, provider)
+
 
     return NextResponse.json(
       { user },
-      { status: 200 }
+      { status: 201 }
     );
 
   } catch (error) {

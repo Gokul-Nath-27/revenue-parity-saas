@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { getOAuthClient } from "@/app/api/oauth/_providers/base";
 import db from "@/drizzle/db";
 import { type OAuthProvider, User } from '@/drizzle/schemas';
-import { signupSchema, signInSchema, sessionSchema } from "@/features/account/schema";
+import { signupSchema, signInSchema, sessionSchema, emailUserSchema } from "@/features/account/schema";
 import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
 import { redis } from "@/lib/redis";
 import { createSession } from "@/lib/session";
@@ -101,11 +101,16 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
     columns: { email: true, password: true, salt: true, id: true, role: true },
   });
 
-  if (!user || !await checkCredential(password, user.password, user.salt)) {
+  const validatedUser = emailUserSchema.safeParse(user);
+  if (!validatedUser.success) {
     return { message: 'Invalid login credentials.' };
   }
 
-  const sessionResult = await createSession(sessionSchema.parse(user));
+  if (!await checkCredential(password, validatedUser.data.password, validatedUser.data.salt)) {
+    return { message: 'Invalid login credentials.' };
+  }
+
+  const sessionResult = await createSession(sessionSchema.parse(validatedUser.data));
   if (sessionResult instanceof Error) {
     return { message: sessionResult.message };
   }

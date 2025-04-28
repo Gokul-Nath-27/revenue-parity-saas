@@ -36,6 +36,13 @@
       "when": 1745769905594,
       "tag": "0004_sticky_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1745855952111,
+      "tag": "0005_abandoned_kabuki",
+      "breakpoints": true
     }
   ]
 }

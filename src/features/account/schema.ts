@@ -17,6 +17,17 @@ const sessionSchema = z.object({
   id: z.string(),
   role: z.enum(userRoles)
 })
-export type UserSession = z.infer<typeof sessionSchema>
 
-export { signInSchema, signupSchema, sessionSchema }
+const emailUserSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  name: z.string(),
+  password: z.string(),
+  salt: z.string(),
+  role: z.enum(userRoles)
+})
+
+export type UserSession = z.infer<typeof sessionSchema>
+export type EmailUser = z.infer<typeof emailUserSchema>
+
+export { signInSchema, signupSchema, sessionSchema, emailUserSchema }
