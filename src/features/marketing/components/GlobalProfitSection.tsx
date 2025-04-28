@@ -101,7 +101,7 @@ const GlobalProfitSection = () => {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative overflow-hidden rounded-lg">
             <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
             <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-blue-500/20 rounded-full blur-xl"></div>
 
