@@ -74,21 +74,30 @@ const HeroSection = () => {
 
                 {/* Product Card Mock */}
                 <div className="w-full bg-background rounded-lg p-4 border border-white/10">
-                  <div className="aspect-video bg-muted rounded-md mb-3 flex items-center justify-center">
-                    <span className="text-2xl">🎬</span>
+                  <div className="relative aspect-video rounded-md mb-3 overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-blue-600/20" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-primary/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                        <span className="text-3xl">🎬</span>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/50 to-transparent flex items-center gap-1">
+                      <p className="text-xs text-white/80">Preview Available</p>
+                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    </div>
                   </div>
                   <h3 className="text-lg font-semibold mb-1">Advanced Creator Course</h3>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xl font-bold">$49.99</span>
                     <span className="text-muted-foreground text-sm line-through">$79.99</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">30% OFF</span>
-                  </div>
-                  <Button className="w-full">Purchase Now</Button>
+                  </div>  
+                  <Button className="w-full bg-primary hover:bg-primary/90">Purchase Now</Button>
                 </div>
 
                 {/* Decorative Elements */}
-                <div className="absolute -top-6 -right-6 w-12 h-12 bg-primary/30 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-500/30 rounded-full blur-xl"></div>
+                <div className="absolute -top-6 -right-6 w-12 h-12 bg-primary/30 rounded-full blur-xl -z-1"></div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-500/30 rounded-full blur-xl -z-1"></div>
               </div>
             </TiltCard>
           </div>
