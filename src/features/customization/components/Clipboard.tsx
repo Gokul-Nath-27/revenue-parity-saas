@@ -25,8 +25,7 @@ export function Clipboard() {
 
       <Button
         variant="outline"
-
-        className={`w-full gap-2 cursor-pointer`}
+        className="w-full gap-2"
         onClick={copyEmbedCode}
       >
         {copied ? (

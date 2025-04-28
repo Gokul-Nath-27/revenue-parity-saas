@@ -122,7 +122,7 @@ export function SiteInfoForm() {
           )}
         </div>
 
-        <div className="pt-2 cursor-pointer">
+        <div className="pt-2">
           <SubmitButton />
         </div>
       </form>

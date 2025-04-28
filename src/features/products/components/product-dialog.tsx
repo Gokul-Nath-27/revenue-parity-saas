@@ -68,7 +68,7 @@ export const AddProductDialog = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="cursor-pointer">
+              <Button type="submit">
                 {"Add Product"}
                 {pending && <div
                   role="status"

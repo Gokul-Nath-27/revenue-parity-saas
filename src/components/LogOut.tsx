@@ -18,7 +18,7 @@ export default function LogOut() {
   }
 
   return (
-    <Button type="submit" className="w-full cursor-pointer" onClick={handleOnClick}>
+    <Button type="submit" className="w-full" onClick={handleOnClick}>
       <LogOutIcon />
       Logout
       {pending && <div

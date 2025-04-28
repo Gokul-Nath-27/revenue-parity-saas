@@ -41,7 +41,7 @@ export default async function DashboardLayout({
         {/* Mobile Header */}
         <header className="md:hidden flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 sticky top-0 bg-background/70 backdrop-blur-md z-20">
           <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1 cursor-pointer" />
+            <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
           <Suspense fallback={<Skeleton className="h-8 w-8 rounded-lg bg-muted/50 mr-4" />}>

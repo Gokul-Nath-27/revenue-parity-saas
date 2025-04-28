@@ -50,11 +50,11 @@ export default function UserProfileDropdown({ user, trigger, isMobile }: UserPro
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push("/dashboard/subscription")} className="cursor-pointer">
+          <DropdownMenuItem onClick={() => router.push("/dashboard/subscription")}>
             <Sparkles />
             Upgrade to Pro
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/")} className="cursor-pointer">
+          <DropdownMenuItem onClick={() => router.push("/")}>
             <Home />
             Go to Marketing Page
           </DropdownMenuItem>

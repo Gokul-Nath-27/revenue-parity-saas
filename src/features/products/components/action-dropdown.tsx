@@ -14,19 +14,19 @@ export function ProductActions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="cursor-pointer">
+        <Button variant="ghost" size="icon">
           <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <Link href="dashboard/products/das">
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem>
             <Pencil />
             Edit
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem>
           <Trash />
           Delete
         </DropdownMenuItem>
