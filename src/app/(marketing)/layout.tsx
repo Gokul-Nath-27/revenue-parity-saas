@@ -10,7 +10,7 @@ export default function MarketingLayout({
   return (
     <div className="container mx-auto px-2 w-full">
       <Navbar />
-      <main className="h-[calc(100vh-64px)]">{children}</main>
+      <main className="h-[calc(100vh-64px)] min-h-[calc(100vh-64px)]">{children}</main>
     </div>
   );
 }
