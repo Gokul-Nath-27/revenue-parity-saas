@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'flagcdn.com',
+    }]
+  },
   logging: {
     fetches: {
       fullUrl: true

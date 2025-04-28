@@ -2,8 +2,9 @@ import { Settings, Palette } from 'lucide-react';
 import React from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import BannerPanel from '@/features/Customization/components/BannerPannel';
-import SiteConfigPanel from '@/features/Customization/components/SiteConfigPannel';
+import BannerPanel from '@/features/customization/components/BannerPannel';
+import SiteConfigPanel from '@/features/customization/components/SiteConfigPannel';
+import DiscountsPanel from '@/features/discounts/DiscountsPanel';
 
 export default function ProductCustomizationTabs(): React.ReactNode {
   return (
@@ -17,6 +18,10 @@ export default function ProductCustomizationTabs(): React.ReactNode {
           <Palette className="h-4 w-4" />
           <span>Banner</span>
         </TabsTrigger>
+        <TabsTrigger value="discounts" className="flex items-center gap-2 py-2 px-3 rounded-md data-[state=active]:bg-primary/20 data-[state=active]:text-primary transition-all">
+          <Palette className="h-4 w-4" />
+          <span>Discounts</span>
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="site" className="space-y-4">
@@ -25,6 +30,10 @@ export default function ProductCustomizationTabs(): React.ReactNode {
 
       <TabsContent value="banner" className="space-y-4">
         <BannerPanel />
+      </TabsContent>
+
+      <TabsContent value="discounts" className="space-y-4">
+        <DiscountsPanel />
       </TabsContent>
     </Tabs>
   )
