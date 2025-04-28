@@ -2,8 +2,8 @@ import { Settings, Palette } from 'lucide-react';
 import React from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import BannerPanel from '@/features/customization/components/BannerPannel';
-import SiteConfigPanel from '@/features/customization/components/SiteConfigPannel';
+import BannerPanel from '@/features/customization2/components/BannerPannel2';
+import SiteConfigPanel from '@/features/customization2/components/SiteConfigPannel2';
 import DiscountsPanel from '@/features/discounts/DiscountsPanel';
 
 export default function ProductCustomizationTabs(): React.ReactNode {
