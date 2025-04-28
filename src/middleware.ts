@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-import { getSessionIdFromCookie, getValidatedSession } from '@/lib/session'
+import { getSessionIdFromCookie, getValidatedSession, getSessionCookieOptions, updateSessionExpiration } from '@/lib/session'
 
 const publicPaths = ['/', '/sign-in', '/sign-up', '/forgot-password']
 const _adminPaths: string[] = [] 
@@ -36,10 +36,23 @@ async function middlewareAuth(request: NextRequest) {
 
   const session = await getValidatedSession(sessionId)
   if (!session) {
-    return NextResponse.redirect(new URL('/sign-in', request.url))
+    // Clear the expired session cookie
+    const response = NextResponse.redirect(new URL('/sign-in', request.url))
+    response.cookies.delete('session-key')
+    return response
   }
 
-  return null
+  // Update session expiration for valid session
+  await updateSessionExpiration(sessionId)
+  
+  // Update session cookie expiration
+  const response = NextResponse.next()
+  const cookieOptions = await getSessionCookieOptions()
+  response.cookies.set({
+    ...cookieOptions,
+    value: sessionId
+  })
+  return response
 }
 
 export const config = {

@@ -9,7 +9,7 @@ import { getUserById } from '@/features/account/db';
 import { sessionSchema, type UserSession } from '@/features/account/schema';
 import { redis } from '@/lib/redis';
 
-const SESSION_EXPIRATION = 1000 * 60  * 60; // 1 hour
+const SESSION_EXPIRATION = 1000 * 60 * 60; // 1 hour
 const SESSION_KEY: string = 'session-key'
 
 const generateSessionId = () => {
@@ -20,7 +20,13 @@ export const createSession = async (user: UserSession) => {
   try {
     const sessionId = generateSessionId();
 
-    const success = await saveSessionToRedis(sessionId, user);
+    // Only store id and role in the session
+    const sessionData = {
+      id: user.id,
+      role: user.role
+    };
+
+    const success = await saveSessionToRedis(sessionId, sessionData);
     if (!success) {
       return new Error('Could not create session, please try again.');
     }
@@ -32,8 +38,6 @@ export const createSession = async (user: UserSession) => {
     return new Error('Failed to create user session');
   }
 };
-
-
 
 export async function getSessionIdFromCookie() {
   const sessionCookie = (await cookies()).get(SESSION_KEY);
@@ -57,11 +61,20 @@ export async function getValidatedSession(sessionId: string) {
   }
 }
 
-export async function saveSessionToRedis(sessionId: string, user: UserSession) {
+export async function updateSessionExpiration(sessionId: string) {
   const redisKey = `${SESSION_KEY}${sessionId}`;
   try {
-    return await redis.set(redisKey, JSON.stringify(user), {
-      ex: SESSION_EXPIRATION,
+    await redis.expire(redisKey, SESSION_EXPIRATION / 1000);
+  } catch (error) {
+    console.error('Error updating session expiration:', error);
+  }
+}
+
+export async function saveSessionToRedis(sessionId: string, sessionData: UserSession) {
+  const redisKey = `${SESSION_KEY}${sessionId}`;
+  try {
+    return await redis.set(redisKey, JSON.stringify(sessionData), {
+      ex: SESSION_EXPIRATION / 1000, // Convert to seconds for Redis
       nx: true,
     });
   } catch (error) {
@@ -80,8 +93,18 @@ export async function setSessionCookie(sessionId: string) {
   });
 }
 
-export const getUser = cache(async (sessionId: string | null) => {
+export async function getSessionCookieOptions() {
+  return {
+    name: SESSION_KEY,
+    value: '',
+    expires: new Date(Date.now() + SESSION_EXPIRATION),
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    path: '/',
+  };
+}
 
+export const getUser = cache(async (sessionId: string | null) => {
   if (!sessionId) redirect('/');
 
   const session = await getValidatedSession(sessionId);
