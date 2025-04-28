@@ -41,34 +41,55 @@ export async function connectUserToAccount(
       ON CONFLICT (email) DO NOTHING
       RETURNING id
     `;
-    if (userInsert.length === 0) {
-      throw new Error("User insert failed.");
+
+    let userId: string;
+
+    if (userInsert.length > 0) {
+      // user inserted
+      userId = userInsert[0].id;
+      createdUsers.push(userId);
+    } else {
+      // User already exists, fetch user id
+      const existingUser = await sql`
+        SELECT id FROM "users" WHERE email = ${email}
+      `;
+      if (existingUser.length === 0) {
+        throw new Error('User lookup failed after insert conflict');
+      }
+      userId = existingUser[0].id;
     }
-    createdUsers.push(userInsert[0].id);
 
     // Q2
     const oauthInsert = await sql`
       INSERT INTO "user_oauth_accounts" (provider, "providerAccountId", "userId")
-      SELECT ${provider}, ${id}, id
-      FROM "users"
-      WHERE email = ${email}
+      VALUES (${provider}, ${id}, ${userId})
       ON CONFLICT DO NOTHING
       RETURNING "userId"
     `;
-    if (oauthInsert.length === 0) {
-      throw new Error("OAuth account connection failed.");
-    }
-    createdOauthAccounts.push(oauthInsert[0].userId);
 
-    // successfull transaction
+    if (oauthInsert.length > 0) {
+      createdOauthAccounts.push(oauthInsert[0].userId);
+    } else {
+      // Maybe it already existed, check manually
+      const existingAccount = await sql`
+        SELECT "userId" FROM "user_oauth_accounts"
+        WHERE provider = ${provider} AND "providerAccountId" = ${id}
+      `;
+      if (existingAccount.length === 0) {
+        throw new Error("OAuth account connection failed.");
+      }
+      createdOauthAccounts.push(existingAccount[0].userId);
+    }
+
+    // Fetch and return user info
     const [user] = await sql`
-      SELECT id, role FROM "users" WHERE email = ${email}
+      SELECT id, role FROM "users" WHERE id = ${userId}
     `;
+
     return user;
   } catch (error) {
     console.error('Transaction failed:', error);
-    
-    // Manual rollback: Delete any inserted users or OAuth accounts
+
     try {
       if (createdOauthAccounts.length > 0) {
         await sql`

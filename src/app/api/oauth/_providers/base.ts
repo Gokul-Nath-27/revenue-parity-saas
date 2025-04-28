@@ -123,10 +123,9 @@ export class OAuthClient<T> {
       throw new Error(`Failed to fetch user info: ${userResponse.status} ${userResponse.statusText} - ${errorBody}`);
     }
 
-    const rawData = await userResponse.json();
-    const parsedData = this.userDataSchema.safeParse(rawData);
+    const rawData = await userResponse.json() as z.infer<typeof this.userInfo.schema>;
 
-    if (!parsedData.success && this.provider === 'github') {  // this is cause, github made the email not a public info to access even we provide the scope
+    if (this.provider === 'github') {  // this is cause, github made the email not a public info to access even we provide the scope
       const emailResponse = await fetch('https://api.github.com/user/emails', {
         headers: {
           Authorization: `${tokenType} ${accessToken}`,
@@ -135,10 +134,11 @@ export class OAuthClient<T> {
       });
   
       if (emailResponse.ok) {
-        const emails: GitHubEmail[] = await emailResponse.json()
-        rawData.email = (emails.find((e) => e.primary) ?? emails[0]).email
+        const emails: GitHubEmail[] = await emailResponse.json();
+        ;(rawData as { email: string | null }).email = (emails.find((e) => e.primary) ?? emails[0]).email;
       }
     }
+    const parsedData = this.userDataSchema.safeParse(rawData);
 
     if (!parsedData.success) {
       throw new InvalidUserError(parsedData.error);
