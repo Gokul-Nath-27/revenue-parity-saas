@@ -1,5 +1,7 @@
 import { Suspense } from "react"
 
+import AuthFormSkeleton from "@/components/AuthFormSkeleton"
+
 import SignInForm from "./signin-form"
 
 export default async function SignInPage() {
@@ -11,7 +13,7 @@ export default async function SignInPage() {
           Enter your credentials to access your account
         </p>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<AuthFormSkeleton />}>
         <SignInForm />
       </Suspense>
     </div>
