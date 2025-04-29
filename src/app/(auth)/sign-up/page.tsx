@@ -1,5 +1,7 @@
+import { Suspense } from "react"
+
 import SignupForm from "./signup-form"
-export default function SignupPage() {
+export default async function SignupPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col items-center justify-center p-6">
@@ -8,7 +10,9 @@ export default function SignupPage() {
             <h1 className="text-3xl font-bold">Create an account</h1>
             <p className="text-gray-500 dark:text-gray-400">Enter your information to get started</p>
           </div>
-          <SignupForm />
+          <Suspense fallback={<div>Loading...</div>}>
+            <SignupForm />
+          </Suspense>
         </div>
       </main>
     </div>

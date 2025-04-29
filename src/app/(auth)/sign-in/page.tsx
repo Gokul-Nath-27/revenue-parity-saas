@@ -1,6 +1,8 @@
+import { Suspense } from "react"
+
 import SignInForm from "./signin-form"
 
-export default function SignInPage() {
+export default async function SignInPage() {
   return (
     <div className="w-full max-w-md space-y-6">
       <div className="space-y-2 text-center">
@@ -9,7 +11,9 @@ export default function SignInPage() {
           Enter your credentials to access your account
         </p>
       </div>
-      <SignInForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SignInForm />
+      </Suspense>
     </div>
   );
 }
