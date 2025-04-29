@@ -63,24 +63,24 @@ export async function connectUserToAccount(
 
     // Q2
     const oauthInsert = await sql`
-      INSERT INTO "user_oauth_accounts" (provider, "providerAccountId", "userId")
-      VALUES (${provider}, ${id}, ${userId})
-      ON CONFLICT DO NOTHING
-      RETURNING "userId"
+      INSERT INTO "user_oauth_accounts" (user_id, provider, provider_account_id)
+      VALUES (${userId}, ${provider}, ${id})
+      ON CONFLICT (provider_account_id, provider) DO NOTHING
+      RETURNING user_id
     `;
 
     if (oauthInsert.length > 0) {
-      createdOauthAccounts.push(oauthInsert[0].userId);
+      createdOauthAccounts.push(oauthInsert[0].user_id);
     } else {
       // Maybe it already existed, check manually
       const existingAccount = await sql`
-        SELECT "userId" FROM "user_oauth_accounts"
-        WHERE provider = ${provider} AND "providerAccountId" = ${id}
+        SELECT user_id FROM "user_oauth_accounts"
+        WHERE provider = ${provider} AND provider_account_id = ${id}
       `;
       if (existingAccount.length === 0) {
         throw new Error("OAuth account connection failed.");
       }
-      createdOauthAccounts.push(existingAccount[0].userId);
+      createdOauthAccounts.push(existingAccount[0].user_id);
     }
 
     // Fetch and returning only the role and the user id (DTO)
@@ -95,7 +95,7 @@ export async function connectUserToAccount(
     try {
       if (createdOauthAccounts.length > 0) {
         await sql`
-          DELETE FROM "user_oauth_accounts" WHERE "userId" IN (${createdOauthAccounts})
+          DELETE FROM "user_oauth_accounts" WHERE user_id IN (${createdOauthAccounts})
         `;
       }
       if (createdUsers.length > 0) {
