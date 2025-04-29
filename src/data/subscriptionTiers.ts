@@ -17,10 +17,9 @@ export const subscriptionTiers = {
     isPopular: false,
     features: [
       "Up to 5,000 monthly visitors",
-      "Basic banner customization",
-      "Standard support",
-      "Manual pricing control",
-      "Single website integration"
+      "Up to 1 product",
+      "No support",
+      "Basic website integration"
     ]
   },
   Standard: {
@@ -38,11 +37,11 @@ export const subscriptionTiers = {
     isPopular: true,
     features: [
       "Up to 100,000 monthly visitors",
-      "Advanced banner customization",
+      "Up to 30 products",
+      "Banner customization",
       "Priority email support",
-      "A/B testing capabilities",
       "Multiple website integration",
-      "Advanced analytics dashboard"
+      "Analytics dashboard",
     ]
   },
   Premium: {
@@ -60,12 +59,14 @@ export const subscriptionTiers = {
     isPopular: false,
     features: [
       "Up to 1,000,000 monthly visitors",
-      "Custom banner development",
+      "Up to 50 products",
+      "Advanced banner development",
       "24/7 dedicated support",
-      "AI-powered price optimization",
       "Advanced revenue analytics",
+      "A/B testing capabilities",
       "Multi-team collaboration",
-      "Custom integrations"
+      "Custom integrations",
+      "Remove branding"
     ]
   },
 } as const
