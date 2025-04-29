@@ -1,11 +1,10 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { userRolesEnum } from "./enums";
+import { created_at, updated_at, userRolesEnum } from "./enums";
 import { UserOAuthAccountTable } from "./oauth";
-
-const created_at = timestamp({ withTimezone: true }).notNull().defaultNow();
-const updated_at = timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
+import { Product } from "./product";
+import { UserSubscription } from "./subscription";
 
 export const User = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
@@ -20,4 +19,6 @@ export const User = pgTable("users", {
 
 export const userRelations = relations(User, ({ many }) => ({
   oAuthAccounts: many(UserOAuthAccountTable),
+  products: many(Product),
+  subscriptions: many(UserSubscription),
 }));

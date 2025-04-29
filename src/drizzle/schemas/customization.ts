@@ -1,18 +1,35 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, varchar, integer } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 
 import { Product } from "./product";
 
-export const Customization = pgTable("customizations", {
+const created_at = timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
+const updated_at = timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
+
+export const ProductCustomization = pgTable("product_customizations", {
   id: uuid().primaryKey().defaultRandom(),
-  product_id: integer().notNull().references(() => Product.id, { onDelete: 'cascade' }),
-  bg_color: varchar({ length: 225 }),
-  text_color: varchar({ length: 225 }),
+  class_prefix: text(),
+  product_id: uuid()
+    .notNull()
+    .references(() => Product.id, { onDelete: "cascade" })
+    .unique(),
+  location_message: text()
+    .notNull()
+    .default(
+      "Hey! It looks like you are from <b>{country}</b>. We support Parity Purchasing Power, so if you need it, use code <b>\"{coupon}\"</b> to get <b>{discount}%</b> off."
+    ),
+  background_color: text()
+    .notNull()
+    .default("hsl(193, 82%, 31%)"),
+  text_color: text().notNull().default("hsl(0, 0%, 100%)"),
+  banner_container: text().notNull().default("body"),
+  created_at,
+  updated_at,
 });
 
-export const customizationRelations = relations(Customization, ({ one }) => ({
+export const productCustomizationRelations = relations(ProductCustomization, ({ one }) => ({
   product: one(Product, {
-    fields: [Customization.product_id],
+    fields: [ProductCustomization.product_id],
     references: [Product.id],
   }),
 }));

@@ -1,23 +1,33 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, varchar, text, numeric, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, index } from "drizzle-orm/pg-core";
 
-import { Customization } from "./customization";
-
-const created_at = timestamp({ withTimezone: true }).notNull().defaultNow();
-const updated_at = timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
+import { CountryGroupDiscount } from "./country";
+import { ProductCustomization } from "./customization";
+import { User } from "./user";
+import { ProductView } from "./visits";
+const created_at = timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
+const updated_at = timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date());
 
 export const Product = pgTable("products", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar({ length: 255 }).notNull(),
+  id: uuid().primaryKey().defaultRandom(),
+  user_id: uuid().notNull(),
+  name: text().notNull(),
+  domain: text().notNull(),
   description: text(),
-  price: numeric().notNull(),
   created_at,
   updated_at,
-});
+}, (table) => [
+  index("products_user_id_index").on(table.user_id),
+  index("products_name_index").on(table.name),
+  index("products_domain_index").on(table.domain),
+]);
 
-export const productRelations = relations(Product, ({ one }) => ({
-  customizations: one(Customization, {
-    fields: [Product.id],
-    references: [Customization.product_id],
+export const productRelations = relations(Product, ({ one, many }) => ({
+  product_customization: one(ProductCustomization),
+  product_views: many(ProductView),
+  country_group_discounts: many(CountryGroupDiscount),
+  user: one(User, {
+    fields: [Product.user_id],
+    references: [User.id],
   }),
 }));

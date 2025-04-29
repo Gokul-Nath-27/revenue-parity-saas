@@ -6,7 +6,7 @@ type Product = {
   id: string;
   name: string;
   description: string;
-  price: number;
+  domain: string;
 };
 
 type ProductMainContentProps = {
@@ -23,23 +23,18 @@ export const ProductMainContent: React.FC<ProductMainContentProps> = ({ products
         >
           <div className="space-y-4">
             <div className='flex justify-between'>
-              <div>
+              <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-1">
                   {product.name}
                 </h3>
+                <p className="text-sm text-muted-foreground mb-1">
+                  {product.domain}
+                </p>
                 <p className="text-sm text-muted-foreground line-clamp-2">
                   {product.description}
                 </p>
               </div>
               <ProductActions />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="text-lg font-bold text-primary">
-                ${product.price.toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })}
-              </div>
             </div>
           </div>
         </div>

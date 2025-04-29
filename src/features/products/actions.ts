@@ -6,7 +6,7 @@ type Response = {
   errors: null
 };
 
-export async function createProductAction(prev: Response | null, formData: FormData) {
+export async function createProduct(prev: Response | null, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
 
   const { data, success, error } = productSchema.safeParse(rawData);

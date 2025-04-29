@@ -21,3 +21,7 @@ export const generateIntials = (name: string) => {
 
   return `${firstNameInitial}${lastNameInitial}`;
 };
+
+export function removeTrailingSlash(path: string) {
+  return path.replace(/\/$/, "")
+}``

@@ -8,12 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createProductAction } from '@/features/products/actions';
+import { createProduct } from '@/features/products/actions';
 
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);
-  const [state, createAction, pending] = useActionState(createProductAction, null);
+  const [state, createAction, pending] = useActionState(createProduct, null);
 
   useEffect(() => {
     if (state?.success) {
