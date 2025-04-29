@@ -11,8 +11,17 @@ export function BannerEmbed() {
         <div className="space-y-4">
           <h3 className="text-xl font-semibold">Embed Code</h3>
           <p className="text-sm text-muted-foreground">
-            Use this code to add the banner to your existing website.
+            Use this code to add the banner to your existing website. The code includes all your customization settings:
           </p>
+          <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-color</code>: The banner&apos;s background color</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-style</code>: The banner&apos;s border radius</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-position</code>: Where the banner appears (top/bottom)</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-text-color</code>: The text color of the banner</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-font-size</code>: The size of the text</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-container</code>: Where the banner is placed (body/header/main)</li>
+            <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-sticky</code>: Whether the banner sticks to the viewport</li>
+          </ul>
           <Clipboard />
         </div>
       </CardContent>

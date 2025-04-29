@@ -10,6 +10,14 @@ type BannerContextType = {
   setCustomMessage: (message: string) => void;
   bannerPosition: string;
   setBannerPosition: (position: string) => void;
+  textColor: string;
+  setTextColor: (color: string) => void;
+  fontSize: string;
+  setFontSize: (size: string) => void;
+  bannerContainer: string;
+  setBannerContainer: (container: string) => void;
+  isSticky: boolean;
+  setIsSticky: (sticky: boolean) => void;
 };
 
 export const BannerContext = createContext<BannerContextType | undefined>(undefined);
@@ -19,6 +27,10 @@ export function BannerProvider({ children }: { children: ReactNode }) {
   const [bannerStyle, setBannerStyle] = useState('rounded-md');
   const [customMessage, setCustomMessage] = useState('');
   const [bannerPosition, setBannerPosition] = useState('top');
+  const [textColor, setTextColor] = useState('hsl(0, 0%, 100%)');
+  const [fontSize, setFontSize] = useState('1rem');
+  const [bannerContainer, setBannerContainer] = useState('body');
+  const [isSticky, setIsSticky] = useState(true);
 
   return (
     <BannerContext.Provider value={{
@@ -29,7 +41,15 @@ export function BannerProvider({ children }: { children: ReactNode }) {
       customMessage,
       setCustomMessage,
       bannerPosition,
-      setBannerPosition
+      setBannerPosition,
+      textColor,
+      setTextColor,
+      fontSize,
+      setFontSize,
+      bannerContainer,
+      setBannerContainer,
+      isSticky,
+      setIsSticky
     }}>
       {children}
     </BannerContext.Provider>

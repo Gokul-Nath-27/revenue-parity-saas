@@ -10,19 +10,25 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createProduct } from '@/features/products/actions';
 
+const initialState = {
+  success: false,
+  message: "",
+  errors: undefined,
+  inputs: undefined,
+}
 
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);
-  const [state, createAction, pending] = useActionState(createProduct, null);
+  const [state, createAction, pending] = useActionState(createProduct, initialState);
 
   useEffect(() => {
-    if (state?.success) {
-      toast.success('Product created successfully');
-      setOpen(false);
-    } else if (state?.errors && !pending && !state.success) {
-      // Object.values(state.errors).forEach((value) => {
-      //   toast.error(value);
-      // });
+    if (!pending && state?.message) {
+      if (state.success) {
+        setOpen(false);
+        toast.success(state.message);
+      } else {
+        toast.error(state.message);
+      }
     }
   }, [state, pending]);
 
@@ -31,7 +37,7 @@ export const AddProductDialog = () => {
       <Button onClick={() => setOpen(true)} className="gap-2 cursor-pointer">
         <Plus className="h-4 w-4" /> Add Product
       </Button>
-      <Dialog open={open} onOpenChange={setOpen} modal={true}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px] [&>button]:cursor-pointer">
           <DialogHeader>
             <DialogTitle>{"Add New Product"}</DialogTitle>
@@ -42,7 +48,8 @@ export const AddProductDialog = () => {
           <form className="space-y-4" action={createAction}>
             <div>
               <label className="block text-sm font-medium" htmlFor="name">Product Name</label>
-              <Input id="name" placeholder="Premium E-book" name="name" required />
+              <Input id="name" placeholder="Product Name" name="name" required minLength={3} defaultValue={state.inputs?.name || ""} />
+              {state.errors?.name && <p className="text-red-500 text-sm">{state.errors.name.join(", ")}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium" htmlFor="description">Description</label>
@@ -51,21 +58,21 @@ export const AddProductDialog = () => {
                 className="resize-none h-20"
                 placeholder="Describe your product"
                 id="description"
+                defaultValue={state.inputs?.description || ""}
               />
+              {state.errors?.description && <p className="text-red-500 text-sm">{state.errors.description.join(", ")}</p>}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium" htmlFor="price">Price</label>
-                <Input
-                  type="number"
-                  id="price"
-                  required
-                  placeholder="29.99"
-                  min="0"
-                  step="0.01"
-                  name="price"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium" htmlFor="domain">Domain</label>
+              <Input
+                type="text"
+                id="domain"
+                required
+                placeholder="example.com"
+                defaultValue={state.inputs?.domain || ""}
+                name="domain"
+              />
+              {state.errors?.domain && <p className="text-red-500 text-sm">{state.errors.domain.join(", ")}</p>}
             </div>
             <DialogFooter>
               <Button type="submit">

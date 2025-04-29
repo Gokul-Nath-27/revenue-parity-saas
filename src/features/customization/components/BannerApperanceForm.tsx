@@ -11,10 +11,14 @@ import { Label } from "@/components/ui/label";
 import { updateBannerConfig } from '../action';
 
 import { BannerColorPicker } from "./BannerColorPicker";
+import { BannerContainerPicker } from "./BannerContainerPicker";
 import { useBanner } from './BannerContext';
 import { BannerMessageInput } from "./BannerMessageInput";
 import { BannerPositionPicker } from "./BannerPositionPicker";
 import { BannerRadiusPicker } from "./BannerRadiusPicker";
+import { FontSizePicker } from "./FontSizePicker";
+import { StickyToggle } from "./StickyToggle";
+import { TextColorPicker } from "./TextColorPicker";
 
 type FormState = {
   success: boolean;
@@ -24,6 +28,10 @@ type FormState = {
     bannerRadius?: string[];
     bannerMessage?: string[];
     bannerPosition?: string[];
+    textColor?: string[];
+    fontSize?: string[];
+    bannerContainer?: string[];
+    isSticky?: string[];
   };
 };
 
@@ -43,7 +51,16 @@ const initialState: FormState = {
   errors: {}
 };
 export function BannerApperanceForm() {
-  const { bannerColor, bannerStyle, customMessage, bannerPosition } = useBanner();
+  const {
+    bannerColor,
+    bannerStyle,
+    customMessage,
+    bannerPosition,
+    textColor,
+    fontSize,
+    bannerContainer,
+    isSticky
+  } = useBanner();
 
   const [state, formAction] = useActionState<FormState, FormData>(updateBannerConfig, initialState);
 
@@ -74,6 +91,10 @@ export function BannerApperanceForm() {
             <input type="hidden" name="bannerRadius" value={bannerStyle} />
             <input type="hidden" name="bannerMessage" value={customMessage} />
             <input type="hidden" name="bannerPosition" value={bannerPosition} />
+            <input type="hidden" name="textColor" value={textColor} />
+            <input type="hidden" name="fontSize" value={fontSize} />
+            <input type="hidden" name="bannerContainer" value={bannerContainer} />
+            <input type="hidden" name="isSticky" value={isSticky.toString()} />
 
             <div className="space-y-2">
               <Label>Banner Color</Label>
@@ -82,6 +103,23 @@ export function BannerApperanceForm() {
                 <p className="text-xs text-destructive">{state.errors.bannerColor[0]}</p>
               )}
             </div>
+
+            <div className="space-y-2">
+              <Label>Text Color</Label>
+              <TextColorPicker />
+              {state.errors?.textColor && (
+                <p className="text-xs text-destructive">{state.errors.textColor[0]}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label>Font Size</Label>
+              <FontSizePicker />
+              {state.errors?.fontSize && (
+                <p className="text-xs text-destructive">{state.errors.fontSize[0]}</p>
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label>Banner Radius</Label>
               <BannerRadiusPicker />
@@ -89,16 +127,21 @@ export function BannerApperanceForm() {
                 <p className="text-xs text-destructive">{state.errors.bannerRadius[0]}</p>
               )}
             </div>
+
             <div className="space-y-2">
               <Label>Banner Message</Label>
               <BannerMessageInput />
-              <p className="text-xs text-muted-foreground">
-                Leave blank to use our default message optimized for each country
-              </p>
+              <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <span>Parameters:</span>
+                <code className="bg-muted px-1 py-0.5 rounded text-[10px]">{'{country}'}</code>
+                <code className="bg-muted px-1 py-0.5 rounded text-[10px]">{'{coupon}'}</code>
+                <code className="bg-muted px-1 py-0.5 rounded text-[10px]">{'{discount}'}</code>
+              </div>
               {state.errors?.bannerMessage && (
                 <p className="text-xs text-destructive">{state.errors.bannerMessage[0]}</p>
               )}
             </div>
+
             <div className="space-y-2">
               <Label>Banner Position</Label>
               <BannerPositionPicker />
@@ -106,6 +149,22 @@ export function BannerApperanceForm() {
                 <p className="text-xs text-destructive">{state.errors.bannerPosition[0]}</p>
               )}
             </div>
+
+            <div className="space-y-2">
+              <Label>Banner Container</Label>
+              <BannerContainerPicker />
+              {state.errors?.bannerContainer && (
+                <p className="text-xs text-destructive">{state.errors.bannerContainer[0]}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <StickyToggle />
+              {state.errors?.isSticky && (
+                <p className="text-xs text-destructive">{state.errors.isSticky[0]}</p>
+              )}
+            </div>
+
             <div className="pt-4">
               <SubmitButton />
             </div>

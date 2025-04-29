@@ -50,8 +50,21 @@ export async function updateBannerConfig(prevState: State, formData: FormData) {
     const bannerRadius = formData.get('bannerRadius');
     const bannerMessage = formData.get('bannerMessage');
     const bannerPosition = formData.get('bannerPosition');
+    const textColor = formData.get('textColor');
+    const fontSize = formData.get('fontSize');
+    const bannerContainer = formData.get('bannerContainer');
+    const isSticky = formData.get('isSticky') === 'true';
 
-    console.log(bannerColor, bannerRadius, bannerMessage, bannerPosition);
+    console.log({
+      bannerColor,
+      bannerRadius,
+      bannerMessage,
+      bannerPosition,
+      textColor,
+      fontSize,
+      bannerContainer,
+      isSticky
+    });
 
     // TODO: Add your API call here to update the banner configuration
 
@@ -70,6 +83,10 @@ export async function updateBannerConfig(prevState: State, formData: FormData) {
         bannerRadius: ["Invalid banner radius"],
         bannerMessage: ["Invalid banner message"],
         bannerPosition: ["Invalid banner position"],
+        textColor: ["Invalid text color"],
+        fontSize: ["Invalid font size"],
+        bannerContainer: ["Invalid banner container"],
+        isSticky: ["Invalid sticky setting"],
       },
     };
   }

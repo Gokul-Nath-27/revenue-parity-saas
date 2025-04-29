@@ -1,24 +1,39 @@
 "use server"
-import { productSchema } from "@/features/products/schema";
+import { createProductIntoDb } from "@/features/products/db";
+import { productFormSchema, ProductForm } from "@/features/products/schema";
 
 type Response = {
   success: boolean;
-  errors: null
+  message: string;
+  errors?: Record<string, string[]> | null;
+  inputs?: ProductForm;
 };
 
-export async function createProduct(prev: Response | null, formData: FormData) {
-  const rawData = Object.fromEntries(formData.entries());
+export async function createProduct(prev: Response, formData: FormData) {
 
-  const { data, success, error } = productSchema.safeParse(rawData);
-  console.log(data)
+  const rawData = Object.fromEntries(formData.entries()) as ProductForm;
+
+  const { data, success, error } = productFormSchema.safeParse(rawData);
 
   if (!success) {
-    console.log(error.flatten().formErrors)
     return {
       success: false,
-      errors: null,
+      message: "Invalid form data",
+      errors: error.flatten().fieldErrors,
+      inputs: rawData,
     }
   }
-
-  return { success: true, errors: null };
+  const [product] = await createProductIntoDb(data);
+  if (!product) {
+    return {
+      success: false,
+      message: "Failed to create product",
+      inputs: rawData,
+    }
+  }
+  return {
+    success: true,
+    message: "Product created successfully",
+  }
 } 
+

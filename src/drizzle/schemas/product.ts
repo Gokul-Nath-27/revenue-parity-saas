@@ -12,7 +12,7 @@ export const Product = pgTable("products", {
   id: uuid().primaryKey().defaultRandom(),
   user_id: uuid().notNull(),
   name: text().notNull(),
-  domain: text().notNull(),
+  domain: text().notNull().unique(),
   description: text(),
   created_at,
   updated_at,
@@ -23,7 +23,10 @@ export const Product = pgTable("products", {
 ]);
 
 export const productRelations = relations(Product, ({ one, many }) => ({
-  product_customization: one(ProductCustomization),
+  product_customization: one(ProductCustomization, {
+    fields: [Product.id],
+    references: [ProductCustomization.product_id],
+  }),
   product_views: many(ProductView),
   country_group_discounts: many(CountryGroupDiscount),
   user: one(User, {

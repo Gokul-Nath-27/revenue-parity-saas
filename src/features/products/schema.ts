@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
-export const productSchema = z.object({
-  name: z.string().min(10),
-  description: z.string(),
+export const productFormSchema = z.object({
+  name: z.string().min(3),
+  description: z.string().nullable(),
   domain: z.string().url(),
 });
 
-export type Product = z.infer<typeof productSchema>;
+export type ProductForm = z.infer<typeof productFormSchema>;
+export type Product = ProductForm & {
+  id: string;
+};

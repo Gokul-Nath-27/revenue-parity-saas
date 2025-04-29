@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+
 import ProductContent from "@/features/products/components/product-content";
 import { AddProductDialog } from "@/features/products/components/product-dialog";
+import { ProductSkeleton } from "@/features/products/components/product-skeleton";
 
 export default async function DashboardPage() {
   return (
@@ -11,7 +14,9 @@ export default async function DashboardPage() {
         </div>
         <AddProductDialog />
       </div>
-      <ProductContent />
+      <Suspense fallback={<ProductSkeleton />}>
+        <ProductContent />
+      </Suspense>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import OAuth from "../OAuth"
 export default function SignInForm() {
   const searchParams = useSearchParams();
   const oauthError = searchParams.get("oauthError")
+  const notAuthorized = searchParams.get("not-authorized")
   const [state, action, pending] = useActionState(signIn, {});
 
   useEffect(() => {
@@ -22,6 +23,12 @@ export default function SignInForm() {
       toast.error(state.message);
     }
   }, [state, pending]);
+
+  useEffect(() => {
+    if (notAuthorized) {
+      toast.error("You are not authorized to access this page");
+    }
+  }, [notAuthorized]);
 
   return (
     <form action={action} className="space-y-4" autoComplete="off">

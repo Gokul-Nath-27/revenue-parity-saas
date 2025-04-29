@@ -7,20 +7,44 @@ import { Button } from "@/components/ui/button";
 
 import { useBanner } from "./BannerContext";
 
-
 export function Clipboard() {
-  const { bannerColor, bannerStyle, bannerPosition } = useBanner();
+  const { 
+    bannerColor, 
+    bannerStyle, 
+    bannerPosition,
+    textColor,
+    fontSize,
+    bannerContainer,
+    isSticky
+  } = useBanner();
   const [copied, setCopied] = useState(false);
 
   const copyEmbedCode = () => {
-    navigator.clipboard.writeText(`<script src="https://revenueparity.com/embed.js" data-color="${bannerColor}" data-style="${bannerStyle}" data-position="${bannerPosition}"></script>`);
+    const embedCode = `<script src="https://revenueparity.com/embed.js" 
+  data-color="${bannerColor}" 
+  data-style="${bannerStyle}" 
+  data-position="${bannerPosition}"
+  data-text-color="${textColor}"
+  data-font-size="${fontSize}"
+  data-container="${bannerContainer}"
+  data-sticky="${isSticky}"></script>`;
+    
+    navigator.clipboard.writeText(embedCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
   return (
     <>
       <div className="bg-muted p-3 rounded-md text-xs font-mono overflow-x-auto">
-        <code className="hide-scrollbar">{`<script src="https://revenueparity.com/embed.js" data-color="${bannerColor}" data-style="${bannerStyle}" data-position="${bannerPosition}"></script>`}</code>
+        <code className="hide-scrollbar whitespace-pre">{`<script src="https://revenueparity.com/embed.js" 
+  data-color="${bannerColor}" 
+  data-style="${bannerStyle}" 
+  data-position="${bannerPosition}"
+  data-text-color="${textColor}"
+  data-font-size="${fontSize}"
+  data-container="${bannerContainer}"
+  data-sticky="${isSticky}"></script>`}</code>
       </div>
 
       <Button
@@ -39,6 +63,5 @@ export function Clipboard() {
         )}
       </Button>
     </>
-
-  )
+  );
 }
