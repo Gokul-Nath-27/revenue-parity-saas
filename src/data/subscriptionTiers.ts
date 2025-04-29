@@ -11,16 +11,17 @@ export const subscriptionTiers = {
     canCustomizeBanner: false,
     canRemoveBranding: false,
     stripePriceId: null,
-  },
-  Basic: {
-    name: "Basic",
-    priceInCents: 1900,
-    maxNumberOfProducts: 5,
-    maxNumberOfVisits: 10000,
-    canAccessAnalytics: true,
-    canCustomizeBanner: false,
-    canRemoveBranding: true,
-    stripePriceId: process.env.STRIPE_BASIC_PLAN_STRIPE_PRICE_ID,
+    description: "Perfect for trying out our platform",
+    buttonText: "Start for Free",
+    buttonVariant: "outline",
+    isPopular: false,
+    features: [
+      "Up to 5,000 monthly visitors",
+      "Basic banner customization",
+      "Standard support",
+      "Manual pricing control",
+      "Single website integration"
+    ]
   },
   Standard: {
     name: "Standard",
@@ -31,6 +32,18 @@ export const subscriptionTiers = {
     canCustomizeBanner: true,
     canRemoveBranding: true,
     stripePriceId: process.env.STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID,
+    description: "For growing businesses and creators",
+    buttonText: "Get Started",
+    buttonVariant: "default",
+    isPopular: true,
+    features: [
+      "Up to 100,000 monthly visitors",
+      "Advanced banner customization",
+      "Priority email support",
+      "A/B testing capabilities",
+      "Multiple website integration",
+      "Advanced analytics dashboard"
+    ]
   },
   Premium: {
     name: "Premium",
@@ -41,12 +54,24 @@ export const subscriptionTiers = {
     canCustomizeBanner: true,
     canRemoveBranding: true,
     stripePriceId: process.env.STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID,
+    description: "For large businesses with high volume",
+    buttonText: "Contact Sales",
+    buttonVariant: "secondary",
+    isPopular: false,
+    features: [
+      "Up to 1,000,000 monthly visitors",
+      "Custom banner development",
+      "24/7 dedicated support",
+      "AI-powered price optimization",
+      "Advanced revenue analytics",
+      "Multi-team collaboration",
+      "Custom integrations"
+    ]
   },
 } as const
 
 export const subscriptionTiersInOrder = [
   subscriptionTiers.Free,
-  subscriptionTiers.Basic,
   subscriptionTiers.Standard,
   subscriptionTiers.Premium,
 ] as const

@@ -1,12 +1,13 @@
 import { Star, Check, ArrowRight } from "lucide-react";
 
+import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
+
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
 
 const PricingCard = ({
   title,
   price,
-  frequency,
   description,
   features,
   buttonText,
@@ -15,9 +16,8 @@ const PricingCard = ({
 }: {
   title: string;
   price: string;
-  frequency: string;
   description: string;
-  features: string[];
+  features: readonly string[];
   buttonText: string;
   buttonVariant?: "default" | "outline" | "secondary";
   popular?: boolean;
@@ -40,7 +40,7 @@ const PricingCard = ({
     <CardContent className="pt-6 flex-grow">
       <div className="flex items-baseline mb-6">
         <span className="text-3xl md:text-4xl font-bold">{price}</span>
-        {price !== 'Free' && <span className="text-muted-foreground ml-1">{frequency}</span>}
+        {price !== 'Free' && <span className="text-muted-foreground ml-1">/month</span>}
       </div>
 
       <ul className="space-y-3 text-sm">
@@ -63,61 +63,19 @@ const PricingCard = ({
 
 export default function PricingSection() {
   return (
-    <div id="pricing-section" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl">
-      {/* Free Plan */}
-      <PricingCard
-        title="Starter"
-        price="Free"
-        frequency=""
-        description="Perfect for trying out our platform"
-        features={[
-          "Up to 5,000 monthly visitors",
-          "Basic banner customization",
-          "Standard support",
-          "Manual pricing control",
-          "Single website integration"
-        ]}
-        buttonText="Start for Free"
-        buttonVariant="outline"
-      />
-
-      {/* Pro Plan */}
-      <PricingCard
-        title="Professional"
-        price="$20"
-        frequency="/month"
-        description="For growing businesses and creators"
-        features={[
-          "Up to 50,000 monthly visitors",
-          "Advanced banner customization",
-          "Priority email support",
-          "A/B testing capabilities",
-          "Multiple website integration",
-          "Advanced analytics dashboard"
-        ]}
-        buttonText="Get Started"
-        // popular={true}
-      />
-
-      {/* Enterprise Plan */}
-      <PricingCard
-        title="Enterprise"
-        price="$60"
-        frequency="/month"
-        description="For large businesses with high volume"
-        features={[
-          "Unlimited monthly visitors",
-          "Custom banner development",
-          "24/7 dedicated support",
-          "AI-powered price optimization",
-          "Advanced revenue analytics",
-          "Multi-team collaboration",
-          "Custom integrations"
-        ]}
-        buttonText="Contact Sales"
-        buttonVariant="secondary"
-      />
+    <div id="pricing-section" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {subscriptionTiersInOrder.map((tier) => (
+        <PricingCard
+          key={tier.name}
+          title={tier.name}
+          price={tier.priceInCents === 0 ? "Free" : `$${(tier.priceInCents / 100).toFixed(2)}`}
+          description={tier.description}
+          features={tier.features}
+          buttonText={tier.buttonText}
+          buttonVariant={tier.buttonVariant}
+          popular={tier.isPopular}
+        />
+      ))}
     </div>
-
-  )
+  );
 }

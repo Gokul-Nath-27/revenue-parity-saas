@@ -57,6 +57,13 @@
       "when": 1745935295105,
       "tag": "0007_amusing_viper",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1745942990327,
+      "tag": "0008_pretty_black_bolt",
+      "breakpoints": true
     }
   ]
 }
