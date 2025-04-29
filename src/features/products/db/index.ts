@@ -17,7 +17,7 @@ export const getProducts = withAuthUserId(async function getProducts(userId) {
   return products;
 });
 
-export const createProductIntoDb = withAuthUserId(async function insertProduct(userId, data) {
+export const createProductIntoDb = withAuthUserId(async function insertProduct(userId, data: typeof Product.$inferInsert) {
   const product = await db.insert(Product).values({
     ...data,
     user_id: userId

@@ -1,4 +1,5 @@
 "use server"
+import { Product } from "@/drizzle/schemas";
 import { createProductIntoDb } from "@/features/products/db";
 import { productFormSchema, ProductForm } from "@/features/products/schema";
 
@@ -23,7 +24,7 @@ export async function createProduct(prev: Response, formData: FormData) {
       inputs: rawData,
     }
   }
-  const [product] = await createProductIntoDb(data);
+  const [product] = await createProductIntoDb(data as typeof Product.$inferInsert);
   if (!product) {
     return {
       success: false,
