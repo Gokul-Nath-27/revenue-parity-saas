@@ -1,48 +1,148 @@
-# My App
+# Global Pricing Platform
 
-A Next.js application with TypeScript, Tailwind CSS, and Drizzle ORM.
+A sophisticated platform that enables digital product creators to implement intelligent, region-based pricing strategies to maximize global revenue while maintaining fair pricing across different markets.
 
-## Quick Start
+## 🌟 Key Features
 
-1. Install dependencies:
+### 1. Smart Global Pricing
+- Automatic currency detection and conversion
+- Purchasing Power Parity (PPP) based pricing
+- Region-specific discount management
+- Revenue optimization algorithms
+
+### 2. Product Management
+- Multi-product support
+- Customizable product details
+- Domain integration
+- Product analytics and tracking
+
+### 3. Customization Tools
+- Site configuration management
+- Customizable banner system
+- A/B testing capabilities
+- Advanced analytics dashboard
+
+### 4. User Management
+- Multi-user support
+- Role-based access control
+- User activity tracking
+- Secure authentication
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL database
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
 ```bash
-pnpm install
+git clone https://github.com/your-org/global-pricing-platform.git
+cd global-pricing-platform
 ```
 
-2. Set up environment:
-   - Create the .env
-   - Add your Neon database URL to `NEXT_APP_NEON_DATABASE_URL`
-
-3. Setup database:
+2. Install dependencies:
 ```bash
-pnpm db:generate
-pnpm db:push
+npm install
+# or
+yarn install
 ```
 
-4. Start development server:
+3. Set up environment variables:
 ```bash
-pnpm dev
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-Visit [http://localhost:3000](http://localhost:3000)
+4. Initialize the database:
+```bash
+npm run db:migrate
+# or
+yarn db:migrate
+```
 
-## Tech Stack
+5. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-- Next.js 15 + TypeScript
-- Tailwind CSS
-- Neon (PostgreSQL) + Drizzle ORM
-- Radix UI + next-themes
+## 📦 Project Structure
 
-## Scripts
+```
+src/
+├── app/                    # Next.js app router
+├── components/            # Reusable UI components
+├── features/             # Feature-specific modules
+│   ├── products/        # Product management
+│   ├── customization/   # Site customization
+│   ├── discounts/      # Discount management
+│   └── marketing/      # Marketing components
+├── drizzle/             # Database schema and migrations
+└── lib/                 # Utility functions and shared code
+```
 
-- `pnpm dev` - Start dev server
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm db:studio` - Database management
-- `pnpm db:generate` - Generate migrations
-- `pnpm db:push` - Push schema changes
+## 🔧 Configuration
 
-## Contributing
+### Database
+The application uses PostgreSQL with Drizzle ORM. Database configuration can be found in:
+- `src/drizzle/schemas/` - Database schemas
+- `src/drizzle/migrations/` - Database migrations
+
+### Environment Variables
+Required environment variables:
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXT_PUBLIC_APP_URL` - Application base URL
+- `NEXTAUTH_SECRET` - Authentication secret
+- `NEXTAUTH_URL` - Authentication callback URL
+
+## 🛠️ Development Guidelines
+
+### Code Style
+- Follow TypeScript best practices
+- Use ESLint and Prettier for code formatting
+- Write meaningful commit messages
+- Document complex logic with comments
+
+### Testing
+- Write unit tests for critical functionality
+- Use Jest for testing
+- Maintain test coverage above 80%
+
+### Database Changes
+1. Create new migration:
+```bash
+npm run db:generate
+# or
+yarn db:generate
+```
+
+2. Apply migrations:
+```bash
+npm run db:migrate
+# or
+yarn db:migrate
+```
+
+## 📈 Performance Optimization
+
+- Implement caching strategies
+- Optimize database queries
+- Use proper indexing
+- Monitor application performance
+
+## 🔒 Security
+
+- Implement proper authentication
+- Use secure session management
+- Validate all user inputs
+- Regular security audits
+- Keep dependencies updated
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -50,6 +150,14 @@ Visit [http://localhost:3000](http://localhost:3000)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support, email support@example.com or join our [Discord community](https://discord.gg/example).
+
+---
+
+Built with ❤️ by [Your Organization]
