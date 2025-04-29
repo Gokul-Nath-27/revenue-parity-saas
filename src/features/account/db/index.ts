@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 
 import db, { sql } from "@/drizzle/db";
-import { OAuthProvider, User } from "@/drizzle/schemas";
+import { OAuthProvider, TierEnum, User, UserSubscription } from "@/drizzle/schemas";
 
-import { UserSession } from "../schema";
+import { sessionSchema } from "../schema";
 
 export async function getUserById(userId: string) {
   try {
@@ -49,6 +49,7 @@ export async function connectUserToAccount(
     if (userInsert.length > 0) {
       // user inserted
       userId = userInsert[0].id;
+      await assignDefaultTier(userId);
       createdUsers.push(userId);
     } else {
       // User already exists, fetch user id
@@ -85,10 +86,15 @@ export async function connectUserToAccount(
 
     // Fetch and returning only the role and the user id (DTO)
     const [user] = await sql`
-      SELECT id, role FROM "users" WHERE id = ${userId}
+      SELECT u.id, u.role, us.tier 
+      FROM "users" u
+      LEFT JOIN "user_subscriptions" us ON u.id = us.user_id
+      WHERE u.id = ${userId}
     `;
 
-    return user as UserSession;
+    const parsedUser = sessionSchema.parse(user);
+
+    return parsedUser;
   } catch (error) {
     console.error('Transaction failed:', error);
 
@@ -108,5 +114,15 @@ export async function connectUserToAccount(
     }
 
     throw new Error('Failed to connect user to account');
+  }
+}
+
+export async function assignDefaultTier(userId: string) {
+  try {    
+    await db.insert(UserSubscription).values({ user_id: userId, tier: TierEnum.enumValues[0] })
+      .onConflictDoNothing({ target: UserSubscription.user_id });
+    console.log(`Successfully created subscription for user: ${userId}`);
+  } catch (error) {
+    console.error('Failed to create subscription:', error);
   }
 }

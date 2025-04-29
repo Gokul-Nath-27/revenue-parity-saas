@@ -9,11 +9,11 @@ const updated_at = timestamp("updated_at", { withTimezone: true }).notNull().def
 
 export const UserSubscription = pgTable("user_subscriptions", {
   id: uuid().primaryKey().defaultRandom(),
-  user_id: uuid().notNull().unique(),
+  user_id: uuid().notNull().unique().references(() => User.id, { onDelete: "cascade" }),
   stripe_subscription_item_id: text(),
   stripe_subscription_id: text(),
   stripe_customer_id: text(),
-  tier: TierEnum("tier").notNull(),
+  tier: TierEnum("tier").notNull().default(TierEnum.enumValues[0]),
   created_at,
   updated_at,
 }, (table) => [

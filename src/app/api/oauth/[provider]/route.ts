@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { oAuthProviders } from "@/drizzle/schemas/enums";
-import { connectUserToAccount } from '@/features/account/db';
+import { connectUserToAccount  } from '@/features/account/db';
 import { createSession } from "@/lib/session";
 
 import { getOAuthClient } from "../_providers/base";

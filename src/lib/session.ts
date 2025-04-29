@@ -6,7 +6,6 @@ import { cache } from 'react';
 import { getUserById } from '@/features/account/db';
 import { sessionSchema, type UserSession } from '@/features/account/schema';
 import { redis } from '@/lib/redis';
-
 const SESSION_EXPIRATION = 1000 * 60 * 60; // 1 hour
 const SESSION_KEY: string = 'session-key'
 
@@ -22,18 +21,14 @@ export const createSession = async (user: UserSession) => {
   try {
     const sessionId = await generateSessionId();
 
-    // Only store id and role in the session
-    const sessionData = {
-      id: user.id,
-      role: user.role
-    };
 
-    const success = await saveSessionToRedis(sessionId, sessionData);
+    const success = await saveSessionToRedis(sessionId, user);
     if (!success) {
       return new Error('Could not create session, please try again.');
     }
 
     await setSessionCookie(sessionId);
+    return true;
 
   } catch (error) {
     console.error('Unexpected error creating session:', error);

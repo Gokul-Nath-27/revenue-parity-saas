@@ -1,0 +1,2 @@
+ALTER TABLE "user_subscriptions" ALTER COLUMN "tier" SET DEFAULT 'Free';--> statement-breakpoint
+ALTER TABLE "user_subscriptions" ADD CONSTRAINT "user_subscriptions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;

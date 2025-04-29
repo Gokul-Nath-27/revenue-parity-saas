@@ -17,8 +17,11 @@ export const User = pgTable("users", {
   updated_at,
 });
 
-export const userRelations = relations(User, ({ many }) => ({
+export const userRelations = relations(User, ({ many, one }) => ({
   oAuthAccounts: many(UserOAuthAccountTable),
   products: many(Product),
-  subscriptions: many(UserSubscription),
+  subscriptions: one(UserSubscription, {
+    fields: [User.id],
+    references: [UserSubscription.user_id],
+  }),
 }));

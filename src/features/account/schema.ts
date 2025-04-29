@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { userRoles } from '@/drizzle/schemas';
+import { userRoles, TierEnum } from '@/drizzle/schemas';
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -15,7 +15,8 @@ const signupSchema = z.object({
 
 const sessionSchema = z.object({
   id: z.string(),
-  role: z.enum(userRoles)
+  role: z.enum(userRoles),
+  tier: z.enum(TierEnum.enumValues)
 })
 
 const emailUserSchema = z.object({

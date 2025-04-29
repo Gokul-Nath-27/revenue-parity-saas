@@ -5,11 +5,13 @@ import { redirect } from "next/navigation";
 
 import { getOAuthClient } from "@/app/api/oauth/_providers/base";
 import db from "@/drizzle/db";
-import { type OAuthProvider, User } from '@/drizzle/schemas';
+import { type OAuthProvider, TierEnum, User } from '@/drizzle/schemas';
 import { signupSchema, signInSchema, sessionSchema, emailUserSchema } from "@/features/account/schema";
 import { generateSalt, gethashedPassword, checkCredential } from "@/lib/auth";
 import { redis } from "@/lib/redis";
 import { createSession } from "@/lib/session";
+
+import { assignDefaultTier } from "./db";
 
 const SESSION_KEY: string = 'session-key'
 
@@ -56,14 +58,16 @@ export async function signup(prev: FormState, formData: FormData): Promise<FormS
     return { message: 'An error occurred while creating your account.' };
   }
 
-  const sessionResult = await createSession(user);
+  // Assign default tier to new user
+  await assignDefaultTier(user.id);
+
+  const sessionResult = await createSession({ ...user, tier: TierEnum.enumValues[0] });
   if (sessionResult instanceof Error) {
     return { message: sessionResult.message };
   }
 
   redirect('/dashboard')
 }
-
 
 export async function signout() {
   try {
@@ -87,7 +91,6 @@ export async function signout() {
 }
 
 export async function signIn(prev: FormState, formData: FormData): Promise<FormState> {
-  console.log(1)
   const rawFormData = Object.fromEntries(formData);
   const parsed = signInSchema.safeParse(rawFormData);
 
@@ -100,25 +103,31 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
   const user = await db.query.User.findFirst({
     where: eq(User.email, email),
     columns: { email: true, password: true, salt: true, id: true, role: true },
+    with: {
+      subscriptions: {
+        columns: {
+          tier: true
+        },
+      }
+    }
   });
 
-  const validatedUser = emailUserSchema.safeParse(user);
-  if (!validatedUser.success) {
+  const { success, data } = emailUserSchema.safeParse(user);
+  if (!success) {
     return { message: 'Invalid login credentials.' };
   }
 
-  if (!await checkCredential(password, validatedUser.data.password, validatedUser.data.salt)) {
+  if (!await checkCredential(password, data.password, data.salt)) {
     return { message: 'Invalid login credentials.' };
   }
 
-  const sessionResult = await createSession(sessionSchema.parse(validatedUser.data));
+  const sessionResult = await createSession(sessionSchema.parse({ ...data, tier: user?.subscriptions.tier || TierEnum.enumValues[0] }));
   if (sessionResult instanceof Error) {
     return { message: sessionResult.message };
   }
 
   redirect('/dashboard')
 }
-
 
 export async function oAuthSignIn(provider: OAuthProvider) {
   const oAuthClient = getOAuthClient(provider)
