@@ -33,21 +33,19 @@ A sophisticated platform that enables digital product creators to implement inte
 ### Prerequisites
 - Node.js (v18 or higher)
 - PostgreSQL database
-- npm or yarn package manager
+- pnpm package manager
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-org/global-pricing-platform.git
-cd global-pricing-platform
+git clone https://github.com/Gokul-Nath-27/parity-promo-engine.git
+cd parity-promo-engine
 ```
 
 2. Install dependencies:
 ```bash
-npm install
-# or
-yarn install
+pnpm install
 ```
 
 3. Set up environment variables:
@@ -58,16 +56,12 @@ cp .env.example .env
 
 4. Initialize the database:
 ```bash
-npm run db:migrate
-# or
-yarn db:migrate
+pnpm db:migrate
 ```
 
 5. Start the development server:
 ```bash
-npm run dev
-# or
-yarn dev
+pnpm dev
 ```
 
 ## 📦 Project Structure
@@ -107,24 +101,15 @@ Required environment variables:
 - Write meaningful commit messages
 - Document complex logic with comments
 
-### Testing
-- Write unit tests for critical functionality
-- Use Jest for testing
-- Maintain test coverage above 80%
-
 ### Database Changes
 1. Create new migration:
 ```bash
-npm run db:generate
-# or
-yarn db:generate
+pnpm db:generate
 ```
 
 2. Apply migrations:
 ```bash
-npm run db:migrate
-# or
-yarn db:migrate
+pnpm db:migrate
 ```
 
 ## 📈 Performance Optimization
@@ -156,8 +141,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email support@example.com or join our [Discord community](https://discord.gg/example).
+For support, email gokulnath0827@gmail.com
 
 ---
 
-Built with ❤️ by [Your Organization]
+Built with ❤️ by Gokul Nath
