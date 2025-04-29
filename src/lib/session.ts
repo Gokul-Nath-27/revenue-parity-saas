@@ -1,6 +1,4 @@
 "use server"
-import crypto from 'crypto';
-
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import { cache } from 'react';
@@ -12,13 +10,17 @@ import { redis } from '@/lib/redis';
 const SESSION_EXPIRATION = 1000 * 60 * 60; // 1 hour
 const SESSION_KEY: string = 'session-key'
 
-const generateSessionId = () => {
-  return crypto.randomBytes(64).toString('hex').normalize();
+const generateSessionId = async () => {
+  const array = new Uint8Array(64);
+  crypto.getRandomValues(array);
+  return Array.from(array)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
 };
 
 export const createSession = async (user: UserSession) => {
   try {
-    const sessionId = generateSessionId();
+    const sessionId = await generateSessionId();
 
     // Only store id and role in the session
     const sessionData = {

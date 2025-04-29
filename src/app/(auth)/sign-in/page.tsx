@@ -1,6 +1,7 @@
 'use client'
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useActionState, useEffect } from "react"
 import { toast } from "sonner"
 
@@ -8,10 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { signIn } from "@/features/account/actions"
 
-
 import OAuth from "../OAuth"
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
+  const oauthError = searchParams.get("oauthError")
   const [state, action, pending] = useActionState(signIn, {});
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function SignInPage() {
       toast.error(state.message);
     }
   }, [state, pending]);
+
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -66,7 +69,7 @@ export default function SignInPage() {
 
         {/* Third Party Authentication */}
         <OAuth />
-
+        {oauthError && <p className="text-sm text-destructive text-center">{oauthError}</p>}
         <div className="mt-4 text-center text-sm">
           {`Don't have an account? `}
           <Link href="/sign-up" className="text-primary hover:underline">

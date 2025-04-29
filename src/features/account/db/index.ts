@@ -3,6 +3,8 @@ import { eq } from "drizzle-orm";
 import db, { sql } from "@/drizzle/db";
 import { OAuthProvider, User } from "@/drizzle/schemas";
 
+import { UserSession } from "../schema";
+
 export async function getUserById(userId: string) {
   try {
     return await db.query.User.findFirst({
@@ -81,12 +83,12 @@ export async function connectUserToAccount(
       createdOauthAccounts.push(existingAccount[0].userId);
     }
 
-    // Fetch and return user info
+    // Fetch and returning only the role and the user id (DTO)
     const [user] = await sql`
       SELECT id, role FROM "users" WHERE id = ${userId}
     `;
 
-    return user;
+    return user as UserSession;
   } catch (error) {
     console.error('Transaction failed:', error);
 

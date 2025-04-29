@@ -1,10 +1,23 @@
 "use client"
 import { Separator } from "@radix-ui/react-separator";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { oAuthSignIn } from "@/features/account/actions";
 
 export default function OAuth() {
+  const searchParams = useSearchParams();
+  const oauthError = searchParams.get("oauthError");
+
+  useEffect(() => {
+    if (oauthError) {
+      console.log("OAuth Error:", oauthError);
+      toast.error(decodeURIComponent(oauthError));
+    }
+  }, [oauthError]);
+
   return (
     <>
       <div className="relative">

@@ -87,6 +87,7 @@ export async function signout() {
 }
 
 export async function signIn(prev: FormState, formData: FormData): Promise<FormState> {
+  console.log(1)
   const rawFormData = Object.fromEntries(formData);
   const parsed = signInSchema.safeParse(rawFormData);
 
