@@ -1,6 +1,6 @@
 import { ParityGroupForm } from "./parity-group-form";
 
-const DiscountsPanel = ({ productId }: { productId: string }) => {
+const DiscountsPanel = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">

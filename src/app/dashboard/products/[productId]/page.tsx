@@ -6,9 +6,9 @@ import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import BannerPanel from '@/features/customization/components/BannerPannel';
-import SiteConfigPanel from '@/features/customization/components/SiteConfigPannel';
-import { ProductCustomizationSkeleton } from '@/features/customization/components/product-customization-skeleton';
 import DiscountsPanel from '@/features/discounts/DiscountsPanel';
+import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
+import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
 
 type EditProductPageProps = {
   params: { productId: string };

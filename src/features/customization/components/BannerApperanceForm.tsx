@@ -18,21 +18,6 @@ import { FontSizePicker } from "./FontSizePicker";
 import { StickyToggle } from "./StickyToggle";
 import { TextColorPicker } from "./TextColorPicker";
 
-type FormState = {
-  success: boolean;
-  message: string;
-  errors: {
-    bannerColor?: string[];
-    bannerRadius?: string[];
-    bannerMessage?: string[];
-    bannerPosition?: string[];
-    textColor?: string[];
-    fontSize?: string[];
-    bannerContainer?: string[];
-    isSticky?: string[];
-  };
-};
-
 function SubmitButton() {
   const { pending } = useFormStatus();
 

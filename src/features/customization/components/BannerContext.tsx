@@ -22,27 +22,16 @@ type BannerContextType = {
 
 export const BannerContext = createContext<BannerContextType | undefined>(undefined);
 
-type Customization = {
-  id: string;
-  sticky: boolean;
-  class_prefix: string | null;
-  location_message: string;
-  background_color: string;
-  text_color: string;
-  banner_container: string;
-  font_size: string;
-} | undefined
-export function BannerProvider({ children, customization }: { children: ReactNode, customization: Customization }) {
-  const { background_color, text_color, banner_container, font_size, sticky, class_prefix, location_message } = customization || {};
+export function BannerProvider({ children }: { children: ReactNode }) {
   
-  const [bannerColor, setBannerColor] = useState(background_color || 'from-primary/20 to-blue-600/20');
+  const [bannerColor, setBannerColor] = useState('from-primary/20 to-blue-600/20');
   const [bannerStyle, setBannerStyle] = useState('rounded-md');
-  const [customMessage, setCustomMessage] = useState(location_message || '');
+  const [customMessage, setCustomMessage] = useState('');
   const [bannerPosition, setBannerPosition] = useState('top');
-  const [textColor, setTextColor] = useState(text_color ||  'hsl(0, 0%, 100%)');
-  const [fontSize, setFontSize] = useState(font_size || '1rem');
-  const [bannerContainer, setBannerContainer] = useState(banner_container || 'body');
-  const [isSticky, setIsSticky] = useState<boolean>(sticky ?? true);
+  const [textColor, setTextColor] = useState('hsl(0, 0%, 100%)');
+  const [fontSize, setFontSize] = useState('1rem');
+  const [bannerContainer, setBannerContainer] = useState('body');
+  const [isSticky, setIsSticky] = useState<boolean>(true);
 
   return (
     <BannerContext.Provider value={{

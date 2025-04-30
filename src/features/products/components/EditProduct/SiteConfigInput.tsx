@@ -1,8 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
-import { useSiteConfig } from './SiteConfigContext';
+import { useSiteConfig } from '@/features/products/components/EditProduct/SiteConfigContext';
 
 export function SiteConfigInput() {
   const { config, updateConfig } = useSiteConfig();
