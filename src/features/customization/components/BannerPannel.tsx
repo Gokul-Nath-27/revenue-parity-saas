@@ -2,10 +2,17 @@ import { BannerApperanceForm } from './BannerApperanceForm';
 import { BannerProvider } from './BannerContext';
 import { BannerEmbed } from './BannerEmbed';
 import { BannerPreview } from './BannerPreview';
+import { getCustomization } from '@/features/customization/db';
+import { catchError } from '@/lib/utils';
 
-export default function BannerPanel() {
+export default async function BannerPanel({ productId }: { productId: string }) {
+  const { data: customization, error } = await catchError(getCustomization(productId));
+  if (error) {
+    console.error(error);
+  }
+
   return (
-    <BannerProvider>
+    <BannerProvider customization={customization}>
       <div>
         <div className="mb-6">
           <h2 className="text-2xl font-bold">Banner Customization</h2>

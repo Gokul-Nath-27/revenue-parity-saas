@@ -1,44 +1,6 @@
-"use client"
-import React, { useState } from 'react';
+import { ParityGroupForm } from "./parity-group-form";
 
-import { parityGroups } from '@/data/parityGroups';
-
-import ParityGroupCard from './ParityGroupCard';
-
-interface GroupSettings {
-  discount: string;
-  coupon: string;
-}
-
-interface GroupSettingsMap {
-  [groupName: string]: GroupSettings;
-}
-
-const DiscountsPanel = () => {
-  const [groupSettings, setGroupSettings] = useState<GroupSettingsMap>({});
-
-  const handleUpdateDiscount = (groupName: string, discount: string) => {
-    setGroupSettings(prev => ({
-      ...prev,
-      [groupName]: {
-        ...prev[groupName],
-        discount
-      }
-    }));
-
-  };
-
-  const handleUpdateCoupon = (groupName: string, coupon: string) => {
-    setGroupSettings(prev => ({
-      ...prev,
-      [groupName]: {
-        ...prev[groupName],
-        coupon: coupon.toUpperCase()
-      }
-    }));
-
-  };
-
+const DiscountsPanel = ({ productId }: { productId: string }) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -49,21 +11,8 @@ const DiscountsPanel = () => {
           </p>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {parityGroups.map((group) => (
-          <ParityGroupCard
-            key={group.name}
-            group={group}
-            onUpdateDiscount={handleUpdateDiscount}
-            onUpdateCoupon={handleUpdateCoupon}
-            currentDiscount={groupSettings[group.name]?.discount}
-            currentCoupon={groupSettings[group.name]?.coupon}
-          />
-        ))}
-      </div>
+      <ParityGroupForm />
     </div>
   );
 };
-
 export default DiscountsPanel;

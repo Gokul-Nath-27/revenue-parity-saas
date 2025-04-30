@@ -1,36 +1,48 @@
 "use client"
-import { createContext, useState, ReactNode, useContext } from 'react';
+import { createContext, useState, ReactNode, useContext, type Dispatch, type SetStateAction } from 'react';
 
 type BannerContextType = {
   bannerColor: string;
-  setBannerColor: (color: string) => void;
+  setBannerColor: Dispatch<SetStateAction<string>>;
   bannerStyle: string;
-  setBannerStyle: (style: string) => void;
+  setBannerStyle: Dispatch<SetStateAction<string>>;
   customMessage: string;
-  setCustomMessage: (message: string) => void;
+  setCustomMessage: Dispatch<SetStateAction<string>>;
   bannerPosition: string;
-  setBannerPosition: (position: string) => void;
+  setBannerPosition: Dispatch<SetStateAction<string>>;
   textColor: string;
-  setTextColor: (color: string) => void;
+  setTextColor: Dispatch<SetStateAction<string>>;
   fontSize: string;
-  setFontSize: (size: string) => void;
+  setFontSize: Dispatch<SetStateAction<string>>;
   bannerContainer: string;
-  setBannerContainer: (container: string) => void;
+  setBannerContainer: Dispatch<SetStateAction<string>>;
   isSticky: boolean;
-  setIsSticky: (sticky: boolean) => void;
+  setIsSticky: Dispatch<SetStateAction<boolean>>;
 };
 
 export const BannerContext = createContext<BannerContextType | undefined>(undefined);
 
-export function BannerProvider({ children }: { children: ReactNode }) {
-  const [bannerColor, setBannerColor] = useState('from-primary/20 to-blue-600/20');
+type Customization = {
+  id: string;
+  sticky: boolean;
+  class_prefix: string | null;
+  location_message: string;
+  background_color: string;
+  text_color: string;
+  banner_container: string;
+  font_size: string;
+} | undefined
+export function BannerProvider({ children, customization }: { children: ReactNode, customization: Customization }) {
+  const { background_color, text_color, banner_container, font_size, sticky, class_prefix, location_message } = customization || {};
+  
+  const [bannerColor, setBannerColor] = useState(background_color || 'from-primary/20 to-blue-600/20');
   const [bannerStyle, setBannerStyle] = useState('rounded-md');
-  const [customMessage, setCustomMessage] = useState('');
+  const [customMessage, setCustomMessage] = useState(location_message || '');
   const [bannerPosition, setBannerPosition] = useState('top');
-  const [textColor, setTextColor] = useState('hsl(0, 0%, 100%)');
-  const [fontSize, setFontSize] = useState('1rem');
-  const [bannerContainer, setBannerContainer] = useState('body');
-  const [isSticky, setIsSticky] = useState(true);
+  const [textColor, setTextColor] = useState(text_color ||  'hsl(0, 0%, 100%)');
+  const [fontSize, setFontSize] = useState(font_size || '1rem');
+  const [bannerContainer, setBannerContainer] = useState(banner_container || 'body');
+  const [isSticky, setIsSticky] = useState<boolean>(sticky ?? true);
 
   return (
     <BannerContext.Provider value={{
@@ -49,7 +61,7 @@ export function BannerProvider({ children }: { children: ReactNode }) {
       bannerContainer,
       setBannerContainer,
       isSticky,
-      setIsSticky
+      setIsSticky,
     }}>
       {children}
     </BannerContext.Provider>

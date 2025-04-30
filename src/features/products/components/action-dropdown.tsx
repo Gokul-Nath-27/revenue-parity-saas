@@ -9,29 +9,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-export function ProductActions() {
+import { DeleteProductModal } from "./delete-product-modal"
+export function ProductActions({ id }: { id: string }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <EllipsisVertical className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <Link href="dashboard/products/das">
-          <DropdownMenuItem>
-            <Pencil />
-            Edit
-          </DropdownMenuItem>
-        </Link>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Trash />
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <EllipsisVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <Link href={`/dashboard/products/${id}?tab=site`}>
+            <DropdownMenuItem>
+              <Pencil />
+              Edit
+            </DropdownMenuItem>
+          </Link>
+          <DropdownMenuSeparator />
+          <DeleteProductModal id={id} />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+
   )
 }
 

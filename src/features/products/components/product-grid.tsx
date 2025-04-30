@@ -28,7 +28,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                   {product.description}
                 </p>
               </div>
-              <ProductActions />
+              <ProductActions id={product.id} />
             </div>
           </div>
         </div>

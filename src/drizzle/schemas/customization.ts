@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, boolean, varchar } from "drizzle-orm/pg-core";
 
 import { Product } from "./product";
 
@@ -23,6 +23,8 @@ export const ProductCustomization = pgTable("product_customizations", {
     .default("hsl(193, 82%, 31%)"),
   text_color: text().notNull().default("hsl(0, 0%, 100%)"),
   banner_container: text().notNull().default("body"),
+  sticky: boolean().notNull().default(true),
+  font_size: varchar().notNull().default("1rem"),
   created_at,
   updated_at,
 });

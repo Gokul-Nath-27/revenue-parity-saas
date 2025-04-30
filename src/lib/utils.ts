@@ -5,10 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function catchError<T>(promise: Promise<T>): Promise<[undefined, T] | [Error]> {
-  return promise
-    .then((data): [undefined, T] => [undefined, data])
-    .catch((error): [Error] => [error]);
+export async function catchError<T>(
+  promise: Promise<T>
+): Promise<{ error: Error | undefined; data: T | undefined }> {
+  try {
+    const data = await promise;
+    return { error: undefined, data };
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    return { error, data: undefined };
+  }
 }
 
 export const generateIntials = (name: string) => {

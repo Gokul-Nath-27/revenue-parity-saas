@@ -10,16 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createProduct } from '@/features/products/actions';
 
-const initialState = {
-  success: false,
-  message: "",
-  errors: undefined,
-  inputs: undefined,
-}
-
 export const AddProductDialog = () => {
   const [open, setOpen] = useState(false);
-  const [state, createAction, pending] = useActionState(createProduct, initialState);
+  const [state, createAction, pending] = useActionState(createProduct, undefined);
 
   useEffect(() => {
     if (!pending && state?.message) {
@@ -48,8 +41,8 @@ export const AddProductDialog = () => {
           <form className="space-y-4" action={createAction}>
             <div>
               <label className="block text-sm font-medium" htmlFor="name">Product Name</label>
-              <Input id="name" placeholder="Product Name" name="name" required minLength={3} defaultValue={state.inputs?.name || ""} />
-              {state.errors?.name && <p className="text-red-500 text-sm">{state.errors.name.join(", ")}</p>}
+              <Input id="name" placeholder="Product Name" name="name" required minLength={3} defaultValue={state?.inputs?.name || ""} />
+              {state?.errors?.name && <p className="text-red-500 text-sm">{state.errors.name.join(", ")}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium" htmlFor="description">Description</label>
@@ -58,9 +51,9 @@ export const AddProductDialog = () => {
                 className="resize-none h-20"
                 placeholder="Describe your product"
                 id="description"
-                defaultValue={state.inputs?.description || ""}
+                defaultValue={state?.inputs?.description || ""}
               />
-              {state.errors?.description && <p className="text-red-500 text-sm">{state.errors.description.join(", ")}</p>}
+              {state?.errors?.description && <p className="text-red-500 text-sm">{state.errors.description.join(", ")}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium" htmlFor="domain">Domain</label>
@@ -69,10 +62,10 @@ export const AddProductDialog = () => {
                 id="domain"
                 required
                 placeholder="example.com"
-                defaultValue={state.inputs?.domain || ""}
+                defaultValue={state?.inputs?.domain || ""}
                 name="domain"
               />
-              {state.errors?.domain && <p className="text-red-500 text-sm">{state.errors.domain.join(", ")}</p>}
+              {state?.errors?.domain && <p className="text-red-500 text-sm">{state.errors.domain.join(", ")}</p>}
             </div>
             <DialogFooter>
               <Button type="submit">

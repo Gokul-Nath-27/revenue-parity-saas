@@ -13,6 +13,7 @@ import { getSessionIdFromCookie, getValidatedSession } from "./session";
 export function withAuthUserId<TReturn, TArgs extends unknown[]>(
   cb: (userId: string, ...args: TArgs) => Promise<TReturn>
 ): (...args: TArgs) => Promise<TReturn> {
+  
   return async (...args: TArgs): Promise<TReturn> => {
     // Get session ID from cookie
     const sessionId = await getSessionIdFromCookie();
