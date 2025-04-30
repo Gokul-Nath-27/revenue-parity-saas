@@ -2,6 +2,7 @@
 
 import { Settings, Palette } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 import { TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ProductTabs() {

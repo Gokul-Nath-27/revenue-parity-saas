@@ -1,15 +1,14 @@
 import { ArrowLeft } from 'lucide-react';
-import React, { Suspense } from 'react';
 import Link from 'next/link';
+import React, { Suspense } from 'react';
 
-import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import BannerPanel from '@/features/customization/components/BannerPannel';
 import SiteConfigPanel from '@/features/customization/components/SiteConfigPannel';
-import DiscountsPanel from '@/features/discounts/DiscountsPanel';
 import { ProductCustomizationSkeleton } from '@/features/customization/components/product-customization-skeleton';
-import { getProductDetails } from '@/features/products/db';
-import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
+import DiscountsPanel from '@/features/discounts/DiscountsPanel';
 
 type EditProductPageProps = {
   params: { productId: string };

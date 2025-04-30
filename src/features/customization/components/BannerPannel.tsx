@@ -1,9 +1,10 @@
+import { getCustomization } from '@/features/customization/db';
+import { catchError } from '@/lib/utils';
+
 import { BannerApperanceForm } from './BannerApperanceForm';
 import { BannerProvider } from './BannerContext';
 import { BannerEmbed } from './BannerEmbed';
 import { BannerPreview } from './BannerPreview';
-import { getCustomization } from '@/features/customization/db';
-import { catchError } from '@/lib/utils';
 
 export default async function BannerPanel({ productId }: { productId: string }) {
   const { data: customization, error } = await catchError(getCustomization(productId));

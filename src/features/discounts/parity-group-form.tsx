@@ -1,7 +1,9 @@
 "use client"
-import { parityGroups } from "@/data/parityGroups";
-import ParityGroupCard from "./ParityGroupCard";
 import { useState } from "react";
+
+import { parityGroups } from "@/data/parityGroups";
+
+import ParityGroupCard from "./ParityGroupCard";
 
 interface GroupSettings {
   discount: string;

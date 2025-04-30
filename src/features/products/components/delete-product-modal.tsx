@@ -1,6 +1,8 @@
 "use client"
 
 import { Trash, Trash2 } from "lucide-react"
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,9 +15,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+
 import { deleteProduct } from "../actions"
-import { useTransition } from "react";
-import { toast } from "sonner";
 
 export const DeleteProductModal = ({ id }: { id: string }) => {
   return (

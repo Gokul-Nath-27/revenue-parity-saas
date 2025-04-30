@@ -1,4 +1,4 @@
-import { EllipsisVertical, Pencil, Trash } from 'lucide-react'
+import { EllipsisVertical, Pencil } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
 import { DeleteProductModal } from "./delete-product-modal"
 export function ProductActions({ id }: { id: string }) {
   return (

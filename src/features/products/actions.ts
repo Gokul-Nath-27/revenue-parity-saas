@@ -1,4 +1,6 @@
 "use server"
+import { redirect } from "next/navigation";
+
 import { Product } from "@/drizzle/schemas";
 import {
   createProduct as createProductIntoDb,
@@ -7,7 +9,6 @@ import {
 } from "@/features/products/db";
 import { productFormSchema, ProductForm } from "@/features/products/schema";
 import { catchError } from "@/lib/utils";
-import { redirect } from "next/navigation";
 
 type ProductFormState = {
   success: boolean;

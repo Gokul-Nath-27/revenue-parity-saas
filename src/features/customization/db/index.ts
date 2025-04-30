@@ -1,6 +1,7 @@
+import { eq } from "drizzle-orm";
+
 import db from "@/drizzle/db";
 import { ProductCustomization } from "@/drizzle/schemas/customization";
-import { eq } from "drizzle-orm";
 
 export const getCustomization = async (productId: string) => {
   return await db.query.ProductCustomization.findFirst({

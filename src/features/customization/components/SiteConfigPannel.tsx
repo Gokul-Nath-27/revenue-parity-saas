@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { getProductDetails } from '@/features/products/db';
 
 import { SiteInfoForm } from './SiteInfoForm';
-import { getProductDetails } from '@/features/products/db';
 
 
 export default async function SiteConfigPanel({ productId }: { productId: string }) {

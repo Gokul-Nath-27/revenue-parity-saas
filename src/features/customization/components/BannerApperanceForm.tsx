@@ -1,8 +1,6 @@
 "use client"
 import { Check, Palette } from "lucide-react";
-import { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
-import { toast } from 'sonner';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,11 +43,6 @@ function SubmitButton() {
   );
 }
 
-const initialState: FormState = {
-  success: false,
-  message: "",
-  errors: {}
-};
 export function BannerApperanceForm() {
   const {
     bannerColor,
