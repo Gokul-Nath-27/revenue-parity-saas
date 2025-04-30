@@ -1,9 +1,8 @@
 "use client"
 import React, { useActionState, useEffect } from 'react';
-import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
+import SubmitButton from '@/components/SubmitButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,17 +24,8 @@ const FormField = ({ label, name, error, children }: FormFieldProps) => (
   </div>
 );
 
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Saving..." : "Save Information"}
-    </Button>
-  );
-};
 
-
-export function SiteInfoForm({ product }: { product: Product }) {
+export function EditProductForm({ product }: { product: Product }) {
   const [state, formAction] = useActionState<UpdateFormState, FormData>(
     updateProductDetails,
     undefined

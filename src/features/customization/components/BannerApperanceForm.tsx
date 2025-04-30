@@ -40,19 +40,6 @@ export function BannerApperanceForm() {
     isSticky
   } = useBanner();
 
-  // const [state, formAction] = useActionState<FormState, FormData>(updateBannerConfig, initialState);
-
-  // Show toast message when form submission completes
-  // useEffect(() => {
-  //   if (state.message) {
-  //     if (state.success) {
-  //       toast.success(state.message);
-  //     } else {
-  //       toast.error(state.message);
-  //     }
-  //   }
-  // }, [state]);
-
   return (
     <Card className="md:col-span-2 h-full relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background opacity-80"></div>
@@ -77,33 +64,21 @@ export function BannerApperanceForm() {
             <div className="space-y-2">
               <Label>Banner Color</Label>
               <BannerColorPicker />
-              {/* {state.errors?.bannerColor && (
-                <p className="text-xs text-destructive">{state.errors.bannerColor[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <Label>Text Color</Label>
               <TextColorPicker />
-              {/* {state.errors?.textColor && (
-                <p className="text-xs text-destructive">{state.errors.textColor[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <Label>Font Size</Label>
               <FontSizePicker />
-              {/* {state.errors?.fontSize && (
-                <p className="text-xs text-destructive">{state.errors.fontSize[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <Label>Banner Radius</Label>
               <BannerRadiusPicker />
-              {/* {state.errors?.bannerRadius && (
-                <p className="text-xs text-destructive">{state.errors.bannerRadius[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
@@ -115,32 +90,20 @@ export function BannerApperanceForm() {
                 <code className="bg-muted px-1 py-0.5 rounded text-[10px]">{'{coupon}'}</code>
                 <code className="bg-muted px-1 py-0.5 rounded text-[10px]">{'{discount}'}</code>
               </div>
-              {/* {state.errors?.bannerMessage && (
-                <p className="text-xs text-destructive">{state.errors.bannerMessage[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <Label>Banner Position</Label>
               <BannerPositionPicker />
-              {/* {state.errors?.bannerPosition && (
-                <p className="text-xs text-destructive">{state.errors.bannerPosition[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <Label>Banner Container</Label>
               <BannerContainerPicker />
-              {/* {state.errors?.bannerContainer && (
-                <p className="text-xs text-destructive">{state.errors.bannerContainer[0]}</p>
-              )} */}
             </div>
 
             <div className="space-y-2">
               <StickyToggle />
-              {/* {state.errors?.isSticky && (
-                <p className="text-xs text-destructive">{state.errors.isSticky[0]}</p>
-              )} */}
             </div>
 
             <div className="pt-4">

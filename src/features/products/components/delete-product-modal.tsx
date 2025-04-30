@@ -51,10 +51,7 @@ const DeleteProductButton = ({ id }: { id: string }) => {
       disabled={isPending}
       onClick={() => startTransition(async () => {
         const { success, message } = await deleteProduct(id);
-        // triggering toast in separate execution context.
-        setTimeout(() => {
-          toast[success ? "success" : "error"](message);
-        }, 0);
+        toast[success ? "success" : "error"](message);
       })}
     >
       <Trash2 className="mr-2 h-4 w-4" />

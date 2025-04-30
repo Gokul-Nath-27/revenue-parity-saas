@@ -17,10 +17,10 @@ interface ParityGroupCardProps {
 
 const ParityGroupCard = ({
   group,
-  onUpdateDiscount,
-  onUpdateCoupon,
   currentDiscount,
-  currentCoupon
+  currentCoupon,
+  onUpdateDiscount,
+  onUpdateCoupon
 }: ParityGroupCardProps) => {
   return (
     <Card className="relative overflow-hidden">

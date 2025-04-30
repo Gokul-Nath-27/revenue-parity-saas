@@ -1,4 +1,6 @@
 "use client"
+import { cn } from '@/lib/utils';
+
 import { useBanner } from './BannerContext';
 
 const colors = [
@@ -17,7 +19,10 @@ export function TextColorPicker() {
         <button
           key={i}
           type="button"
-          className={`w-8 h-8 rounded-full ${textColor === color ? 'ring-2 ring-primary' : 'ring-1 ring-muted'}`}
+          className={cn(
+            "w-8 h-8 rounded-full",
+            textColor === color ? 'ring-2 ring-primary' : 'ring-1 ring-muted'
+          )}
           style={{ backgroundColor: color }}
           onClick={() => setTextColor(color)}
         />

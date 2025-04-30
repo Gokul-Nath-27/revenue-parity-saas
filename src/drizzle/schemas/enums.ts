@@ -2,6 +2,7 @@ import { pgEnum, timestamp } from "drizzle-orm/pg-core";
 
 import { subscriptionTiers, TierNames } from "@/data/subscriptionTiers";
 
+// Schema enums
 export const userRoles = ['user', 'admin'] as const;
 export const subscriptions = ['free', 'basic', 'standard', 'premium'] as const;
 export const oAuthProviders = ["google", "github"] as const;

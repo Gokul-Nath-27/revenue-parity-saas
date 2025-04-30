@@ -6,7 +6,7 @@ import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import BannerPanel from '@/features/customization/components/BannerPannel';
-import DiscountsPanel from '@/features/discounts/DiscountsPanel';
+import ParityGroupFormWrapper from '@/features/discounts/ParityGroupFormWrapper';
 import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
 
@@ -14,7 +14,20 @@ type EditProductPageProps = {
   params: { productId: string };
   searchParams: { tab: string };
 }
-
+const tabHeadingConfig = {
+  site: {
+    heading: "Site Configuration",
+    description: "Configure your site settings"
+  },
+  banner: {
+    heading: "Banner Configuration",
+    description: "Configure your banner settings"
+  },
+  discounts: {
+    heading: "Discounts Configuration",
+    description: "Leave the discount field blank if you do not want to display deals for any specific parity group."
+  }
+}
 export default async function EditProductPage({ params, searchParams }: EditProductPageProps) {
   const { productId } = await params;
   const { tab = "banner" } = await searchParams;
@@ -29,27 +42,37 @@ export default async function EditProductPage({ params, searchParams }: EditProd
         </Link>
         <ProductTabs />
       </div>
-      <Suspense fallback={<ProductCustomizationSkeleton />}>
-        <ProductCustomizationTabs productId={productId} />
-      </Suspense>
+
+      <TabsContent value="site" className="space-y-4">
+        <TabHeadingWrapper headers={tabHeadingConfig.site}>
+          <Suspense fallback={<ProductCustomizationSkeleton />}>
+            <SiteConfigPanel productId={productId} />
+          </Suspense>
+        </TabHeadingWrapper>
+      </TabsContent>
+
+      <TabsContent value="banner" className="space-y-4">
+        <BannerPanel />
+      </TabsContent>
+
+      <TabsContent value="discounts" className="space-y-4">
+        <TabHeadingWrapper headers={tabHeadingConfig.discounts}>
+          <ParityGroupFormWrapper productId={productId} />
+        </TabHeadingWrapper>
+      </TabsContent>
     </Tabs>
   )
 }
 
-const ProductCustomizationTabs = async ({ productId }: { productId: string }) => {
+const TabHeadingWrapper = ({ children, headers }: { children: React.ReactElement, headers: { heading: string, description: string } }) => {
+  const { heading, description } = headers;
   return (
-    <>
-      <TabsContent value="site" className="space-y-4">
-        <SiteConfigPanel productId={productId} />
-      </TabsContent>
-
-      <TabsContent value="banner" className="space-y-4">
-        <BannerPanel productId={productId} />
-      </TabsContent>
-
-      <TabsContent value="discounts" className="space-y-4">
-        <DiscountsPanel productId={productId} />
-      </TabsContent>
-    </>
+    <div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold">{heading}</h2>
+        <p className="text-muted-foreground">{description}</p>
+      </div>
+      {children}
+    </div>
   )
-} 
+}

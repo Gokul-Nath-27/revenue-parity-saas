@@ -4,7 +4,7 @@ import { useState } from "react";
 import { parityGroups } from "@/data/parityGroups";
 
 import ParityGroupCard from "./ParityGroupCard";
-
+import { CountryGroup } from "./ParityGroupFormWrapper";
 interface GroupSettings {
   discount: string;
   coupon: string;
@@ -13,7 +13,15 @@ interface GroupSettings {
 interface GroupSettingsMap {
   [groupName: string]: GroupSettings;
 }
-export const ParityGroupForm = () => {
+
+export default function ParityGroupForm({
+  productId,
+  countryGroups,
+}: {
+  productId: string;
+  countryGroups: CountryGroup;
+}) {
+  console.log(111, countryGroups, productId);
   const [groupSettings, setGroupSettings] = useState<GroupSettingsMap>({});
   const handleUpdateDiscount = (groupName: string, discount: string) => {
     setGroupSettings(prev => ({
@@ -37,7 +45,7 @@ export const ParityGroupForm = () => {
 
   };
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6">
       {parityGroups.map((group) => (
         <ParityGroupCard
           key={group.name}
@@ -50,4 +58,4 @@ export const ParityGroupForm = () => {
       ))}
     </div>
   );
-};
+}
