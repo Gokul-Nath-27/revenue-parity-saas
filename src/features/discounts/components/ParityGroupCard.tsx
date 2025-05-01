@@ -3,28 +3,26 @@ import React from 'react';
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from '@/lib/utils';
 
 import CountryFlag from './CountryFlag';
 import { CountryGroup } from './ParityGroupFormWrapper';
 
 interface ParityGroupCardProps {
   group: CountryGroup[number];
-  errorFields: Record<string, string[]>;
-  submittedData: Record<string, string>;
+  errorFields?: Record<string, string[]>;
+  submittedData?: Record<string, string>;
 }
 
 const getDisCountPercentage = (number: number | undefined) => {
-  return number !== undefined ? number * 100 : "";
+  return number !== undefined ? Math.round(number * 100) : "";
 };
 
 const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardProps) => {
-
   const { countries, discount, name, id } = group;
 
-
-  // Get submitted values from formData, if available
-  const submittedDiscount = submittedData[`groups[${id}][discountPercentage]`];
-  const submittedCoupon = submittedData[`groups[${id}][coupon]`];
+  const submittedDiscount = submittedData?.[`groups[${id}][discountPercentage]`];
+  const submittedCoupon = submittedData?.[`groups[${id}][coupon]`];
 
   return (
     <Card className="relative overflow-hidden">
@@ -33,7 +31,7 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
       <div className="relative z-10">
         <CardHeader className="pb-2">
           <h3 className="text-lg font-semibold">{name}</h3>
-          {errorFields.group && (
+          {errorFields?.group && (
             <p className="text-destructive text-sm">{errorFields.group[0]}</p>
           )}
         </CardHeader>
@@ -54,14 +52,12 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
                 <Label htmlFor={`discount-${id}`}>Discount %</Label>
                 <Input
                   id={`discount-${id}`}
-                  type="number"
+                  type="text"
                   name={`groups[${id}][discountPercentage]`}
                   defaultValue={submittedDiscount ?? getDisCountPercentage(discount?.discountPercentage) ?? ""}
-                  min="0"
-                  max="100"
-                  className={`bg-background ${errorFields.discountPercentage ? 'border-destructive' : ''}`}
+                  className={cn('bg-background', { 'border-destructive': errorFields?.discountPercentage })}
                 />
-                {errorFields.discountPercentage && (
+                {errorFields?.discountPercentage && (
                   <p className="text-destructive text-sm">
                     {errorFields.discountPercentage[0]}
                   </p>
@@ -74,10 +70,9 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
                   name={`groups[${id}][coupon]`}
                   defaultValue={submittedCoupon ?? discount?.coupon ?? ""}
                   placeholder="Enter coupon code"
-                  className={`bg-background ${errorFields.coupon ? 'border-destructive' : ''}`}
-                  style={{ textTransform: 'uppercase' }}
+                  className={cn('bg-background uppercase', { 'border-destructive': errorFields?.coupon })}
                 />
-                {errorFields.coupon && (
+                {errorFields?.coupon && (
                   <p className="text-destructive text-sm">
                     {errorFields.coupon[0]}
                   </p>
@@ -85,7 +80,7 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
               </div>
             </div>
 
-            <input
+            <Input
               type="hidden"
               name={`groups[${id}][countryGroupId]`}
               value={id}

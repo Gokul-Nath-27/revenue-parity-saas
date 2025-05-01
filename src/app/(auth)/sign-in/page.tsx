@@ -1,8 +1,7 @@
 import { Suspense } from "react"
 
 import AuthFormSkeleton from "@/components/AuthFormSkeleton"
-
-import SignInForm from "./signin-form"
+import SignInForm from "@/features/account/componets/signin-form"
 
 export default async function SignInPage() {
   return (

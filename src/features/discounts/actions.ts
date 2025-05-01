@@ -1,5 +1,4 @@
 "use server"
-import { revalidatePath } from "next/cache";
 
 import { CountryGroupDiscount } from "@/drizzle/schemas";
 
@@ -9,7 +8,7 @@ import { productCountryDiscountsSchema } from "./schema";
 type ActionState = {
   error: boolean;
   message: string;
-  errorFields: Record<string, Record<string, string[]>>;
+  errorFields?: Record<string, Record<string, string[]>>;
   formData?: Record<string, string>;
 };
 
@@ -45,15 +44,12 @@ export async function updateCountryDiscounts(
     };
   });
 
-  console.log(11, groups);
-
   // Validate the groups data using the schema
   const parsed = productCountryDiscountsSchema.safeParse({ groups });
 
   if (!parsed.success) {
     const errorFields: Record<string, Record<string, string[]>> = {};
     parsed.error.issues.forEach(issue => {
-      console.log(44444, issue);
       if (issue.path[0] === 'groups' && typeof issue.path[1] === 'number') {
         const groupIndex = issue.path[1];
         const groupId = groups[groupIndex].countryGroupId;
@@ -68,7 +64,7 @@ export async function updateCountryDiscounts(
         errorFields[groupId][field].push(issue.message);
       }
     });
-    console.log(33333, errorFields);
+
 
     // Convert FormData to a plain object for the client
     const formDataObject: Record<string, string> = {};
@@ -108,12 +104,8 @@ export async function updateCountryDiscounts(
     }
   });
 
-  console.log(22, insert, deleteIds);
-
   // Update the database with insert and delete data
   await updateCountryDiscountsIntoDb(deleteIds, insert, { productId });
-
-  revalidatePath(`/dashboard/products/${productId}/?tab=discounts`);
 
   return { error: false, message: "Country discounts saved", errorFields: {}, formData: {} };
 }

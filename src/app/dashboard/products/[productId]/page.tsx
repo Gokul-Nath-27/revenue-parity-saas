@@ -24,7 +24,7 @@ const tabHeadingConfig = {
   },
   discounts: {
     heading: "Discounts Configuration",
-    description: "Leave the discount field blank if you do not want to display deals for any specific parity group."
+    description: "Both the discount percentage and coupon code need to be filled if you want to display deals for any specific parity group."
   }
 }
 

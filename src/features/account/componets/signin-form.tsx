@@ -9,8 +9,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { signIn } from "@/features/account/actions"
-
-import OAuth from "../OAuth"
+import OAuth from "@/features/account/componets/OAuth"
 
 export default function SignInForm() {
   const searchParams = useSearchParams();

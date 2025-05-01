@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server"
 
 import { getSessionIdFromCookie, getValidatedSession, getSessionCookieOptions, updateSessionExpiration } from '@/lib/session'
 
-const publicPaths = ['/', '/sign-in', '/sign-up', '/forgot-password']
+const publicPaths = ['/', '/sign-in', '/sign-up']
 const _adminPaths: string[] = [] 
 
 export async function middleware(request: NextRequest) {

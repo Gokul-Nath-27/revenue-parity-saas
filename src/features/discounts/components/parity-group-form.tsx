@@ -2,7 +2,7 @@
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 
 import { updateCountryDiscounts } from "../actions";
 
@@ -15,12 +15,11 @@ export default function ParityGroupForm({
   productId: string;
   countryGroups: CountryGroup;
 }) {
-  const [state, formAction, pending] = useActionState(updateCountryDiscounts, {
+  const [state, formAction] = useActionState(updateCountryDiscounts, {
     error: false,
     message: "",
-    errorFields: {},
-    formData: {},
   });
+
 
   useEffect(() => {
     if (!state.error && state.message) {
@@ -35,14 +34,13 @@ export default function ParityGroupForm({
         <ParityGroupCard
           key={group.id}
           group={group}
-          errorFields={state.errorFields?.[group.id] ?? {}}
-          submittedData={state.formData ?? {}}
+          {...(state.error && {
+            errorFields: state.errorFields?.[group.id] ?? {},
+            submittedData: state.formData ?? {},
+          })}
         />
       ))}
-      {/* Loading Spinner */}
-      <Button type="submit" className="md:col-span-lo2" disabled={pending}>
-        Save
-      </Button>
+      <SubmitButton text="Save the changes" />
     </form>
   );
 }
