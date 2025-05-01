@@ -45,7 +45,7 @@ export default async function EditProductPage({ params, searchParams }: EditProd
         </div>
 
         <TabsContent value="site" className="space-y-4">
-          <TabHeadingWrapper headers={tabHeadingConfig.site}>
+          <TabHeadingWrapper tabHeaders={tabHeadingConfig.site}>
             <Suspense fallback={<ProductCustomizationSkeleton />}>
               <SiteConfigPanel productId={productId} />
             </Suspense>
@@ -60,7 +60,7 @@ export default async function EditProductPage({ params, searchParams }: EditProd
         </TabsContent> */}
 
         <TabsContent value="discounts" className="space-y-4">
-          <TabHeadingWrapper headers={tabHeadingConfig.discounts}>
+          <TabHeadingWrapper tabHeaders={tabHeadingConfig.discounts}>
             <Suspense fallback={<div>Loading...</div>}>
               <ParityGroupFormWrapper productId={productId} />
             </Suspense>
@@ -71,8 +71,8 @@ export default async function EditProductPage({ params, searchParams }: EditProd
   )
 }
 
-const TabHeadingWrapper = ({ children, headers }: { children: React.ReactElement, headers: { heading: string, description: string } }) => {
-  const { heading, description } = headers;
+const TabHeadingWrapper = ({ children, tabHeaders }: { children: React.ReactElement, tabHeaders: { heading: string, description: string } }) => {
+  const { heading, description } = tabHeaders;
   return (
     <div>
       <div className="mb-6">
