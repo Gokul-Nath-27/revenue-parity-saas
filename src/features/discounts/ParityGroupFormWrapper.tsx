@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { getCountryGroupDiscounts } from "./db";
 import ParityGroupForm from "./parity-group-form";
 
@@ -22,10 +20,10 @@ export default async function ParityGroupFormWrapper({ productId }: { productId:
   const countryGroups = await getCountryGroupDiscounts(productId);
   console.log(11, countryGroups);
 
-  return <Suspense fallback={<div>Loading...</div>}>
+  return (
     <ParityGroupForm
       productId={productId}
       countryGroups={countryGroups}
     />
-  </Suspense>;
+  )
 } 
