@@ -20,7 +20,7 @@ async function updateCountryGroups() {
   const countryGroupInsertData = parityGroups.map(
     ({ name, recommendedDiscountPercentage }) => ({
       name,
-      recommendedDiscountPercentage
+      recommended_discount_percentage: recommendedDiscountPercentage
     })
   )
 

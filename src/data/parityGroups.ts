@@ -1,5 +1,11 @@
-import { ParityGroup } from "@/features/discounts/parity.ds";
-
+type ParityGroup = {
+  name: string;
+  recommendedDiscountPercentage?: number;
+  countries: {
+    country: string;
+    countryName: string;
+  }[];
+}
 export const parityGroups: ParityGroup[] = [
   {
     "name": "Parity Group: 0.2-0.3",

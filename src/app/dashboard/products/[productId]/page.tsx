@@ -5,7 +5,7 @@ import React, { Suspense } from 'react';
 import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import ParityGroupFormWrapper from '@/features/discounts/ParityGroupFormWrapper';
+import ParityGroupFormWrapper from '@/features/discounts/components/ParityGroupFormWrapper';
 import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
 
