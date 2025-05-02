@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,33 +12,39 @@ export function Clipboard() {
   const { background_color, text_color, font_size, banner_container, sticky } = customization;
   const [copied, setCopied] = useState(false);
 
-  const copyEmbedCode = () => {
-    const embedCode = `<script src="https://revenueparity.com/embed.js" 
-  data-color="${background_color}" 
+  const embedCode = useMemo(() => {
+    return `
+<script src="https://revenueparity.com/embed.js"
+  data-color="${background_color}"
   data-text-color="${text_color}"
   data-font-size="${font_size}"
   data-container="${banner_container}"
-  data-sticky="${sticky}"></script>`;
+  data-sticky="${sticky}"></script>
+    `.trim();
+  }, [background_color, text_color, font_size, banner_container, sticky]);
 
-    navigator.clipboard.writeText(embedCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyEmbedCode = () => {
+    navigator.clipboard.writeText(embedCode)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
   };
 
   return (
     <>
       <div className="bg-muted p-3 rounded-md text-xs font-mono overflow-x-auto">
-        <code className="hide-scrollbar whitespace-pre">{`<script src="https://revenueparity.com/embed.js" 
-  data-color="${background_color}" 
-  data-text-color="${text_color}"
-  data-font-size="${font_size}"
-  data-container="${banner_container}"
-  data-sticky="${sticky}"></script>`}</code>
+        <pre className="hide-scrollbar whitespace-pre-wrap">
+          <code>{embedCode}</code>
+        </pre>
       </div>
 
       <Button
         variant="outline"
-        className="w-full gap-2"
+        className="w-full gap-2 mt-2"
         onClick={copyEmbedCode}
       >
         {copied ? (
