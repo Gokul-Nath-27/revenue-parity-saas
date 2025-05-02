@@ -8,27 +8,18 @@ import { Button } from "@/components/ui/button";
 import { useBanner } from "./BannerContext";
 
 export function Clipboard() {
-  const { 
-    bannerColor, 
-    bannerStyle, 
-    bannerPosition,
-    textColor,
-    fontSize,
-    bannerContainer,
-    isSticky
-  } = useBanner();
+  const { customization } = useBanner();
+  const { background_color, text_color, font_size, banner_container, sticky } = customization;
   const [copied, setCopied] = useState(false);
 
   const copyEmbedCode = () => {
     const embedCode = `<script src="https://revenueparity.com/embed.js" 
-  data-color="${bannerColor}" 
-  data-style="${bannerStyle}" 
-  data-position="${bannerPosition}"
-  data-text-color="${textColor}"
-  data-font-size="${fontSize}"
-  data-container="${bannerContainer}"
-  data-sticky="${isSticky}"></script>`;
-    
+  data-color="${background_color}" 
+  data-text-color="${text_color}"
+  data-font-size="${font_size}"
+  data-container="${banner_container}"
+  data-sticky="${sticky}"></script>`;
+
     navigator.clipboard.writeText(embedCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -38,13 +29,11 @@ export function Clipboard() {
     <>
       <div className="bg-muted p-3 rounded-md text-xs font-mono overflow-x-auto">
         <code className="hide-scrollbar whitespace-pre">{`<script src="https://revenueparity.com/embed.js" 
-  data-color="${bannerColor}" 
-  data-style="${bannerStyle}" 
-  data-position="${bannerPosition}"
-  data-text-color="${textColor}"
-  data-font-size="${fontSize}"
-  data-container="${bannerContainer}"
-  data-sticky="${isSticky}"></script>`}</code>
+  data-color="${background_color}" 
+  data-text-color="${text_color}"
+  data-font-size="${font_size}"
+  data-container="${banner_container}"
+  data-sticky="${sticky}"></script>`}</code>
       </div>
 
       <Button
