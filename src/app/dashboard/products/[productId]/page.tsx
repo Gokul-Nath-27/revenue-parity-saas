@@ -10,8 +10,8 @@ import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConf
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
 
 type EditProductPageProps = {
-  params: { productId: string };
-  searchParams: { tab: string };
+  params: Promise<{ productId: string }>;
+  searchParams: Promise<{ tab: string }>;
 }
 const tabHeadingConfig = {
   site: {
@@ -33,25 +33,24 @@ export default async function EditProductPage({ params, searchParams }: EditProd
   const { tab = "banner" } = await searchParams;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Tabs defaultValue={tab} className='relative'>
-        <div className='flex items-center gap-2 st'>
-          <Link href="/dashboard">
-            <Button variant="ghost">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <ProductTabs />
-        </div>
+    <Tabs defaultValue={tab} className='relative'>
+      <div className='flex items-center gap-2 st'>
+        <Link href="/dashboard">
+          <Button variant="ghost">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <ProductTabs />
+      </div>
 
-        <TabsContent value="site" className="space-y-4">
-          <TabHeadingWrapper tabHeaders={tabHeadingConfig.site}>
-            <Suspense fallback={<ProductCustomizationSkeleton />}>
-              <SiteConfigPanel productId={productId} />
-            </Suspense>
-          </TabHeadingWrapper>
-        </TabsContent>
-        {/* <TabsContent value="banner" className="space-y-4">
+      <TabsContent value="site" className="space-y-4">
+        <TabHeadingWrapper tabHeaders={tabHeadingConfig.site}>
+          <Suspense fallback={<ProductCustomizationSkeleton />}>
+            <SiteConfigPanel productId={productId} />
+          </Suspense>
+        </TabHeadingWrapper>
+      </TabsContent>
+      {/* <TabsContent value="banner" className="space-y-4">
           <TabHeadingWrapper headers={tabHeadingConfig.banner}>
             <Suspense fallback={<ProductCustomizationSkeleton />}>
               <BannerPannel productId={productId} />
@@ -59,15 +58,14 @@ export default async function EditProductPage({ params, searchParams }: EditProd
           </TabHeadingWrapper>
         </TabsContent> */}
 
-        <TabsContent value="discounts" className="space-y-4">
-          <TabHeadingWrapper tabHeaders={tabHeadingConfig.discounts}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <ParityGroupFormWrapper productId={productId} />
-            </Suspense>
-          </TabHeadingWrapper>
-        </TabsContent>
-      </Tabs>
-    </Suspense>
+      <TabsContent value="discounts" className="space-y-4">
+        <TabHeadingWrapper tabHeaders={tabHeadingConfig.discounts}>
+          <Suspense fallback={<div>Loading...</div>}>
+            <ParityGroupFormWrapper productId={productId} />
+          </Suspense>
+        </TabHeadingWrapper>
+      </TabsContent>
+    </Tabs>
   )
 }
 
