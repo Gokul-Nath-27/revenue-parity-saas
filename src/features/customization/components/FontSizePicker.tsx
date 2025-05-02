@@ -9,16 +9,17 @@ const sizes = [
 ];
 
 export function FontSizePicker() {
-  const { fontSize, setFontSize } = useBanner();
-
+  const { customization, setBanner } = useBanner();
+  const { font_size } = customization;
   return (
     <div className="flex items-center gap-2 flex-wrap">
+      <input type="hidden" name='font_size' value={font_size} />
       {sizes.map((size) => (
         <button
           key={size.value}
           type="button"
-          className={`px-3 py-1 border ${fontSize === size.value ? 'border-primary bg-primary/10' : 'border-muted'}`}
-          onClick={() => setFontSize(size.value)}
+          className={`px-3 py-1 border ${font_size === size.value ? 'border-primary bg-primary/10' : 'border-muted'}`}
+          onClick={() => setBanner({ font_size: size.value })}
         >
           {size.label}
         </button>

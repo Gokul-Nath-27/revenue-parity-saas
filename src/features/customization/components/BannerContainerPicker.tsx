@@ -1,26 +1,34 @@
 "use client"
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Input } from '@/components/ui/input';
 
 import { useBanner } from './BannerContext';
+const container_examples = [
+  '.banner-container',
+  '#header',
+  'body',
+]
 
 export function BannerContainerPicker() {
-  const { bannerContainer, setBannerContainer } = useBanner();
+  const { customization, setBanner } = useBanner();
+  const { banner_container } = customization;
 
-  const containers = [
-    { value: 'body', label: 'Entire Page' },
-    { value: 'header', label: 'Header' },
-    { value: 'main', label: 'Main Content' },
-  ];
 
   return (
-    <RadioGroup value={bannerContainer} onValueChange={setBannerContainer}>
-      {containers.map((container) => (
-        <div key={container.value} className="flex items-center space-x-2">
-          <RadioGroupItem value={container.value} id={container.value} />
-          <Label htmlFor={container.value}>{container.label}</Label>
-        </div>
-      ))}
-    </RadioGroup>
+    <>
+      <Input
+        name="banner_container"
+        value={banner_container}
+        onChange={(e) => setBanner({ banner_container: e.target.value })}
+      />
+      <p className="text-xs text-muted-foreground">
+        Enter the CSS selector for the container of the banner.
+        <br />
+        <span className="flex gap-1">
+          (e.g.{container_examples.map((example) => (
+            <code key={example} className="bg-muted px-1 py-0.5 rounded text-[10px]">{example}</code>
+          ))})
+        </span>
+      </p>
+    </>
   );
 } 
