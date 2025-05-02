@@ -30,7 +30,6 @@ export async function signup(prev: FormState, formData: FormData): Promise<FormS
   }
 
   const { name, email, password } = data;
-
   const existingUser = await db.query.User.findFirst({
     where: eq(User.email, email),
   });

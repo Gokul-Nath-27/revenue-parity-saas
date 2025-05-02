@@ -71,6 +71,13 @@
       "when": 1745947633055,
       "tag": "0009_fixed_raider",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1746169871761,
+      "tag": "0010_wonderful_harrier",
+      "breakpoints": true
     }
   ]
 }
