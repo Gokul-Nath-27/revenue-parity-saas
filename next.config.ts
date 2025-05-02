@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
     }
   },
   experimental: {
+    optimisticClientCache: false,
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
     ppr: true,
     dynamicIO: true
   },
