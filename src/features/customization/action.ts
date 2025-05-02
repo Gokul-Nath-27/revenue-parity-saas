@@ -8,6 +8,7 @@ import { updateBannerCustomizationIntoDb } from "./db";
 import { productCustomizationSchema } from "./schema";
 
 export async function updateBannerCustomization(
+  prev: { error: boolean, message: string },
   formData: FormData
 ) {
   const productId = formData.get("productId") as string;

@@ -1,4 +1,5 @@
 import { Palette } from "lucide-react";
+import { useActionState } from "react";
 
 import SubmitButton from "@/components/SubmitButton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,6 +17,10 @@ import { StickyToggle } from "./StickyToggle";
 
 
 export function BannerApperanceForm({ productId }: { productId: string }) {
+  const [_, formAction] = useActionState(updateBannerCustomization, {
+    error: false,
+    message: "",
+  })
 
   return (
     <Card className="md:col-span-2 h-full relative overflow-hidden">
@@ -28,7 +33,7 @@ export function BannerApperanceForm({ productId }: { productId: string }) {
             <Palette className="h-5 w-5 text-muted-foreground" />
           </div>
 
-          <form className="space-y-6" action={updateBannerCustomization}>
+          <form className="space-y-6" action={formAction}>
             <input type="hidden" name="productId" value={productId} />
             <div className="flex items-center gap-2 w-full">
               <div className="space-y-2 w-full">
