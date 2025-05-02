@@ -53,6 +53,12 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.4
         version: 1.2.4(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@uiw/color-convert':
+        specifier: ^2.5.3
+        version: 2.5.3(@babel/runtime@7.27.0)
+      '@uiw/react-color-colorful':
+        specifier: ^2.5.3
+        version: 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@upstash/redis':
         specifier: ^1.34.8
         version: 1.34.8
@@ -1391,6 +1397,46 @@ packages:
   '@typescript-eslint/visitor-keys@7.18.0':
     resolution: {integrity: sha512-cDF0/Gf81QpY3xYyJKDV14Zwdmid5+uuENhjH2EqFaF0ni+yAyq/LzMaIJdhNJXZI7uLzwIlA+V7oWoyn6Curg==}
     engines: {node: ^18.18.0 || >=20.0.0}
+
+  '@uiw/color-convert@2.5.3':
+    resolution: {integrity: sha512-r5WPoidQXyfPSZMuYFTwsGFMR+Sxlx7Od/qveE9CUp4DZDqlxmSw1VnTvGIAQKfEgM5h6rpjBkdiGOPi18heFQ==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+
+  '@uiw/react-color-alpha@2.5.3':
+    resolution: {integrity: sha512-suYYRXQMM/4DmXptftrafJz6ifzUHFDJGQiSmmQZ7j0rXQyds0iRHEGVKVdvjAQu0HlKK4BZuzI5paZ/IJ6Ltw==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
+  '@uiw/react-color-colorful@2.5.3':
+    resolution: {integrity: sha512-3D7HjmrSRGDQ7BQK1cZ2b+qiwKfE3NQlLSIDneN9f+X1wX+luRjj2/1NE88VcMVCeYf0CgLDVECe5GKll7xeCQ==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
+  '@uiw/react-color-hue@2.5.3':
+    resolution: {integrity: sha512-TCP9VwebHtpMSkzfYMcDdn4fOncylO17QqSLBTHw2QcJWrhRNpRE+d6WSVgFYHQwdPbg112QIj1MBXBpRuqh4g==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
+  '@uiw/react-color-saturation@2.5.3':
+    resolution: {integrity: sha512-niwNpHptyn958FMexXadJ26J5i2Rll6L42zOSpyBCV0DcGOwELKFP80Nw4Cpp1HqbaKEd8+eSqOexPpO+SBx4A==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
+  '@uiw/react-drag-event-interactive@2.5.3':
+    resolution: {integrity: sha512-gerpmyu5ak7pCyxpG2+k8jwKRHf0XdowkKgVCtQLbQtXqCBuo8QHYxRnU4G+Is0lBZestgMjbtee1s29xYIitw==}
+    peerDependencies:
+      '@babel/runtime': '>=7.19.0'
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
@@ -4369,6 +4415,50 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 7.18.0
       eslint-visitor-keys: 3.4.3
+
+  '@uiw/color-convert@2.5.3(@babel/runtime@7.27.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+
+  '@uiw/react-color-alpha@2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@uiw/color-convert': 2.5.3(@babel/runtime@7.27.0)
+      '@uiw/react-drag-event-interactive': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@uiw/react-color-colorful@2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@uiw/color-convert': 2.5.3(@babel/runtime@7.27.0)
+      '@uiw/react-color-alpha': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@uiw/react-color-hue': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@uiw/react-color-saturation': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@uiw/react-color-hue@2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@uiw/color-convert': 2.5.3(@babel/runtime@7.27.0)
+      '@uiw/react-color-alpha': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@uiw/react-color-saturation@2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@uiw/color-convert': 2.5.3(@babel/runtime@7.27.0)
+      '@uiw/react-drag-event-interactive': 2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@uiw/react-drag-event-interactive@2.5.3(@babel/runtime@7.27.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   '@ungap/structured-clone@1.3.0': {}
 

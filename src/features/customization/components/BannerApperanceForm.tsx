@@ -1,44 +1,21 @@
-"use client"
-import { Check, Palette } from "lucide-react";
-import { useFormStatus } from 'react-dom';
+import { Palette } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
-// import { updateBannerConfig } from '../action';
+import { updateBannerCustomization } from "../action";
 
-import { BannerColorPicker } from "./BannerColorPicker";
 import { BannerContainerPicker } from "./BannerContainerPicker";
-import { useBanner } from './BannerContext';
 import { BannerMessageInput } from "./BannerMessageInput";
-import { BannerPositionPicker } from "./BannerPositionPicker";
 import { BannerRadiusPicker } from "./BannerRadiusPicker";
+import { ClassPrefixInput } from "./ClassPrefixInput";
+import ReactColorPicker from "./ColorPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { StickyToggle } from "./StickyToggle";
-import { TextColorPicker } from "./TextColorPicker";
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit" className="w-full gap-2" disabled={pending}>
-      <Check className="h-4 w-4" /> {pending ? "Saving..." : "Save Changes"}
-    </Button>
-  );
-}
 
 export function BannerApperanceForm() {
-  const {
-    bannerColor,
-    bannerStyle,
-    customMessage,
-    bannerPosition,
-    textColor,
-    fontSize,
-    bannerContainer,
-    isSticky
-  } = useBanner();
 
   return (
     <Card className="md:col-span-2 h-full relative overflow-hidden">
@@ -51,26 +28,21 @@ export function BannerApperanceForm() {
             <Palette className="h-5 w-5 text-muted-foreground" />
           </div>
 
-          <form className="space-y-6">
-            <input type="hidden" name="bannerColor" value={bannerColor} />
-            <input type="hidden" name="bannerRadius" value={bannerStyle} />
-            <input type="hidden" name="bannerMessage" value={customMessage} />
-            <input type="hidden" name="bannerPosition" value={bannerPosition} />
-            <input type="hidden" name="textColor" value={textColor} />
-            <input type="hidden" name="fontSize" value={fontSize} />
-            <input type="hidden" name="bannerContainer" value={bannerContainer} />
-            <input type="hidden" name="isSticky" value={isSticky.toString()} />
+          <form className="space-y-6" action={updateBannerCustomization}>
+            <input type="hidden" name="text_color" />
+            <input type="hidden" name="font_size" />
+            <input type="hidden" name="banner_container" />
 
-            <div className="space-y-2">
-              <Label>Banner Color</Label>
-              <BannerColorPicker />
+            <div className="flex items-center gap-2 w-full">
+              <div className="space-y-2 w-full">
+                <Label>Background Color</Label>
+                <ReactColorPicker name="background_color" />
+              </div>
+              <div className="space-y-2 w-full">
+                <Label>Text Color</Label>
+                <ReactColorPicker name="text_color" />
+              </div>
             </div>
-
-            <div className="space-y-2">
-              <Label>Text Color</Label>
-              <TextColorPicker />
-            </div>
-
             <div className="space-y-2">
               <Label>Font Size</Label>
               <FontSizePicker />
@@ -93,20 +65,20 @@ export function BannerApperanceForm() {
             </div>
 
             <div className="space-y-2">
-              <Label>Banner Position</Label>
-              <BannerPositionPicker />
+              <Label>Banner Container</Label>
+              <BannerContainerPicker />
             </div>
 
             <div className="space-y-2">
-              <Label>Banner Container</Label>
-              <BannerContainerPicker />
+              <Label>Class Prefix</Label>
+              <ClassPrefixInput />
             </div>
 
             <div className="space-y-2">
               <StickyToggle />
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 ">
               <SubmitButton />
             </div>
           </form>

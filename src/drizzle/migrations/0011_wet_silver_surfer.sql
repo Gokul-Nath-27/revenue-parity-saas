@@ -1,0 +1,1 @@
+ALTER TABLE "product_customizations" ADD COLUMN "banner_radius" varchar DEFAULT '10px' NOT NULL;

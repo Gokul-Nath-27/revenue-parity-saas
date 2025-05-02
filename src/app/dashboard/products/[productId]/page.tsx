@@ -5,6 +5,8 @@ import React, { Suspense } from 'react';
 import { ProductTabs } from '@/app/dashboard/products/[productId]/ProductTabs';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import BannerCustomization from '@/features/customization/components/BannerCustomization';
+import BannerCustomizationLoading from '@/features/customization/components/BannerCustomizationSkeleton';
 import ParityGroupFormWrapper from '@/features/discounts/components/ParityGroupFormWrapper';
 import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
@@ -50,13 +52,16 @@ export default async function EditProductPage({ params, searchParams }: EditProd
           </Suspense>
         </TabHeadingWrapper>
       </TabsContent>
-      {/* <TabsContent value="banner" className="space-y-4">
-          <TabHeadingWrapper headers={tabHeadingConfig.banner}>
-            <Suspense fallback={<ProductCustomizationSkeleton />}>
-              <BannerPannel productId={productId} />
-            </Suspense>
-          </TabHeadingWrapper>
-        </TabsContent> */}
+
+
+      <TabsContent value="banner" className="space-y-4">
+        <TabHeadingWrapper tabHeaders={tabHeadingConfig.banner}>
+          <Suspense fallback={<BannerCustomizationLoading />}>
+            <BannerCustomization productId={productId} />
+          </Suspense>
+        </TabHeadingWrapper>
+      </TabsContent>
+
 
       <TabsContent value="discounts" className="space-y-4">
         <TabHeadingWrapper tabHeaders={tabHeadingConfig.discounts}>

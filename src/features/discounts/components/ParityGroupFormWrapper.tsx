@@ -16,7 +16,10 @@ export type CountryGroup = {
   } | undefined;
 }[]
 
+
+
 export default async function ParityGroupFormWrapper({ productId }: { productId: string }) {
+
   const countryGroups = await getCountryGroupDiscounts(productId);
 
   return (

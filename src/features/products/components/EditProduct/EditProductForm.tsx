@@ -73,9 +73,6 @@ export function EditProductForm({ product }: { product: Product }) {
 
         <FormField label="Domain" name="domain" error={state?.errors?.domain?.[0]}>
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Label htmlFor="domain">Domain</Label>
-            </div>
             <Input
               id="domain"
               name="domain"
