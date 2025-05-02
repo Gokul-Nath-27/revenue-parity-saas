@@ -1,57 +1,48 @@
 "use client"
-import { createContext, useState, ReactNode, useContext, type Dispatch, type SetStateAction } from 'react';
+import { createContext, useReducer, ReactElement, useContext } from 'react';
 
-type BannerContextType = {
-  bannerColor: string;
-  setBannerColor: Dispatch<SetStateAction<string>>;
-  bannerStyle: string;
-  setBannerStyle: Dispatch<SetStateAction<string>>;
-  customMessage: string;
-  setCustomMessage: Dispatch<SetStateAction<string>>;
-  bannerPosition: string;
-  setBannerPosition: Dispatch<SetStateAction<string>>;
-  textColor: string;
-  setTextColor: Dispatch<SetStateAction<string>>;
-  fontSize: string;
-  setFontSize: Dispatch<SetStateAction<string>>;
-  bannerContainer: string;
-  setBannerContainer: Dispatch<SetStateAction<string>>;
-  isSticky: boolean;
-  setIsSticky: Dispatch<SetStateAction<boolean>>;
+type CustomizationType = {
+  id: string;
+  class_prefix: string | null;
+  product_id: string;
+  location_message: string;
+  background_color: string;
+  text_color: string;
+  banner_container: string;
+  sticky: boolean;
+  font_size: string;
+  banner_radius: string;
 };
 
+type BannerContextType = {
+  customization: CustomizationType;
+  setBanner: (customization: Partial<CustomizationType>) => void;
+};
+
+type BannerProviderProps = {
+  children: ReactElement;
+  initialCustomization: CustomizationType;
+};
+
+// Create the context with undefined as initial value
 export const BannerContext = createContext<BannerContextType | undefined>(undefined);
 
-export function BannerProvider({ children }: { children: ReactNode }) {
-  
-  const [bannerColor, setBannerColor] = useState('from-primary/20 to-blue-600/20');
-  const [bannerStyle, setBannerStyle] = useState('rounded-md');
-  const [customMessage, setCustomMessage] = useState('');
-  const [bannerPosition, setBannerPosition] = useState('top');
-  const [textColor, setTextColor] = useState('hsl(0, 0%, 100%)');
-  const [fontSize, setFontSize] = useState('1rem');
-  const [bannerContainer, setBannerContainer] = useState('body');
-  const [isSticky, setIsSticky] = useState<boolean>(true);
+export function BannerProvider({ children, initialCustomization }: BannerProviderProps) {
+  const [customization, setBanner] = useReducer(
+    (state: CustomizationType, updates: Partial<CustomizationType>) => ({
+      ...state,
+      ...updates,
+    }),
+    initialCustomization
+  );
+
+  const value = {
+    customization,
+    setBanner
+  };
 
   return (
-    <BannerContext.Provider value={{
-      bannerColor,
-      setBannerColor,
-      bannerStyle,
-      setBannerStyle,
-      customMessage,
-      setCustomMessage,
-      bannerPosition,
-      setBannerPosition,
-      textColor,
-      setTextColor,
-      fontSize,
-      setFontSize,
-      bannerContainer,
-      setBannerContainer,
-      isSticky,
-      setIsSticky,
-    }}>
+    <BannerContext.Provider value={value}>
       {children}
     </BannerContext.Provider>
   );
@@ -63,4 +54,4 @@ export function useBanner() {
     throw new Error('useBanner must be used within a BannerProvider');
   }
   return context;
-} 
+}
