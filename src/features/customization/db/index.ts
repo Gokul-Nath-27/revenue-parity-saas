@@ -1,6 +1,8 @@
-import db from "@/drizzle/db";
-import { withAuthUserId } from "@/lib/with-auth";
+import { eq } from "drizzle-orm";
 
+import db from "@/drizzle/db";
+import { ProductCustomization } from "@/drizzle/schemas";
+import { withAuthUserId } from "@/lib/with-auth";
 
 export const getProductCustomization = withAuthUserId(
   async function (userId, productId: string) {
@@ -30,3 +32,11 @@ export const getProductCustomization = withAuthUserId(
     }
   }
 );
+
+export const updateBannerCustomizationIntoDb = async (data: typeof ProductCustomization.$inferInsert) => {
+  const { rowCount } = await db
+    .update(ProductCustomization)
+    .set(data)
+    .where(eq(ProductCustomization.product_id, data.product_id));
+  return rowCount > 0;
+}

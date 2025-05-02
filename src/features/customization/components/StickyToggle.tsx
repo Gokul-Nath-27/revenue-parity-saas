@@ -9,9 +9,9 @@ export function StickyToggle() {
 
   return (
     <div className="flex items-center space-x-2">
+      <input type="hidden" name="sticky" value={sticky ? 'true' : 'false'} />
       <Switch
         id="sticky-toggle"
-        name="sticky"
         checked={sticky}
         onCheckedChange={(value) => setBanner({ sticky: value })}
       />

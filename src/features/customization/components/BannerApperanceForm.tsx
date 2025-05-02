@@ -15,7 +15,7 @@ import { FontSizePicker } from "./FontSizePicker";
 import { StickyToggle } from "./StickyToggle";
 
 
-export function BannerApperanceForm() {
+export function BannerApperanceForm({ productId }: { productId: string }) {
 
   return (
     <Card className="md:col-span-2 h-full relative overflow-hidden">
@@ -29,10 +29,7 @@ export function BannerApperanceForm() {
           </div>
 
           <form className="space-y-6" action={updateBannerCustomization}>
-            <input type="hidden" name="text_color" />
-            <input type="hidden" name="font_size" />
-            <input type="hidden" name="banner_container" />
-
+            <input type="hidden" name="productId" value={productId} />
             <div className="flex items-center gap-2 w-full">
               <div className="space-y-2 w-full">
                 <Label>Background Color</Label>

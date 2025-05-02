@@ -37,7 +37,7 @@ export default async function BannerCustomization({ productId }: { productId: st
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
-          <BannerApperanceForm />
+          <BannerApperanceForm productId={productId} />
           <div>
             <BannerEmbed />
           </div>

@@ -8,11 +8,14 @@ import { Button } from '@/components/ui/button'; // assuming you have a Button c
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'; // adjust the path if needed
 import { useBanner } from '@/features/customization/components/BannerContext';
 
+const colorKeys = [
+  'background_color',
+  'text_color',
+] as const;
 
-
-export default function ColorPicker({ name }: { name: string }) {
+export default function ColorPicker({ name }: { name: typeof colorKeys[number] }) {
   const [hsva, setHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
-  const { setBanner } = useBanner();
+  const { customization: { [name]: color }, setBanner } = useBanner();
 
   useEffect(() => {
     const hslString = hsvaToHslString(hsva);
@@ -21,6 +24,7 @@ export default function ColorPicker({ name }: { name: string }) {
 
   return (
     <>
+      <input type="hidden" name={name} value={color} />
       <Slider
         color={hsva}
         style={{ paddingBottom: 10 }}
