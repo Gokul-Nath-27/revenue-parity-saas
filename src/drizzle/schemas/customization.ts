@@ -25,6 +25,7 @@ export const ProductCustomization = pgTable("product_customizations", {
   banner_container: text().notNull().default("body"),
   sticky: boolean().notNull().default(true),
   font_size: varchar().notNull().default("1rem"),
+  banner_radius: varchar().notNull().default("10px"),
   created_at,
   updated_at,
 });
