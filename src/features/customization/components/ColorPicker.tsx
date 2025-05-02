@@ -1,5 +1,5 @@
 "use client"
-import { hsvaToHslString } from '@uiw/color-convert';
+import { hsvaToHslString, hslStringToHsva } from '@uiw/color-convert';
 import Colorful from '@uiw/react-color-colorful';
 import React, { useEffect, useState } from 'react';
 
@@ -14,8 +14,8 @@ const colorKeys = [
 ] as const;
 
 export default function ColorPicker({ name }: { name: typeof colorKeys[number] }) {
-  const [hsva, setHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
   const { customization: { [name]: color }, setBanner } = useBanner();
+  const [hsva, setHsva] = useState(hslStringToHsva(color));
 
   useEffect(() => {
     const hslString = hsvaToHslString(hsva);
