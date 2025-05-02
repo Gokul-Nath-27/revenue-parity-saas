@@ -1,0 +1,2 @@
+ALTER TABLE "product_customizations" ALTER COLUMN "background_color" SET DEFAULT 'hsl(0, 50%, 20%)';--> statement-breakpoint
+ALTER TABLE "product_customizations" ALTER COLUMN "text_color" SET DEFAULT 'hsl(0, 100%, 93%)';

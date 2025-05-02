@@ -92,6 +92,13 @@
       "when": 1746210057108,
       "tag": "0012_fancy_vanisher",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1746210263706,
+      "tag": "0013_bright_cerise",
+      "breakpoints": true
     }
   ]
 }

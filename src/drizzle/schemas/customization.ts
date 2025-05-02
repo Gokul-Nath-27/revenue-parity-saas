@@ -20,8 +20,8 @@ export const ProductCustomization = pgTable("product_customizations", {
     ),
   background_color: text()
     .notNull()
-    .default("hsl(187.2, 21%, 13%)"),
-  text_color: text().notNull().default("hsl(359.1, 0%, 100%)"),
+    .default("hsl(0, 50%, 20%)"),
+  text_color: text().notNull().default("hsl(0, 100%, 93%)"),
   banner_container: text().notNull().default("body"),
   sticky: boolean().notNull().default(true),
   font_size: varchar().notNull().default("1rem"),
