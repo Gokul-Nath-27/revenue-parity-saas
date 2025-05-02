@@ -28,10 +28,8 @@ export async function GET(
         { status: 400 }
       );
     }
-
-    console.log(1, oauthProvider);
+    
     const provider = providerSchema.parse(oauthProvider);
-    console.log(2, provider);
     if (error) {
       return NextResponse.json(
         { error: `OAuth error: ${error}` },
