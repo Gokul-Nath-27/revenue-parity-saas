@@ -1,10 +1,12 @@
 "use client"
 
 import { Palette } from "lucide-react";
+import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 import SubmitButton from "@/components/SubmitButton";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { updateBannerCustomization } from "@/features/customization/action";
@@ -13,11 +15,11 @@ import { BannerContainerPicker } from "./BannerContainerPicker";
 import { BannerMessageInput } from "./BannerMessageInput";
 import { BannerRadiusPicker } from "./BannerRadiusPicker";
 import { ClassPrefixInput } from "./ClassPrefixInput";
-import ReactColorPicker from "./ColorPicker";
+import ColorPicker from "./ColorPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { StickyToggle } from "./StickyToggle";
 
-export function BannerApperanceForm({ productId }: { productId: string }) {
+export function BannerApperanceForm({ productId, canCustomizeBanner }: { productId: string, canCustomizeBanner: boolean }) {
   const [state, formAction] = useActionState(updateBannerCustomization, {
     error: false,
     message: "",
@@ -39,7 +41,13 @@ export function BannerApperanceForm({ productId }: { productId: string }) {
         <div className="space-y-6 flex-grow">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold">Banner Appearance</h3>
-            <Palette className="h-5 w-5 text-muted-foreground" />
+            {!canCustomizeBanner ? (
+              <Link href="/dashboard/subscription">
+                <Button>
+                  Upgrade to customize
+                </Button>
+              </Link>
+            ) : <Palette className="h-5 w-5 text-muted-foreground" />}
           </div>
 
           <form className="space-y-6" action={formAction}>
@@ -47,11 +55,11 @@ export function BannerApperanceForm({ productId }: { productId: string }) {
             <div className="flex items-center gap-2 w-full">
               <div className="space-y-2 w-full">
                 <Label>Background Color</Label>
-                <ReactColorPicker name="background_color" />
+                <ColorPicker name="background_color" />
               </div>
               <div className="space-y-2 w-full">
                 <Label>Text Color</Label>
-                <ReactColorPicker name="text_color" />
+                <ColorPicker name="text_color" />
               </div>
             </div>
             <div className="space-y-2">
@@ -90,7 +98,7 @@ export function BannerApperanceForm({ productId }: { productId: string }) {
             </div>
 
             <div className="pt-4 ">
-              <SubmitButton />
+              <SubmitButton disabled={!canCustomizeBanner} />
             </div>
           </form>
         </div>

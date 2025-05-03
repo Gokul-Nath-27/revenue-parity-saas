@@ -5,6 +5,7 @@ import React from "react";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -33,8 +34,10 @@ export default function RootLayout({
           themes={["light", "dark"]}
           disableTransitionOnChange={false}
         >
-          {children}
-          <SpeedInsights />
+          <TooltipProvider>
+            {children}
+            <SpeedInsights />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

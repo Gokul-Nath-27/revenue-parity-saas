@@ -42,7 +42,7 @@ export async function createProduct(
     }
   }
   const product = await createProductIntoDb(data as typeof Product.$inferInsert);
-  if (!product) {
+  if ("error" in product) {
     return {
       success: false,
       message: "Failed to create product",

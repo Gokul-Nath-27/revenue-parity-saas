@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { useBanner } from './BannerContext';
 
 export function StickyToggle() {
-  const { customization: { sticky }, setBanner } = useBanner();
+  const { customization: { sticky }, setBanner, canCustomizeBanner } = useBanner();
 
   return (
     <div className="flex items-center space-x-2">
@@ -14,6 +14,7 @@ export function StickyToggle() {
         id="sticky-toggle"
         checked={sticky}
         onCheckedChange={(value) => setBanner({ sticky: value })}
+        disabled={!canCustomizeBanner}
       />
       <Label htmlFor="sticky-toggle">Sticky Banner</Label>
     </div>

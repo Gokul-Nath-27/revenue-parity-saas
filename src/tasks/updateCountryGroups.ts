@@ -6,9 +6,7 @@ import { CountryGroup, Country } from "@/drizzle/schemas/country"
 
 
 async function main() {
-  console.log("Updating country groups...")
   const groupCount = await updateCountryGroups()
-  console.log("Updating countries...")
   const countryCount = await updateCountries()
 
   console.log(

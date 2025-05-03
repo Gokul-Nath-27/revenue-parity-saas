@@ -9,13 +9,14 @@ const container_examples = [
 ]
 
 export function BannerContainerPicker() {
-  const { customization, setBanner } = useBanner();
+  const { customization, setBanner, canCustomizeBanner } = useBanner();
   const { banner_container } = customization;
 
 
   return (
     <>
       <Input
+        disabled={!canCustomizeBanner}
         name="banner_container"
         value={banner_container}
         onChange={(e) => setBanner({ banner_container: e.target.value })}

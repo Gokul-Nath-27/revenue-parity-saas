@@ -81,5 +81,6 @@ export const AddProductDialog = () => {
         </DialogContent>
       </Dialog>
     </>
+
   );
 }; 

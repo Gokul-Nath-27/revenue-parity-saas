@@ -14,7 +14,7 @@ const colorKeys = [
 ] as const;
 
 export default function ColorPicker({ name }: { name: typeof colorKeys[number] }) {
-  const { customization: { [name]: color }, setBanner } = useBanner();
+  const { customization: { [name]: color }, setBanner, canCustomizeBanner } = useBanner();
   const [hsva, setHsva] = useState(hslStringToHsva(color));
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function ColorPicker({ name }: { name: typeof colorKeys[number] }
   }, [hsva, name, setBanner]);
 
   return (
-    <>
+    <ColorPickerNotAllowed canCustomizeBanner={canCustomizeBanner}>
       <input type="hidden" name={name} value={color} />
       <Slider
         className='pb-4'
@@ -41,6 +41,16 @@ export default function ColorPicker({ name }: { name: typeof colorKeys[number] }
           />
         </PopoverContent>
       </Popover>
-    </>
+    </ColorPickerNotAllowed>
   );
+}
+
+
+const ColorPickerNotAllowed = ({ children, canCustomizeBanner }: { children: React.ReactNode, canCustomizeBanner: boolean }) => {
+  if (!canCustomizeBanner) return (
+    <div className="cursor-not-allowed pointer-events-none">
+      {children}
+    </div>
+  )
+  return children;
 }

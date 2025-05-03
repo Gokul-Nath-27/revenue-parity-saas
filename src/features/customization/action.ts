@@ -11,10 +11,11 @@ export async function updateBannerCustomization(
   _: { error: boolean, message: string },
   formData: FormData
 ) {
+
   const productId = formData.get("productId") as string;
   const rawData = Object.fromEntries(formData.entries())
+
   const { success, data } = productCustomizationSchema.safeParse(rawData)
-  console.log(success, data)
 
   if (!success || !canCustomize()) {
     return {

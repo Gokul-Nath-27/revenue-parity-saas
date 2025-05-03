@@ -12,12 +12,13 @@ const sizes = [
 ];
 
 export function FontSizePicker() {
-  const { customization, setBanner } = useBanner();
+  const { customization, setBanner, canCustomizeBanner } = useBanner();
   const { font_size } = customization;
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <input type="hidden" name='font_size' value={font_size} />
       <RadioGroup
+        disabled={!canCustomizeBanner}
         className='flex'
         value={font_size}
         onValueChange={(value) => setBanner({ font_size: value })}

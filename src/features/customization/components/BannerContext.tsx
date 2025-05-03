@@ -17,17 +17,19 @@ type CustomizationType = {
 type BannerContextType = {
   customization: CustomizationType;
   setBanner: (customization: Partial<CustomizationType>) => void;
+  canCustomizeBanner: boolean;
 };
 
 type BannerProviderProps = {
   children: ReactElement;
   initialCustomization: CustomizationType;
+  canCustomizeBanner: boolean;
 };
 
 // Create the context with undefined as initial value
 export const BannerContext = createContext<BannerContextType | undefined>(undefined);
 
-export function BannerProvider({ children, initialCustomization }: BannerProviderProps) {
+export function BannerProvider({ children, initialCustomization, canCustomizeBanner }: BannerProviderProps) {
   const [customization, setBanner] = useReducer(
     (state: CustomizationType, updates: Partial<CustomizationType>) => ({
       ...state,
@@ -38,7 +40,8 @@ export function BannerProvider({ children, initialCustomization }: BannerProvide
 
   const value = {
     customization,
-    setBanner
+    setBanner,
+    canCustomizeBanner
   };
 
   return (

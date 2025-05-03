@@ -8,7 +8,7 @@ export const subscriptionTiers = {
     maxNumberOfProducts: 1,
     maxNumberOfVisits: 5000,
     canAccessAnalytics: false,
-    canCustomizeBanner: true,
+    canCustomizeBanner: false,
     canRemoveBranding: false,
     stripePriceId: null,
     description: "Perfect for trying out our platform",

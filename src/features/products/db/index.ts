@@ -1,8 +1,10 @@
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
 import db from "@/drizzle/db";
 import { Product, ProductCustomization } from "@/drizzle/schemas";
+import { catchError } from "@/lib/utils";
 import { withAuthUserId } from "@/lib/with-auth";
+import { canCreateProduct } from "@/permissions";
 
 export const getProducts = withAuthUserId(
   // callback function
@@ -24,11 +26,13 @@ export const getProducts = withAuthUserId(
 export const createProduct = withAuthUserId(
   // callback function
   async function (userId, data: typeof Product.$inferInsert) {
+    const { error, data: hasPermission } = await catchError(canCreateProduct())
+    if (error || !hasPermission) return { error: "You have reached the limit of products for your plan." }
 
-  const [newProduct] = await db
-    .insert(Product).values({
-      ...data,
-      user_id: userId
+    const [newProduct] = await db
+      .insert(Product).values({
+        ...data,
+        user_id: userId
     }).returning({
       id: Product.id,
       user_id: Product.user_id,
@@ -86,3 +90,11 @@ export const deleteProduct = withAuthUserId(
     return rowCount > 0;
   }
 );
+
+export const getProductCount = async function (userId: string) {
+  const counts = await db
+    .select({ productCount: count() })
+    .from(Product)
+    .where(eq(Product.user_id, userId))
+  return counts[0].productCount
+}

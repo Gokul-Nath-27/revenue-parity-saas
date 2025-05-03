@@ -20,7 +20,6 @@ export async function GET(
     const code = request.nextUrl.searchParams.get("code")
     const error = request.nextUrl.searchParams.get("error")
 
-    console.log(0, code);
     // Validate the provider
     if (!oauthProvider || oauthProvider === "[provider]") {
       return NextResponse.json(

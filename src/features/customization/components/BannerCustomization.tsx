@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import { getProductCustomization } from '@/features/customization/db';
 import { catchError } from '@/lib/utils';
-import { canRemoveBranding as canRemoveBrandingPermission } from '@/permissions';
+import { canRemoveBranding as canRemoveBrandingPermission, canCustomizeBanner as canCustomizeBannerPermission } from '@/permissions';
 
 import { BannerApperanceForm } from './BannerApperanceForm';
 import { BannerProvider } from './BannerContext';
@@ -20,9 +20,10 @@ export default async function BannerCustomization({ productId }: { productId: st
   const { userId, customization } = data;
 
   const canRemoveBranding = await canRemoveBrandingPermission(userId);
+  const canCustomizeBanner = await canCustomizeBannerPermission(userId);
 
   return (
-    <BannerProvider initialCustomization={customization}>
+    <BannerProvider initialCustomization={customization} canCustomizeBanner={canCustomizeBanner}>
       <div className="space-y-6">
         <div className="space-y-2">
           <h3 className="text-md font-semibold">Preview</h3>
@@ -37,7 +38,10 @@ export default async function BannerCustomization({ productId }: { productId: st
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
-          <BannerApperanceForm productId={productId} />
+          <BannerApperanceForm
+            productId={productId}
+            canCustomizeBanner={canCustomizeBanner}
+          />
           <div>
             <BannerEmbed />
           </div>
