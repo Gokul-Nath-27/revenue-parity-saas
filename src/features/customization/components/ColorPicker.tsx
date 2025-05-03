@@ -48,8 +48,10 @@ export default function ColorPicker({ name }: { name: typeof colorKeys[number] }
 
 const ColorPickerNotAllowed = ({ children, canCustomizeBanner }: { children: React.ReactNode, canCustomizeBanner: boolean }) => {
   if (!canCustomizeBanner) return (
-    <div className="cursor-not-allowed pointer-events-none">
-      {children}
+    <div className="cursor-not-allowed">
+      <div className="pointer-events-none">
+        {children}
+      </div>
     </div>
   )
   return children;
