@@ -17,14 +17,17 @@ export async function POST(request: NextRequest) {
 
   switch (event.type) {
     case "customer.subscription.created": {
+
       await handleCreate(event.data.object)
       break
     }
     case "customer.subscription.updated": {
+      console.log("customer.subscription.updated", event.data.object)
       await handleUpdate(event.data.object)
       break
     }
     case "customer.subscription.deleted": {
+      console.log("customer.subscription.deleted", event.data.object)
       await handleDelete(event.data.object)
       break
     }
@@ -33,7 +36,19 @@ export async function POST(request: NextRequest) {
   return new Response(null, { status: 200 })
 }
 async function handleCreate(subscription: Stripe.Subscription) {
+  console.log("price id", subscription.items.data[0].price.id)
   const tier = getTierByPriceId(subscription.items.data[0].price.id)
+  // console.log({
+  //   "metadata": subscription.metadata,
+  //   "price id": subscription.items.data[0].price.id,
+  //   "subscription customer id": subscription.customer,
+  // })
+  // SAMPLE DATA
+  // {
+  //   metadata: { userId: '16a85ca1-b1fa-4ec0-934f-85a36012d9a1' },
+  //   'price id': 'price_1RKcQeSEy5rcSZkax2ixWSeF',
+  //   'subscription customer id': 'cus_SFEphMIHIedw9a'
+  // }
   const userId = subscription.metadata.userId
   if (userId == null || tier == null) {
     return new Response(null, { status: 500 })

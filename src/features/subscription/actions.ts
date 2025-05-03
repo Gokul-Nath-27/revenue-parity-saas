@@ -45,8 +45,13 @@ export async function createCheckoutSession(tier: PaidTierNames): Promise<{ erro
 
   // Already subscribed, upgrade to new tier
   if (subscription.stripe_subscription_id) {
-    const url = await getSubscriptionUpgradeSession(tier, subscription)
-    redirect(url)
+    const result = await getSubscriptionUpgradeSession(tier, subscription)
+  
+    if (result.error) {
+      return result  // { error: true, message }
+    }
+    
+    redirect(result.url)
   }
 
   // Create checkout session for the new purchase
@@ -82,18 +87,36 @@ async function createCheckoutSessionUrl(user: User, priceId: string) {
   }
 }
 
+type UpgradeSessionResult =
+  | { error: true; message: string }
+  | { error: false; url: string }
+
 async function getSubscriptionUpgradeSession(
   tier: PaidTierNames,
   subscription: UserSubscriptionType
-) {
+): Promise<UpgradeSessionResult> {
   if (
     subscription.stripe_customer_id == null ||
     subscription.stripe_subscription_id == null ||
     subscription.stripe_subscription_item_id == null
   ) {
-    throw new Error()
+    return { error: true, message: "Missing Stripe subscription details." }
   }
 
+  const stripeSubscription = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id)
+
+  const currentPriceId = stripeSubscription.items.data[0].price.id
+  const targetPriceId = subscriptionTiers[tier].stripePriceId
+
+  console.log("stripeSubscription: tier", tier)
+  console.log("currentPriceId", currentPriceId)
+  console.log("targetPriceId", targetPriceId)
+  console.log("EQUALS", currentPriceId === targetPriceId)
+  
+  if (currentPriceId === targetPriceId) {
+    return { error: true, message: "You are already on this tier." }
+  }
+  
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: subscription.stripe_customer_id,
     return_url: `${baseUrl}/dashboard/subscription`,
@@ -104,7 +127,7 @@ async function getSubscriptionUpgradeSession(
         items: [
           {
             id: subscription.stripe_subscription_item_id,
-            price: subscriptionTiers[tier].stripePriceId,
+            price: targetPriceId,
             quantity: 1,
           },
         ],
@@ -112,7 +135,9 @@ async function getSubscriptionUpgradeSession(
     },
   })
 
-  return portalSession.url
+  console.log("getSubscriptionUpgradeSession: portalSession", portalSession)
+
+  return { error: false, url: portalSession.url }
 }
 
 export async function createCustomerPortalSession(): Promise<{ error: boolean }> {

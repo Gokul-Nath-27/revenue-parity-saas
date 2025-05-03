@@ -36,7 +36,7 @@ export const subscriptionTiers = {
     canAccessAnalytics: true,
     canCustomizeBanner: true,
     canRemoveBranding: true,
-    stripePriceId: process.env.STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID,
+    stripePriceId: process.env.STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID as string,
     description: "For growing businesses and creators",
     marketingLayout: {
       buttonText: "Get Started",
