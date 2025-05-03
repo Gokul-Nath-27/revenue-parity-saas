@@ -8,10 +8,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn, generateIntials } from "@/lib/utils";
 
-
-
-
-
 type UserProfileDropdownProps = {
   user: { name: string; email: string };
   trigger: React.ReactNode;

@@ -30,4 +30,8 @@ export const generateIntials = (name: string) => {
 
 export function removeTrailingSlash(path: string) {
   return path.replace(/\/$/, "")
-}``
+}
+
+export function startOfMonth(date = new Date()) {
+  return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+}

@@ -1,17 +1,13 @@
 
-import PricingSection from "@/components/Pricing"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { Suspense } from "react"
 
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import ManageSubscription, { ManageSubscriptionSkeleton } from "@/features/subscription/components/ManageSubsciption"
+import PricingSection from "@/features/subscription/components/PricingGroup"
+import UsageStats, { UsageStatsSkeleton } from "@/features/subscription/components/UsageStats"
+import UserInformation, { UserInformationSkeleton } from "@/features/subscription/components/UserInformation"
 
-
-export default function SubscriptionPage() {
-  const premiumUsage = 12
-  const premiumLimit = 50
-  const freeUsage = 28
-  const freeLimit = 200
+export default async function SubscriptionPage() {
 
   return (
     <div className="space-y-8 bg-background text-foreground md:pt-6">
@@ -24,71 +20,23 @@ export default function SubscriptionPage() {
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Basic Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between">
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm font-semibold">Name</p>
-                <p className="text-muted-foreground">Yugandhar developer</p>
-              </div>
-              <div>
-                <p className="text-sm font-semibold">Email</p>
-                <p className="text-muted-foreground">yugandhardeveloper@gmail.com</p>
-              </div>
-            </div>
-            <Avatar>
-              <AvatarFallback className="rounded-lg">{'DM'}</AvatarFallback>
-            </Avatar>
-          </CardContent>
-        </Card>
+        <Suspense fallback={<UserInformationSkeleton />}>
+          <UserInformation />
+        </Suspense>
 
         {/* Usage */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Usage</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Premium Usage */}
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span>Premium models</span>
-                <span>{premiumUsage} / {premiumLimit}</span>
-              </div>
-              <Progress value={(premiumUsage / premiumLimit) * 100} />
-              <p className="text-sm text-muted-foreground mt-2">
-                You&apos;ve used no requests out of your <strong>{premiumLimit}</strong> fast requests quota.
-              </p>
-            </div>
-
-            {/* Free Usage */}
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span>gpt-4o-mini or cursor-small</span>
-                <span>{freeUsage} / {freeLimit}</span>
-              </div>
-              <Progress value={(freeUsage / freeLimit) * 100} />
-              <p className="text-sm text-muted-foreground mt-2">
-                You&apos;ve used no requests out of your <strong>{freeLimit}</strong> monthly fast requests quota.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <Suspense fallback={<UsageStatsSkeleton />}>
+          <UsageStats />
+        </Suspense>
 
         {/* Account Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>Subscription</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            <Button variant="secondary">Upgrade to Pro</Button>
-            <Button>Upgrade to Business</Button>
-            <div className="text-muted-foreground mt-2 text-sm cursor-pointer">
-              Advanced <span className="text-xs">▼</span>
-            </div>
-          </CardContent>
+          <Suspense fallback={<ManageSubscriptionSkeleton />}>
+            <ManageSubscription />
+          </Suspense>
         </Card>
       </div>
       <div className="mt-12">

@@ -1,9 +1,9 @@
 import { Star, Check, ArrowRight } from "lucide-react";
 
-import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
 
-import { Button } from "./ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
 
 const PricingCard = ({
   title,
@@ -71,8 +71,8 @@ export default function PricingSection() {
           price={tier.priceInCents === 0 ? "Free" : `$${(tier.priceInCents / 100).toFixed(2)}`}
           description={tier.description}
           features={tier.features}
-          buttonText={tier.buttonText}
-          buttonVariant={tier.buttonVariant}
+          buttonText={tier.marketingLayout.buttonText}
+          buttonVariant={tier.marketingLayout.buttonVariant}
           popular={tier.isPopular}
         />
       ))}

@@ -12,8 +12,14 @@ export const subscriptionTiers = {
     canRemoveBranding: false,
     stripePriceId: null,
     description: "Perfect for trying out our platform",
-    buttonText: "Start for Free",
-    buttonVariant: "outline",
+    marketingLayout: {
+      buttonText: "Start for Free",
+      buttonVariant: "outline",
+    },
+    subscriptionLayout: {
+      buttonText: "Start for Free",
+      buttonVariant: "outline",
+    },
     isPopular: false,
     features: [
       "Up to 5,000 monthly visitors",
@@ -32,8 +38,14 @@ export const subscriptionTiers = {
     canRemoveBranding: true,
     stripePriceId: process.env.STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID,
     description: "For growing businesses and creators",
-    buttonText: "Get Started",
-    buttonVariant: "default",
+    marketingLayout: {
+      buttonText: "Get Started",
+      buttonVariant: "default",
+    },
+    subscriptionLayout: {
+      buttonText: "Swap to Standard",
+      buttonVariant: "default",
+    },
     isPopular: true,
     features: [
       "Up to 100,000 monthly visitors",
@@ -54,8 +66,13 @@ export const subscriptionTiers = {
     canRemoveBranding: true,
     stripePriceId: process.env.STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID,
     description: "For large businesses with high volume",
-    buttonText: "Contact Sales",
-    buttonVariant: "secondary",
+    marketingLayout: {
+      buttonText: "Contact Sales",
+      buttonVariant: "secondary",
+    },
+    subscriptionLayout: {
+      buttonText: "Swap to Premium",
+    },
     isPopular: false,
     features: [
       "Up to 1,000,000 monthly visitors",
