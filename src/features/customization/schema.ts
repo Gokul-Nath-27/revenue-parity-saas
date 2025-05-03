@@ -7,5 +7,5 @@ export const productCustomizationSchema = z.object({
   font_size: z.string().min(1, "Required"),
   location_message: z.string().min(1, "Required"),
   banner_container: z.string().min(1, "Required"),
-  sticky: z.boolean(),
+  sticky: z.coerce.boolean(),
 })

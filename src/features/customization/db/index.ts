@@ -33,10 +33,12 @@ export const getProductCustomization = withAuthUserId(
   }
 );
 
-export const updateBannerCustomizationIntoDb = async (data: typeof ProductCustomization.$inferInsert) => {
+export const updateBannerCustomizationIntoDb = async (data: Partial<typeof ProductCustomization.$inferInsert>, productId: string) => {
+
   const { rowCount } = await db
     .update(ProductCustomization)
     .set(data)
-    .where(eq(ProductCustomization.product_id, data.product_id));
+    .where(eq(ProductCustomization.product_id, productId));
+  
   return rowCount > 0;
 }

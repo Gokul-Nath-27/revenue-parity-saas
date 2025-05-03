@@ -8,7 +8,7 @@ import { updateBannerCustomizationIntoDb } from "./db";
 import { productCustomizationSchema } from "./schema";
 
 export async function updateBannerCustomization(
-  prev: { error: boolean, message: string },
+  _: { error: boolean, message: string },
   formData: FormData
 ) {
   const productId = formData.get("productId") as string;
@@ -24,12 +24,9 @@ export async function updateBannerCustomization(
   }
 
   const product = await getProductDetails(productId)
-  if (product == null) return { error: true, message: "Product not found" }
+  if (!product) return { error: true, message: "Product not found" }
 
-  const result = await updateBannerCustomizationIntoDb({
-    ...data,
-    product_id: product.id,
-  })
+  const result = await updateBannerCustomizationIntoDb(data, product.id)
 
   if (!result) return { error: true, message: "There was an error updating your banner" }
 

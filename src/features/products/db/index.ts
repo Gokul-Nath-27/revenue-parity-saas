@@ -13,7 +13,8 @@ export const getProducts = withAuthUserId(
         id: true,
         name: true,
         description: true,
-        domain: true
+        domain: true,
+        updated_at: true,
       }
     });
     return products;

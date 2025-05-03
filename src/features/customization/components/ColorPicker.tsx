@@ -26,11 +26,9 @@ export default function ColorPicker({ name }: { name: typeof colorKeys[number] }
     <>
       <input type="hidden" name={name} value={color} />
       <Slider
+        className='pb-4'
         color={hsva}
-        style={{ paddingBottom: 10 }}
-        onChange={(color) => {
-          setHsva({ ...hsva, ...color.hsv });
-        }}
+        onChange={(color) => setHsva({ ...hsva, ...color.hsv })}
       />
       <Popover>
         <PopoverTrigger asChild>
@@ -39,9 +37,7 @@ export default function ColorPicker({ name }: { name: typeof colorKeys[number] }
         <PopoverContent className="p-0 max-w-fit" align="start">
           <Colorful
             color={hsva}
-            onChange={(color) => {
-              setHsva(color.hsva);
-            }}
+            onChange={(color) => setHsva(color.hsva)}
           />
         </PopoverContent>
       </Popover>

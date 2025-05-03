@@ -1,13 +1,13 @@
 "use client"
 
 import { Palette } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 import SubmitButton from "@/components/SubmitButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-
-import { updateBannerCustomization } from "../action";
+import { updateBannerCustomization } from "@/features/customization/action";
 
 import { BannerContainerPicker } from "./BannerContainerPicker";
 import { BannerMessageInput } from "./BannerMessageInput";
@@ -17,12 +17,19 @@ import ReactColorPicker from "./ColorPicker";
 import { FontSizePicker } from "./FontSizePicker";
 import { StickyToggle } from "./StickyToggle";
 
-
 export function BannerApperanceForm({ productId }: { productId: string }) {
-  const [_, formAction] = useActionState(updateBannerCustomization, {
+  const [state, formAction] = useActionState(updateBannerCustomization, {
     error: false,
     message: "",
   })
+
+  useEffect(() => {
+    if (state.error) {
+      toast.error(state.message)
+    } else if (state.message) {
+      toast.success(state.message)
+    }
+  }, [state.error, state.message])
 
   return (
     <Card className="md:col-span-2 h-full relative overflow-hidden">

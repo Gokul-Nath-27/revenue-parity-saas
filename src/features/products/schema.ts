@@ -9,4 +9,5 @@ export const productFormSchema = z.object({
 export type ProductForm = z.infer<typeof productFormSchema>;
 export type Product = ProductForm & {
   id: string;
+  updated_at: Date;
 };
