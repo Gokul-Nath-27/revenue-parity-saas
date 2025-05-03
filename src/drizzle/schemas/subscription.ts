@@ -27,3 +27,6 @@ export const userSubscriptionRelations = relations(UserSubscription, ({ one }) =
     references: [User.id],
   }),
 }));
+
+
+export type UserSubscriptionType = Omit<typeof UserSubscription.$inferSelect, "created_at" | "updated_at">

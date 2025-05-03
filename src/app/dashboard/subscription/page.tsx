@@ -2,7 +2,7 @@
 import { Suspense } from "react"
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
-import ManageSubscription, { ManageSubscriptionSkeleton } from "@/features/subscription/components/ManageSubsciption"
+import ManageSubscriptionWrapper, { ManageSubscriptionSkeleton } from "@/features/subscription/components/ManageSubscriptionWrapper"
 import PricingGroup from "@/features/subscription/components/PricingGroup"
 import UsageStats, { UsageStatsSkeleton } from "@/features/subscription/components/UsageStats"
 import UserInformation, { UserInformationSkeleton } from "@/features/subscription/components/UserInformation"
@@ -34,7 +34,7 @@ export default async function SubscriptionPage() {
             <CardTitle>Subscription</CardTitle>
           </CardHeader>
           <Suspense fallback={<ManageSubscriptionSkeleton />}>
-            <ManageSubscription />
+            <ManageSubscriptionWrapper />
           </Suspense>
         </Card>
       </div>

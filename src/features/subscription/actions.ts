@@ -5,7 +5,7 @@ import { cache } from "react"
 import Stripe from "stripe"
 
 import { PaidTierNames, subscriptionTiers } from "@/data/subscriptionTiers"
-import { UserSubscription } from "@/drizzle/schemas/subscription"
+import { UserSubscriptionType } from "@/drizzle/schemas/subscription"
 import { catchError } from "@/lib/utils"
 import { withAuthUserId } from "@/lib/with-auth"
 
@@ -14,12 +14,12 @@ import { User } from "../account/schema"
 
 import { getUserSubscriptionFromDb } from "./db"
 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const baseUrl = process.env.NODE_ENV === "production"
   ? process.env.BASE_URL
   : process.env.BASE_URL_DEV
 
-export type UserSubscription = Omit<typeof UserSubscription.$inferSelect, "created_at" | "updated_at">
 
 export const getUserSubscription = cache(withAuthUserId(async (userId) => {
   const subscription = await getUserSubscriptionFromDb(userId)
@@ -84,7 +84,7 @@ async function createCheckoutSessionUrl(user: User, priceId: string) {
 
 async function getSubscriptionUpgradeSession(
   tier: PaidTierNames,
-  subscription: UserSubscription
+  subscription: UserSubscriptionType
 ) {
   if (
     subscription.stripe_customer_id == null ||
@@ -113,5 +113,47 @@ async function getSubscriptionUpgradeSession(
   })
 
   return portalSession.url
+}
+
+export async function createCustomerPortalSession(): Promise<{ error: boolean }> {
+  const subscription = await getUserSubscription()
+
+  if (subscription?.stripe_customer_id == null) {
+    return { error: true }
+  }
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: subscription.stripe_customer_id,
+    return_url: `${baseUrl}/dashboard/subscription`,
+  })
+
+  redirect(portalSession.url)
+}
+
+export async function createCancelSession() {
+
+  const subscription = await getUserSubscription()
+
+  if (subscription == null) return { error: true }
+
+  if (
+    subscription.stripe_customer_id == null ||
+    subscription.stripe_subscription_id == null
+  ) {
+    return new Response(null, { status: 500 })
+  }
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: subscription.stripe_customer_id,
+    return_url: `${baseUrl}/dashboard/subscription`,
+    flow_data: {
+      type: "subscription_cancel",
+      subscription_cancel: {
+        subscription: subscription.stripe_subscription_id,
+      },
+    },
+  })
+
+  redirect(portalSession.url)
 }
 

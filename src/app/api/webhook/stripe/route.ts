@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm"
 import { NextRequest } from "next/server"
 import Stripe from "stripe"
 
-import { getTierByPriceId } from "@/data/subscriptionTiers"
+import { getTierByPriceId, subscriptionTiers } from "@/data/subscriptionTiers"
 import { UserSubscription } from "@/drizzle/schemas/subscription"
 import { updateUserSubscription } from "@/features/subscription/db"
 
@@ -21,12 +21,12 @@ export async function POST(request: NextRequest) {
       break
     }
     case "customer.subscription.updated": {
-      // await handleUpdate(event.data.object)
-      // break
+      await handleUpdate(event.data.object)
+      break
     }
     case "customer.subscription.deleted": {
-      // await handleDelete(event.data.object)
-      // break
+      await handleDelete(event.data.object)
+      break
     }
   }
 
@@ -52,7 +52,30 @@ async function handleCreate(subscription: Stripe.Subscription) {
   )
 }
 
-// async function handleDelete() {}
+async function handleUpdate(subscription: Stripe.Subscription) {
+  const tier = getTierByPriceId(subscription.items.data[0].price.id)
+  const customer = subscription.customer
+  const customerId = typeof customer === "string" ? customer : customer.id
+  if (tier == null) {
+    return new Response(null, { status: 500 })
+  }
 
-// async function handleUpdate() {}
+  return await updateUserSubscription(
+    eq(UserSubscription.stripe_customer_id, customerId),
+    { tier: tier.name }
+  )
+}
 
+async function handleDelete(subscription: Stripe.Subscription) {
+  const customer = subscription.customer
+  const customerId = typeof customer === "string" ? customer : customer.id
+
+  return await updateUserSubscription(
+    eq(UserSubscription.stripe_customer_id, customerId),
+    {
+      tier: subscriptionTiers.Free.name,
+      stripe_subscription_id: null,
+      stripe_subscription_item_id: null,
+    }
+  )
+}
