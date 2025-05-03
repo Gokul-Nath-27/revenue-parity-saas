@@ -51,8 +51,8 @@ export class OAuthClient<T> {
 
   private get redirectUrl() {
     const baseUrl = process.env.NODE_ENV === 'production' 
-      ? process.env.OAUTH_REDIRECT_URL_BASE
-      : process.env.OAUTH_REDIRECT_URL_BASE_DEV;
+      ? process.env.BASE_URL
+      : process.env.BASE_URL_DEV;
     
     return new URL(`/api/oauth/${this.provider}`, baseUrl);
   }

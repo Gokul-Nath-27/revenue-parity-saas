@@ -68,7 +68,7 @@ export default function PricingSection() {
         <PricingCard
           key={tier.name}
           title={tier.name}
-          price={tier.priceInCents === 0 ? "Free" : `$${(tier.priceInCents / 100).toFixed(2)}`}
+          price={tier.priceInDollars === 0 ? "Free" : `$${tier.priceInDollars}`}
           description={tier.description}
           features={tier.features}
           buttonText={tier.marketingLayout.buttonText}

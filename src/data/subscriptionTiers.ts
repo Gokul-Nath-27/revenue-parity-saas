@@ -4,9 +4,9 @@ export type PaidTierNames = Exclude<TierNames, "Free">
 export const subscriptionTiers = {
   Free: {
     name: "Free",
-    priceInCents: 0,
+    priceInDollars: 0,
     maxNumberOfProducts: 1,
-    maxNumberOfVisits: 5000,
+    maxNumberOfVisits: 500,
     canAccessAnalytics: false,
     canCustomizeBanner: false,
     canRemoveBranding: false,
@@ -22,17 +22,17 @@ export const subscriptionTiers = {
     },
     isPopular: false,
     features: [
-      "Up to 5,000 monthly visitors",
-      "Up to 1 product",
+      "Up to 500 monthly visitors",
+      "Up to 5 products",
       "No support",
       "Basic website integration"
     ]
   },
   Standard: {
     name: "Standard",
-    priceInCents: 4900,
-    maxNumberOfProducts: 30,
-    maxNumberOfVisits: 100000,
+    priceInDollars: 20,
+    maxNumberOfProducts: 20,
+    maxNumberOfVisits: 10000,
     canAccessAnalytics: true,
     canCustomizeBanner: true,
     canRemoveBranding: true,
@@ -48,8 +48,8 @@ export const subscriptionTiers = {
     },
     isPopular: true,
     features: [
-      "Up to 100,000 monthly visitors",
-      "Up to 30 products",
+      "Up to 10,000 monthly visitors",
+      "Up to 20 products",
       "Banner customization",
       "Priority email support",
       "Multiple website integration",
@@ -58,13 +58,13 @@ export const subscriptionTiers = {
   },
   Premium: {
     name: "Premium",
-    priceInCents: 9900,
+    priceInDollars: 49,
     maxNumberOfProducts: 50,
     maxNumberOfVisits: 1000000,
     canAccessAnalytics: true,
     canCustomizeBanner: true,
     canRemoveBranding: true,
-    stripePriceId: process.env.STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID,
+    stripePriceId: process.env.STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID as string,
     description: "For large businesses with high volume",
     marketingLayout: {
       buttonText: "Contact Sales",

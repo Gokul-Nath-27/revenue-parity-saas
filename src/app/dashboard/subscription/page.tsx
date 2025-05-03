@@ -3,12 +3,11 @@ import { Suspense } from "react"
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import ManageSubscription, { ManageSubscriptionSkeleton } from "@/features/subscription/components/ManageSubsciption"
-import PricingSection from "@/features/subscription/components/PricingGroup"
+import PricingGroup from "@/features/subscription/components/PricingGroup"
 import UsageStats, { UsageStatsSkeleton } from "@/features/subscription/components/UsageStats"
 import UserInformation, { UserInformationSkeleton } from "@/features/subscription/components/UserInformation"
 
 export default async function SubscriptionPage() {
-
   return (
     <div className="space-y-8 bg-background text-foreground md:pt-6">
       <div>
@@ -41,7 +40,7 @@ export default async function SubscriptionPage() {
       </div>
       <div className="mt-12">
         <h2 className="text-3xl font-bold mb-8">Upgrade your plan</h2>
-        <PricingSection />
+        <PricingGroup />
       </div>
     </div>
   )

@@ -1,4 +1,3 @@
-import 'server-only'
 import { eq, count, gte, and } from "drizzle-orm"
 import { cache } from "react"
 
@@ -46,4 +45,20 @@ export const getUserSubscriptionUsage = withAuthUserId(
     }
   }
 )
+
+
+export const getUserSubscriptionFromDb = async (userId: string) => {
+  const subscription = await db.query.UserSubscription.findFirst({
+    where: ({ user_id }, { eq }) => eq(user_id, userId),
+    columns: {
+      id: true,
+      tier: true,
+      stripe_customer_id: true,
+      stripe_subscription_id: true,
+      stripe_subscription_item_id: true,
+      user_id: true,
+    },
+  })
+  return subscription
+}
 

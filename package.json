@@ -12,7 +12,8 @@
     "migrate": "drizzle-kit migrate",
     "push": "drizzle-kit push",
     "prepare": "husky",
-    "updateCountryGroups": "tsx --env-file=.env ./src/tasks/updateCountryGroups.ts"
+    "updateCountryGroups": "tsx --env-file=.env ./src/tasks/updateCountryGroups.ts",
+    "stripe": "stripe listen --forward-to localhost:4242/webhook"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -50,6 +51,7 @@
     "recharts": "^2.15.3",
     "redis": "^4.7.0",
     "sonner": "^2.0.3",
+    "stripe": "^18.1.0",
     "tailwind-merge": "^3.2.0",
     "tw-animate-css": "^1.2.8",
     "zod": "^3.24.3"
