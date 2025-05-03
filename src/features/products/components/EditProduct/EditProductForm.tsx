@@ -25,7 +25,7 @@ const FormField = ({ label, name, error, children }: FormFieldProps) => (
 );
 
 
-export function EditProductForm({ product }: { product: Product }) {
+export function EditProductForm({ product }: { product: Omit<Product, "updated_at"> }) {
   const [state, formAction] = useActionState<UpdateFormState, FormData>(
     updateProductDetails,
     undefined
