@@ -1,14 +1,15 @@
+import { notFound } from 'next/navigation';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { getProductDetails } from '@/features/products/db';
 import { catchError } from '@/lib/utils';
 
 import { EditProductForm } from './EditProductForm';
-import ProductNotFound from './ProductNotFound';
 
 export default async function SiteConfigPanel({ productId }: { productId: string }) {
   const { data: product, error } = await catchError(getProductDetails(productId));
 
-  if (error) return <ProductNotFound />;
+  if (error) return notFound();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
