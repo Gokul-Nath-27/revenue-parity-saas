@@ -13,7 +13,7 @@
     "push": "drizzle-kit push",
     "prepare": "husky",
     "updateCountryGroups": "tsx --env-file=.env ./src/tasks/updateCountryGroups.ts",
-    "stripe": "stripe listen --forward-to localhost:4242/webhook"
+    "stripe": "stripe listen --forward-to localhost:3000/api/webhook/stripe"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

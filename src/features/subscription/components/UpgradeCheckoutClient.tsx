@@ -31,7 +31,7 @@ export default function UpgradeCheckoutClient({
 
   return (
     <form className="w-full" action={formAction}>
-      <Button size="lg" className="w-full gap-2 font-medium">
+      <Button size="lg" className="w-full gap-2 font-medium" variant={isCurrentTier ? "secondary" : "default"}>
         {isCurrentTier ? "Current Plan" : tierConfig.subscriptionLayout.buttonText}
       </Button>
     </form>

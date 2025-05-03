@@ -1,13 +1,13 @@
-import { eq, count, gte, and } from "drizzle-orm"
+import { eq, count, gte, and, SQL } from "drizzle-orm"
 import { cache } from "react"
 
 import { subscriptionTiers, TierNames } from "@/data/subscriptionTiers"
 import db from "@/drizzle/db"
 import { Product } from "@/drizzle/schemas/product"
+import { UserSubscription } from "@/drizzle/schemas/subscription"
 import { ProductView } from "@/drizzle/schemas/visits"
 import { startOfMonth } from "@/lib/utils"
 import { withAuthUserId } from "@/lib/with-auth"
-
 export const getUserSubscriptionTier = cache(async (userId: string) => {
   const subscription = await db.query.UserSubscription.findFirst({
     where: ({ user_id }, { eq }) => eq(user_id, userId),
@@ -62,3 +62,17 @@ export const getUserSubscriptionFromDb = async (userId: string) => {
   return subscription
 }
 
+export async function updateUserSubscription(
+  where: SQL,
+  data: Partial<typeof UserSubscription.$inferInsert>
+) {
+  const [updatedSubscription] = await db
+    .update(UserSubscription)
+    .set(data)
+    .where(where)
+    .returning({
+      id: UserSubscription.id,
+      userId: UserSubscription.user_id,
+    })
+  return updatedSubscription
+}
