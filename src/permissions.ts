@@ -21,3 +21,13 @@ export const canCreateProduct = withAuthUserId(async (userId) => {
   const productCount = await getProductCount(userId)
   return productCount < tier.maxNumberOfProducts
 })
+
+export const canShowDiscountBanner = withAuthUserId(async (userId) => {
+  if (userId == null) return false
+  const tier = await getUserSubscriptionTier(userId)
+  const productViews = await getProductViewCount(
+    userId,
+    startOfMonth(new Date())
+  )
+  return productViews < tier.maxNumberOfVisits
+})
