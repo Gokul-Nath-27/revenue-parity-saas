@@ -1,7 +1,7 @@
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, gte } from "drizzle-orm";
 
 import db from "@/drizzle/db";
-import { Product, ProductCustomization } from "@/drizzle/schemas";
+import { Product, ProductCustomization, ProductView } from "@/drizzle/schemas";
 import { catchError } from "@/lib/utils";
 import { withAuthUserId } from "@/lib/with-auth";
 import { canCreateProduct } from "@/permissions";
