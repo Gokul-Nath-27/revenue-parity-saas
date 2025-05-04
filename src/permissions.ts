@@ -1,7 +1,8 @@
 "use server"
-import { getProductCount } from "@/features/products/db"
+import { getProductCount, getProductViewCount } from "@/features/products/db"
 import { getUserSubscriptionTier } from "@/features/subscription/db"
 
+import { startOfMonth } from "./lib/utils"
 import { withAuthUserId } from "./lib/with-auth"
 
 export async function canRemoveBranding(userId: string | null) {
