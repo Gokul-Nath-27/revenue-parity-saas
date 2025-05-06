@@ -9,8 +9,8 @@ import UpgradeCheckoutWrapper from "./UpgradeCheckoutWrapper";
 
 export default async function PricingGroup() {
   return (
-    <div id="pricing-section" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      {subscriptionTiersInOrder.map((tierConfig, index) => {
+    <div id="pricing-section" className="grid max-w-6xl grid-cols-1 gap-6 mx-auto md:grid-cols-3">
+      {subscriptionTiersInOrder.map((tierConfig) => {
         const { name: tier, priceInDollars, description, features } = tierConfig;
         return (
           <Card
@@ -18,16 +18,16 @@ export default async function PricingGroup() {
             key={tier}
           >
             <CardHeader className="pb-0">
-              <CardTitle className="text-xl font-bold flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-xl font-bold">
                 {tier}
               </CardTitle>
               <CardDescription className="text-muted-foreground">{description}</CardDescription>
             </CardHeader>
 
-            <CardContent className="pt-2 flex-grow">
+            <CardContent className="flex-grow pt-2">
               <div className="flex items-baseline mb-6">
-                <span className="text-3xl md:text-4xl font-bold">{priceInDollars === 0 ? "Free" : `$${priceInDollars}`}</span>
-                {priceInDollars !== 0 && <span className="text-muted-foreground ml-1">/month</span>}
+                <span className="text-3xl font-bold md:text-4xl">{priceInDollars === 0 ? "Free" : `$${priceInDollars}`}</span>
+                {priceInDollars !== 0 && <span className="ml-1 text-muted-foreground">/month</span>}
               </div>
 
               <ul className="space-y-3 text-sm">

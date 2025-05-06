@@ -1,10 +1,10 @@
 "use client"
-import { useState } from "react"
-import { useActionState } from "react"
 import { cva } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { useState, useActionState } from "react"
+
 import { TierNames, subscriptionTiers, PaidTierNames } from "@/data/subscriptionTiers"
 import { createCheckoutSession, updateSubscription } from "@/features/subscription/actions"
+import { cn } from "@/lib/utils"
 
 // Types moved to top for better organization
 type UserSubscription = {
@@ -80,11 +80,6 @@ export default function UpgradeCheckoutClient({
 
   // Extract tier information
   const tierConfig = subscriptionTiers[tier as keyof typeof subscriptionTiers]
-  if (!tierConfig) {
-    return <div>Invalid tier: {tier}</div>
-  }
-
-  // Use lookup-based subscription state
   const {
     isCurrentTier,
     isCurrentPaidTier,
@@ -92,6 +87,21 @@ export default function UpgradeCheckoutClient({
     buttonText,
     buttonVariant
   } = useSubscriptionState(tier, subscription)
+
+  // For new subscriptions or users on free plan - create action state for form submission
+  const [_state, _formAction] = useActionState(async () => {
+    const result = await createCheckoutSession(tier as PaidTierNames)
+    if (result.url) {
+      window.location.href = result.url
+    }
+    return result
+  }, { error: false, message: "" })
+
+  if (!tierConfig) {
+    return <div>Invalid tier: {tier}</div>
+  }
+
+  // Use lookup-based subscription state
 
   // Client-side handler for subscription purchases
   const handleCheckoutNavigation = async () => {
@@ -115,15 +125,6 @@ export default function UpgradeCheckoutClient({
       setIsLoading(false)
     }
   }
-
-  // For new subscriptions or users on free plan - create action state for form submission
-  const [_state, formAction] = useActionState(async () => {
-    const result = await createCheckoutSession(tier as PaidTierNames)
-    if (result.url) {
-      window.location.href = result.url
-    }
-    return result
-  }, { error: false, message: "" })
 
   // For users already on a paid plan
   const handlePlanSwitch = async () => {
@@ -203,7 +204,7 @@ export default function UpgradeCheckoutClient({
 
   return (
     <>
-      {error && <div className="text-destructive text-sm mb-2">{error}</div>}
+      {error && <div className="mb-2 text-sm text-destructive">{error}</div>}
       {renderers[getRendererKey()]}
     </>
   )
