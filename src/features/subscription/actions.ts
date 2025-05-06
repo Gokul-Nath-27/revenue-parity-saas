@@ -1,4 +1,3 @@
-
 "use server"
 import { redirect } from "next/navigation"
 import { cache } from "react"
@@ -28,7 +27,7 @@ export const getUserSubscription = cache(withAuthUserId(async (userId) => {
 
 
 
-export async function createCheckoutSession(tier: PaidTierNames): Promise<{ error: boolean, message: string }> {
+export async function createCheckoutSession(tier: PaidTierNames): Promise<{ error: boolean, message: string, url?: string }> {
   const stripePriceId = subscriptionTiers[tier].stripePriceId as string
 
   const { data: subscription, error } = await catchError(getUserSubscription())
@@ -51,16 +50,16 @@ export async function createCheckoutSession(tier: PaidTierNames): Promise<{ erro
       return result  // { error: true, message }
     }
     
-    redirect(result.url)
+    return { error: false, message: "Success", url: result.url }
   }
 
   // Create checkout session for the new purchase
-  const checkoutSessionUrl = await createCheckoutSessionUrl(fullUser, stripePriceId)
-  if (typeof checkoutSessionUrl !== "string") {
-    return checkoutSessionUrl // error
+  const checkoutSessionResult = await createCheckoutSessionUrl(fullUser, stripePriceId)
+  if (typeof checkoutSessionResult !== "string") {
+    return checkoutSessionResult // error
   }
 
-  redirect(checkoutSessionUrl)
+  return { error: false, message: "Success", url: checkoutSessionResult }
 }
 
 async function createCheckoutSessionUrl(user: User, priceId: string) {
@@ -140,7 +139,7 @@ async function getSubscriptionUpgradeSession(
   return { error: false, url: portalSession.url }
 }
 
-export async function createCustomerPortalSession(): Promise<{ error: boolean }> {
+export async function createCustomerPortalSession(): Promise<{ error: boolean, url?: string }> {
   const subscription = await getUserSubscription()
 
   if (subscription?.stripe_customer_id == null) {
@@ -152,11 +151,10 @@ export async function createCustomerPortalSession(): Promise<{ error: boolean }>
     return_url: `${baseUrl}/dashboard/subscription`,
   })
 
-  redirect(portalSession.url)
+  return { error: false, url: portalSession.url }
 }
 
-export async function createCancelSession() {
-
+export async function createCancelSession(): Promise<{ error: boolean, url?: string }> {
   const subscription = await getUserSubscription()
 
   if (subscription == null) return { error: true }
@@ -165,7 +163,7 @@ export async function createCancelSession() {
     subscription.stripe_customer_id == null ||
     subscription.stripe_subscription_id == null
   ) {
-    return new Response(null, { status: 500 })
+    return { error: true }
   }
 
   const portalSession = await stripe.billingPortal.sessions.create({
@@ -179,6 +177,60 @@ export async function createCancelSession() {
     },
   })
 
-  redirect(portalSession.url)
+  return { error: false, url: portalSession.url }
+}
+
+export async function updateSubscription(
+  tier: PaidTierNames,
+  subscriptionId: string
+): Promise<{ error: boolean; message: string }> {
+  try {
+    const targetPriceId = subscriptionTiers[tier].stripePriceId as string
+    
+    if (!targetPriceId) {
+      return { error: true, message: "Invalid subscription tier" }
+    }
+
+    const { data: subscription, error } = await catchError(getUserSubscription())
+
+    if (error || !subscription) {
+      return { error: true, message: "Failed to get user subscription" }
+    }
+
+    if (subscription.tier === tier) {
+      return { error: true, message: "You are already on this tier" }
+    }
+
+    if (
+      !subscription.stripe_customer_id ||
+      !subscription.stripe_subscription_id ||
+      !subscription.stripe_subscription_item_id
+    ) {
+      return { error: true, message: "Missing subscription details" }
+    }
+
+    // Verify subscription ID matches
+    if (subscription.stripe_subscription_id !== subscriptionId) {
+      return { error: true, message: "Invalid subscription" }
+    }
+
+    // Update the subscription with the new price
+    await stripe.subscriptions.update(subscriptionId, {
+      items: [
+        {
+          id: subscription.stripe_subscription_item_id,
+          price: targetPriceId,
+        },
+      ],
+    });
+
+    return { error: false, message: "Subscription updated successfully" }
+  } catch (error) {
+    console.error("Failed to update subscription:", error)
+    return { 
+      error: true, 
+      message: error instanceof Error ? error.message : "Failed to update subscription" 
+    }
+  }
 }
 
