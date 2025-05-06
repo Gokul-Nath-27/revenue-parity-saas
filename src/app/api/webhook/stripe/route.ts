@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event | null = null
   
   try {
+    console.log("stripe webhook received")
     // Clone the request so we can read the body multiple times
     const reqText = await request.text()
     
@@ -23,14 +24,17 @@ export async function POST(request: NextRequest) {
       )
     }
     
+    console.log("stripe webhook signature", signature)
     // Construct and verify the event
     try {
-      event = await stripe.webhooks.constructEvent(
+      console.log("stripe webhook secret", process.env.STRIPE_WEBHOOK_SECRET)
+      event = stripe.webhooks.constructEvent(
         reqText,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET as string
       )
     } catch (verifyError) {
+      console.log("stripe webhook verifyError", verifyError)
       return new Response(
         JSON.stringify({ error: "Webhook signature verification failed" }),
         { status: 400 }
@@ -38,27 +42,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Process the verified event
+    console.log("stripe webhook event", event)
     switch (event.type) {
       case "customer.subscription.created": {
+        console.log("stripe webhook customer.subscription.created")
         const subscription = event.data.object as Stripe.Subscription
         await handleCreate(subscription)
         break
       }
       case "customer.subscription.updated": {
+        console.log("stripe webhook customer.subscription.updated")
         const subscription = event.data.object as Stripe.Subscription
         await handleUpdate(subscription)
         break
       }
       case "customer.subscription.deleted": {
+        console.log("stripe webhook customer.subscription.deleted")
         const subscription = event.data.object as Stripe.Subscription
-        
         await handleDelete(subscription)
         break
       }
-      default: {
-      }
     }
-
+    console.log("stripe webhook handled and returning 200")
     return new Response(null, { status: 200 })
   } catch (error) {
     return new Response(
