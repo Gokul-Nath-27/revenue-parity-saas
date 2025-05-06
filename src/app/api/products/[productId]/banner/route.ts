@@ -38,17 +38,21 @@ export async function GET(
     
     const normalizedUrl = removeTrailingSlash(requestingUrl).replace("localhost", "127.0.0.1")
     console.log("normalizedUrl", normalizedUrl)
-    const { product, discount, country } = await getProductForBanner({
+    const result = await getProductForBanner({
       id: productId,
       countryCode,
       url: normalizedUrl,
     })
-    console.log("product", product)
-    if (product == null) return notFound()
     
-    if (country == null || discount == null) {
+    if (!result || !result.product) return notFound()
+    
+    const { product, discount, country } = result
+    console.log("product", product, "discount", discount, "country", country)
+    
+    if (!country || !discount) {
       return new Response("No Discount can be applied for this product/location", { status: 203 });
     }
+    
     console.log({
       country,
       discount,
@@ -57,10 +61,11 @@ export async function GET(
     try {
       await createProductView({
         productId: product.id,
-        countryId: country?.id,
+        countryId: country.id,
       })
     } catch (error) {
       console.error("Error creating product view:", error)
+      // Continue execution even if view creation fails
     }
 
     const canShowBanner = await canShowDiscountBanner(product.user_id)
