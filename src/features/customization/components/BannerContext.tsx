@@ -1,7 +1,7 @@
 "use client"
 import { createContext, useReducer, ReactElement, useContext } from 'react';
 
-type CustomizationType = {
+export type CustomizationType = {
   id: string;
   class_prefix: string | null;
   product_id: string;

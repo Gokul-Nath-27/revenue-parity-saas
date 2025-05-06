@@ -1,8 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 
 import { Clipboard } from './Clipboard';
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV
 
-export function BannerEmbed() {
+export function BannerEmbed({ productId }: { productId: string }) {
+  const code = `<script src="${baseUrl}/api/products/${productId}/banner"></script>`
+
   return (
     <Card className='h-auto relative overflow-hidden'>
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background opacity-80"></div>
@@ -22,7 +25,7 @@ export function BannerEmbed() {
             <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-container</code>: Where the banner is placed (body/header/main)</li>
             <li><code className="text-xs bg-muted px-1 py-0.5 rounded">data-sticky</code>: Whether the banner sticks to the viewport</li>
           </ul>
-          <Clipboard />
+          <Clipboard code={code} />
         </div>
       </CardContent>
     </Card>

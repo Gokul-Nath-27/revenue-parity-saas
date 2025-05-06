@@ -1,21 +1,31 @@
 "use client"
-import { useBanner } from './BannerContext';
-
 type BannerPreviewProps = {
+  location_message: string;
   canRemoveBranding: boolean;
   mappings: {
     discount: string;
     coupon: string;
     country: string;
   };
+  customization: {
+    location_message: string;
+    banner_container: string;
+    background_color: string;
+    text_color: string;
+    font_size: string;
+    sticky: boolean;
+    banner_radius: string;
+    class_prefix?: string | null;
+  }
 }
 
 
 export function BannerPreview({
+  location_message,
   canRemoveBranding,
+  customization,
   mappings,
 }: BannerPreviewProps) {
-  const { customization } = useBanner();
   const {
     background_color,
     text_color,
@@ -23,7 +33,6 @@ export function BannerPreview({
     sticky,
     banner_radius,
     class_prefix,
-    location_message,
   } = customization;
 
   const mappedMessage = Object.entries(mappings).reduce(
