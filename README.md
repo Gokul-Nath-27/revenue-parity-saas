@@ -2,38 +2,6 @@
 
 A sophisticated platform that enables digital product creators to implement intelligent, region-based pricing strategies to maximize global revenue while maintaining fair pricing across different markets.
 
-## 🌟 Key Features
-
-### 1. Smart Global Pricing
-- Automatic currency detection and conversion
-- Purchasing Power Parity (PPP) based pricing
-- Region-specific discount management
-- Revenue optimization algorithms
-
-### 2. Product Management
-- Multi-product support
-- Customizable product details
-- Domain integration
-- Product analytics and tracking
-
-### 3. Customization Tools
-- Site configuration management
-- Customizable banner system
-- A/B testing capabilities
-- Advanced analytics dashboard
-
-### 4. User Management
-- Multi-user support
-- Role-based access control
-- User activity tracking
-- Secure authentication
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18 or higher)
-- PostgreSQL database
-- pnpm package manager
 
 ### Installation
 
@@ -64,24 +32,13 @@ pnpm db:migrate
 pnpm dev
 ```
 
-## 📦 Project Structure
-
-```
-src/
-├── app/                    # Next.js app router
-├── components/            # Reusable UI components
-├── features/             # Feature-specific modules
-│   ├── products/        # Product management
-│   ├── customization/   # Site customization
-│   ├── discounts/      # Discount management
-│   └── marketing/      # Marketing components
-├── drizzle/             # Database schema and migrations
-└── lib/                 # Utility functions and shared code
-```
-
 ## 🔧 Configuration
 
-### Database
+### Database architecture
+
+https://github.com/user-attachments/assets/77a171f1-ea37-4928-81c6-850c52584a57
+
+
 The application uses PostgreSQL with Drizzle ORM. Database configuration can be found in:
 - `src/drizzle/schemas/` - Database schemas
 - `src/drizzle/migrations/` - Database migrations
