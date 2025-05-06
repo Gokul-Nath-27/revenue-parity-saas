@@ -7,13 +7,14 @@ import SubmitButton from "@/components/SubmitButton";
 import { updateCountryDiscounts } from "../actions";
 
 import ParityGroupCard from "./ParityGroupCard";
-import { CountryGroup } from "./ParityGroupFormWrapper";
+import { CountryGroups } from "./ParityGroupFormWrapper";
+
 export default function ParityGroupForm({
   productId,
   countryGroups,
 }: {
   productId: string;
-  countryGroups: CountryGroup;
+  countryGroups: CountryGroups;
 }) {
   const [state, formAction] = useActionState(updateCountryDiscounts, {
     error: false,
@@ -41,7 +42,7 @@ export default function ParityGroupForm({
           })}
         />
       ))}
-      <SubmitButton text="Save the changes" />
+      <SubmitButton text="Save the changes" className="col-span-2" />
     </form>
   );
 }

@@ -1,8 +1,8 @@
-import { and, count, eq, gte } from "drizzle-orm";
+import { and, count, eq, gte, not } from "drizzle-orm";
 
 import db from "@/drizzle/db";
 import { Product, ProductCustomization, ProductView } from "@/drizzle/schemas";
-import { catchError } from "@/lib/utils";
+import { catchError, removeTrailingSlash } from "@/lib/utils";
 import { withAuthUserId } from "@/lib/with-auth";
 import { canCreateProduct } from "@/permissions";
 
@@ -28,6 +28,15 @@ export const createProduct = withAuthUserId(
   async function (userId, data: typeof Product.$inferInsert) {
     const { error, data: hasPermission } = await catchError(canCreateProduct())
     if (error || !hasPermission) return { error: "You have reached the limit of products for your plan." }
+
+    // Check if a product with the same domain already exists
+    const existingProduct = await db.query.Product.findFirst({
+      where: eq(Product.domain, data.domain),
+    });
+    
+    if (existingProduct) {
+      return { error: "A product with this domain already exists." };
+    }
 
     const [newProduct] = await db
       .insert(Product).values({
@@ -72,11 +81,27 @@ export const getProductDetails = withAuthUserId(
 export const updateProduct = withAuthUserId(
   // callback function with the userId by default
   async function (userId, productId: string, data: typeof Product.$inferInsert) {
+    // If updating the domain, check if it already exists for another product
+    if (data.domain) {
+      const existingProduct = await db.query.Product.findFirst({
+        where: and(
+          eq(Product.domain, data.domain),
+          eq(Product.user_id, userId),
+          not(eq(Product.id, productId))
+        ),
+      });
+      
+      if (existingProduct) {
+        return { error: "A product with this domain already exists." };
+      }
+    }
+    
     const { rowCount } = await db
       .update(Product)
       .set(data)
       .where(and(eq(Product.id, productId), eq(Product.user_id, userId)));
-    return rowCount > 0;
+    
+    return rowCount > 0 ? { success: true } : { error: "Failed to update product." };
   }
 );
 
@@ -143,13 +168,14 @@ export async function getProductForBanner({
   countryCode: string;
   url: string;
   }) {
-  console.log(222, id, countryCode, url)
+  
   // Query product data with all necessary relations
-  const data = await db.query.Product.findFirst({
-    where: (Product, { eq, and }) => and(eq(Product.id, id), eq(Product.domain, url)),
+  const product = await db.query.Product.findFirst({
+    where: and(eq(Product.id, id), eq(Product.domain, url)),
     columns: {
       id: true,
       user_id: true,
+      domain: true,
     },
     with: {
       product_customization: true,
@@ -175,40 +201,46 @@ export async function getProductForBanner({
       },
     },
   });
-  console.log(3333, data)
 
-  // Early return if no data found
-  if (!data) {
+  
+
+  if (!product) {
+    return { product: undefined, country: undefined, discount: undefined };
+  }
+  
+  const cleanedDomain = removeTrailingSlash(product.domain);
+  const cleanedUrl = removeTrailingSlash(url);
+  
+  if (cleanedDomain !== cleanedUrl) {
     return { product: undefined, country: undefined, discount: undefined };
   }
 
   // Find applicable discount for the country
-  const discount = data.country_group_discounts.find(
+  const discount = product.country_group_discounts.find(
     discount => discount.country_group.countries.length > 0
   );
   
   // Format product data if available
-  const product = data.product_customization 
+  const formattedProduct = product.product_customization
     ? {
-        id: data.id,
-        user_id: data.user_id,
-        customization: data.product_customization,
+        id: product.id,
+        user_id: product.user_id,
+        customization: product.product_customization,
       }
     : undefined;
 
   // Get country info from the discount
   const country = discount?.country_group.countries[0];
   
-  // Format discount data if available
   const formattedDiscount = discount
     ? {
         coupon: discount.coupon,
         percentage: discount.discount_percentage,
       }
     : undefined;
-
+  
   return {
-    product: product,  
+    product: formattedProduct,
     country: country,
     discount: formattedDiscount,
   };

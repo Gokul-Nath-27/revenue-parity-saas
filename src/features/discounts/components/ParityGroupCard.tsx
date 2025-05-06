@@ -6,10 +6,10 @@ import { Label } from "@/components/ui/label";
 import { cn } from '@/lib/utils';
 
 import CountryFlag from './CountryFlag';
-import { CountryGroup } from './ParityGroupFormWrapper';
+import { CountryGroups } from './ParityGroupFormWrapper';
 
 interface ParityGroupCardProps {
-  group: CountryGroup[number];
+  group: CountryGroups[number];
   errorFields?: Record<string, string[]>;
   submittedData?: Record<string, string>;
 }
@@ -21,7 +21,7 @@ const getDisCountPercentage = (number: number | undefined) => {
 const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardProps) => {
   const { countries, discount, name, id } = group;
 
-  const submittedDiscount = submittedData?.[`groups[${id}][discountPercentage]`];
+  const submittedDiscount = submittedData?.[`groups[${id}][discount_percentage]`];
   const submittedCoupon = submittedData?.[`groups[${id}][coupon]`];
 
   return (
@@ -53,13 +53,13 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
                 <Input
                   id={`discount-${id}`}
                   type="text"
-                  name={`groups[${id}][discountPercentage]`}
-                  defaultValue={submittedDiscount ?? getDisCountPercentage(discount?.discountPercentage) ?? ""}
-                  className={cn('bg-background', { 'border-destructive': errorFields?.discountPercentage })}
+                  name={`groups[${id}][discount_percentage]`}
+                  defaultValue={submittedDiscount ?? getDisCountPercentage(discount?.discount_percentage) ?? ""}
+                  className={cn('bg-background', { 'border-destructive': errorFields?.discount_percentage })}
                 />
-                {errorFields?.discountPercentage && (
+                {errorFields?.discount_percentage && (
                   <p className="text-destructive text-sm">
-                    {errorFields.discountPercentage[0]}
+                    {errorFields.discount_percentage[0]}
                   </p>
                 )}
               </div>

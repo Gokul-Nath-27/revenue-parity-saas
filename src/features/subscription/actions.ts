@@ -18,6 +18,8 @@ const baseUrl = process.env.NODE_ENV === "production"
   ? process.env.BASE_URL
   : process.env.BASE_URL_DEV
 
+  console.log("baseUrl", baseUrl, process.env.NODE_ENV)
+
 
 export const getUserSubscription = cache(withAuthUserId(async (userId) => {
   const subscription = await getUserSubscriptionFromDb(userId)
@@ -28,6 +30,8 @@ export const getUserSubscription = cache(withAuthUserId(async (userId) => {
 
 export async function createCheckoutSession(tier: PaidTierNames): Promise<{ error: boolean, message: string, url?: string }> {
   const stripePriceId = subscriptionTiers[tier].stripePriceId as string
+  console.log("createCheckoutSession: stripePriceId", stripePriceId)
+
 
   const { data: subscription, error } = await catchError(getUserSubscription())
 
@@ -74,6 +78,8 @@ async function createCheckoutSessionUrl(user: User, priceId: string) {
       cancel_url: `${baseUrl}/dashboard/subscription`,
     })
 
+    console.log("createCheckoutSessionUrl: session", session)
+
     if (!session.url) {
       return { error: true, message: "Stripe session missing URL" }
     }
@@ -105,11 +111,6 @@ async function getSubscriptionUpgradeSession(
 
   const currentPriceId = stripeSubscription.items.data[0].price.id
   const targetPriceId = subscriptionTiers[tier].stripePriceId
-
-  console.log("stripeSubscription: tier", tier)
-  console.log("currentPriceId", currentPriceId)
-  console.log("targetPriceId", targetPriceId)
-  console.log("EQUALS", currentPriceId === targetPriceId)
   
   if (currentPriceId === targetPriceId) {
     return { error: true, message: "You are already on this tier." }

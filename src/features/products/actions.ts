@@ -45,7 +45,7 @@ export async function createProduct(
   if ("error" in product) {
     return {
       success: false,
-      message: "Failed to create product",
+      message: product.error || "Failed to create product",
       inputs: rawData,
     }
   }
@@ -69,16 +69,17 @@ export async function updateProductDetails(
       inputs: rawData as ProductForm,
     }
   }
-  const { error: dbError } = await catchError(
-    updateProductIntoDb(productId, data as typeof Product.$inferInsert)
-  );
+  
+  const result = await updateProductIntoDb(productId, data as typeof Product.$inferInsert);
 
-  if (dbError) {
+  if ("error" in result) {
     return {
       success: false,
-      message: "Failed to update product",
+      message: result.error || "Failed to update product",
+      inputs: rawData as ProductForm,
     }
   }
+  
   return { success: true, message: "Product updated successfully" };
 }
 

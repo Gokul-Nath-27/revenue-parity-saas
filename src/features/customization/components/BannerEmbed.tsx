@@ -4,7 +4,7 @@ import { Clipboard } from './Clipboard';
 const baseUrl = process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV
 
 export function BannerEmbed({ productId }: { productId: string }) {
-  const code = `<script src="${baseUrl}/api/products/${productId}/banner"></script>`
+  const code = `<script defer src="${baseUrl}/api/products/${productId}/banner"></script>`
 
   return (
     <Card className='h-auto relative overflow-hidden'>

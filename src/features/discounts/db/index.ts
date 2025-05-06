@@ -36,12 +36,9 @@ export const getCountryGroupDiscounts = withAuthUserId(
       name: group.name,
       recommendedDiscount: group.recommended_discount_percentage,
       countries: group.countries,
-      discount: {
-        discountPercentage: group.country_group_discounts.at(0)?.discount_percentage,
-        coupon: group.country_group_discounts.at(0)?.coupon,
-      }
-      }
-    })
+      discount: group.country_group_discounts.at(0),
+    }
+  })
   }
 );
 

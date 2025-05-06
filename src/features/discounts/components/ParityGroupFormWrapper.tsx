@@ -2,7 +2,7 @@ import { getCountryGroupDiscounts } from "../db";
 
 import ParityGroupForm from "./parity-group-form";
 
-export type CountryGroup = {
+export type CountryGroups = {
   id: string;
   name: string;
   recommendedDiscount: number | null;
@@ -11,8 +11,8 @@ export type CountryGroup = {
     name: string;
   }[];
   discount: {
-    coupon?: string;
-    discountPercentage?: number;
+    coupon: string;
+    discount_percentage: number;
   } | undefined;
 }[]
 

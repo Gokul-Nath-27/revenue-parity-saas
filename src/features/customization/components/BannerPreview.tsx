@@ -1,4 +1,3 @@
-"use client"
 type BannerPreviewProps = {
   location_message: string;
   canRemoveBranding: boolean;

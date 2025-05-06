@@ -29,17 +29,17 @@ export async function updateCountryDiscounts(
   // Build the groups data from the formData
   const groups = Array.from(groupIndexes).map(index => {
     const countryGroupId = formData.get(`groups[${index}][countryGroupId]`) as string;
-    const discountStr = formData.get(`groups[${index}][discountPercentage]`) as string;
+    const discountStr = formData.get(`groups[${index}][discount_percentage]`) as string;
     const coupon = formData.get(`groups[${index}][coupon]`) as string;
 
     // Coerce discount to number and handle empty fields
-    const discountPercentage = discountStr?.trim() !== ""
+    const discount_percentage = discountStr?.trim() !== ""
       ? Number(discountStr)
       : undefined;
 
     return {
       countryGroupId,
-      discountPercentage,
+      discount_percentage,
       coupon,
     };
   });
@@ -90,14 +90,14 @@ export async function updateCountryDiscounts(
     if (
       group.coupon &&
       group.coupon.length > 0 &&
-      typeof group.discountPercentage === "number" &&
-      group.discountPercentage > 0
+      typeof group.discount_percentage === "number" &&
+      group.discount_percentage > 0
     ) {
       insert.push({
         country_group_id: group.countryGroupId,
         product_id: productId,
         coupon: group.coupon,
-        discount_percentage: group.discountPercentage / 100,
+        discount_percentage: group.discount_percentage / 100,
       });
     } else {
       deleteIds.push({ country_group_id: group.countryGroupId });

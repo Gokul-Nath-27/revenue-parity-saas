@@ -5,7 +5,7 @@ export const productCountryDiscountsSchema = z.object({
     z
       .object({
         countryGroupId: z.string().min(1, "Required"),
-        discountPercentage: z
+        discount_percentage: z
           .coerce
           .number()
           .max(100)
@@ -18,7 +18,7 @@ export const productCountryDiscountsSchema = z.object({
       .refine(
         value => {
           const hasCoupon = value.coupon != null && value.coupon.length > 0
-          const hasDiscount = value.discountPercentage != null
+          const hasDiscount = value.discount_percentage != null
           return !(hasCoupon && !hasDiscount)
         },
         {
