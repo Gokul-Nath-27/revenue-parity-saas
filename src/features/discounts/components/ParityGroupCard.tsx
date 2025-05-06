@@ -19,7 +19,7 @@ const getDisCountPercentage = (number: number | undefined) => {
 };
 
 const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardProps) => {
-  const { countries, discount, name, id } = group;
+  const { countries, discount, name, id, recommendedDiscount } = group;
 
   const submittedDiscount = submittedData?.[`groups[${id}][discount_percentage]`];
   const submittedCoupon = submittedData?.[`groups[${id}][coupon]`];
@@ -31,6 +31,11 @@ const ParityGroupCard = ({ group, errorFields, submittedData }: ParityGroupCardP
       <div className="relative z-10">
         <CardHeader className="pb-2">
           <h3 className="text-lg font-semibold">{name}</h3>
+          {recommendedDiscount && (
+            <p className="text-sm text-muted-foreground">
+              Recommended Discount: {recommendedDiscount * 100}%
+            </p>
+          )}
           {errorFields?.group && (
             <p className="text-destructive text-sm">{errorFields.group[0]}</p>
           )}
