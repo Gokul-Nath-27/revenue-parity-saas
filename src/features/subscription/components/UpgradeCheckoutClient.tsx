@@ -203,10 +203,10 @@ export default function UpgradeCheckoutClient({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       {error && <div className="mb-2 text-sm text-destructive">{error}</div>}
       {renderers[getRendererKey()]}
-    </>
+    </div>
   )
 }
 
