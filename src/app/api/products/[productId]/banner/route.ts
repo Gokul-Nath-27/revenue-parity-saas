@@ -21,63 +21,39 @@ export async function GET(
 ) {
   try {
     const { productId } = await params
+    console.log("productId", productId)
     
     const referer = request.headers.get("referer");
     const origin = request.headers.get("origin");
     const requestingUrl = referer || origin || request.nextUrl.origin;
+    console.log({
+      referer,
+      origin,
+      requestingUrl,
+    })
     
     const countryCode = getCountryCode(request)
     if (countryCode == null) return notFound()
+    console.log("countryCode", countryCode)
     
     const normalizedUrl = removeTrailingSlash(requestingUrl).replace("localhost", "127.0.0.1")
-
-    let { product, discount, country } = await getProductForBanner({
+    console.log("normalizedUrl", normalizedUrl)
+    const { product, discount, country } = await getProductForBanner({
       id: productId,
       countryCode,
       url: normalizedUrl,
     })
-
-    if (product == null && process.env.NODE_ENV === "development") {
-      try {
-        const db = (await import("@/drizzle/db")).default
-        const { Product } = await import("@/drizzle/schemas")
-        const { eq } = await import("drizzle-orm")
-        
-        const rawProduct = await db.query.Product.findFirst({
-          where: eq(Product.id, productId),
-          with: {
-            product_customization: true,
-          },
-        })
-        
-        if (rawProduct && rawProduct.product_customization) {
-          product = {
-            id: rawProduct.id,
-            user_id: rawProduct.user_id,
-            customization: rawProduct.product_customization
-          }
-          
-          if (country == null) {
-            country = { 
-              name: countryCode === "IN" ? "India" : "United States",
-              id: "mock-country-id"
-            };
-          }
-          
-          if (discount == null) {
-            discount = { 
-              coupon: `${countryCode}30`, 
-              percentage: 0.3
-            };
-          }
-        }
-      } catch (error) {
-        console.error("Failed to bypass domain verification:", error)
-      }
-    }
-
+    console.log("product", product)
     if (product == null) return notFound()
     
+    if (country == null || discount == null) {
+      return new Response("No Discount can be applied for this product/location", { status: 203 });
+    }
+    console.log({
+      country,
+      discount,
+    })
+
     try {
       await createProductView({
         productId: product.id,
@@ -86,23 +62,9 @@ export async function GET(
     } catch (error) {
       console.error("Error creating product view:", error)
     }
-    
-    if (process.env.NODE_ENV === "development" && (country == null || discount == null)) {
-      const mockCountry = { 
-        name: countryCode === "IN" ? "India" : "United States",
-        id: "mock-country-id"
-      };
-      
-      country = country || mockCountry;
-      
-      discount = discount || { 
-        coupon: `${countryCode}30`, 
-        percentage: 0.3
-      };
-    } else if (country == null || discount == null) {
-      return new Response("No Discount can be applied for this product/location", { status: 203 });
-    }
+
     const canShowBanner = await canShowDiscountBanner(product.user_id)
+    console.log("canShowBanner", canShowBanner)
     if (!canShowBanner) return notFound()
     
     const bannerJS = await generateBannerJS(
@@ -111,7 +73,7 @@ export async function GET(
       discount,
       await canRemoveBranding(product.user_id)
     )
-    
+    console.log("bannerJS", bannerJS)
     return new Response(bannerJS, {
       headers: {
         "Content-Type": "application/javascript",
