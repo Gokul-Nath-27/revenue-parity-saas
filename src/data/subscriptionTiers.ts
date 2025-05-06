@@ -36,7 +36,7 @@ export const subscriptionTiers = {
     canAccessAnalytics: true,
     canCustomizeBanner: true,
     canRemoveBranding: true,
-    stripePriceId: process.env.STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID as string,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID as string,
     description: "For growing businesses and creators",
     marketingLayout: {
       buttonText: "Get Started",
@@ -64,7 +64,7 @@ export const subscriptionTiers = {
     canAccessAnalytics: true,
     canCustomizeBanner: true,
     canRemoveBranding: true,
-    stripePriceId: process.env.STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID as string,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID as string,
     description: "For large businesses with high volume",
     marketingLayout: {
       buttonText: "Contact Sales",
