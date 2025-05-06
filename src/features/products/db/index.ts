@@ -216,6 +216,10 @@ export async function getProductForBanner({
   
   const cleanedDomain = removeTrailingSlash(product.domain);
   const cleanedUrl = removeTrailingSlash(url);
+  console.log({
+    cleanedDomain,
+    cleanedUrl,
+  })
   
   if (cleanedDomain !== cleanedUrl) {
     return { product: undefined, country: undefined, discount: undefined };
@@ -225,6 +229,9 @@ export async function getProductForBanner({
   const discount = product.country_group_discounts.find(
     discount => discount.country_group.countries.length > 0
   );
+  console.log({
+    discount,
+  })
   
   // Format product data if available
   const formattedProduct = product.product_customization
@@ -234,17 +241,22 @@ export async function getProductForBanner({
         customization: product.product_customization,
       }
     : undefined;
+  console.log({
+    formattedProduct,
+  })
 
   // Get country info from the discount
   const country = discount?.country_group.countries[0];
-  
+  console.log({
+    country,
+  })
   const formattedDiscount = discount
     ? {
         coupon: discount.coupon,
         percentage: discount.discount_percentage,
       }
     : undefined;
-  
+ 
   return {
     product: formattedProduct,
     country: country,
