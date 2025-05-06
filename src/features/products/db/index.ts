@@ -169,9 +169,14 @@ export async function getProductForBanner({
   url: string;
   }) {
   
+  console.log({
+    id,
+    countryCode,
+    url,
+  })
   // Query product data with all necessary relations
   const product = await db.query.Product.findFirst({
-    where: and(eq(Product.id, id), eq(Product.domain, url)),
+    where: eq(Product.id, id),
     columns: {
       id: true,
       user_id: true,
@@ -201,6 +206,7 @@ export async function getProductForBanner({
       },
     },
   });
+
 
   
 
