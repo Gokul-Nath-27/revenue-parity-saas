@@ -23,14 +23,14 @@ export default function AnalyticsPage() {
             <VisitorsByDayData />
           </Suspense>
 
-          {/* Most Viewed Products Chart */}
-          <Suspense fallback={<HorizontalBarChartSkeleton />}>
-            <MostViewedProductsData />
-          </Suspense>
-
           {/* Visitors by Parity Group Chart */}
           <Suspense fallback={<DonutChartSkeleton />}>
             <VisitorsByParityGroupData />
+          </Suspense>
+
+          {/* Most Viewed Products Chart */}
+          <Suspense fallback={<HorizontalBarChartSkeleton />}>
+            <MostViewedProductsData />
           </Suspense>
 
           {/* Visitors by Country Chart */}
