@@ -225,11 +225,5 @@ async function generateBannerJS(
 }
 
 function getCountryCode(request: NextRequestWithGeo) {
-    if (request.geo?.country) {
-      console.log("Using geo country code:", request.geo.country)
-      return request.geo.country
-    } else { 
-      return null
-    }
-
+  return request.geo?.country || process.env.TEST_COUNTRY_CODE || null
 }
