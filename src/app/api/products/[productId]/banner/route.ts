@@ -1,9 +1,7 @@
 export const runtime = 'edge';
 
 import { NextRequest } from "next/server"
-import { createElement } from "react"
 
-import { BannerPreview } from "@/features/customization/components/BannerPreview"
 import { getProductForBanner , createProductView } from "@/features/products/db"
 import { catchError, removeTrailingSlash } from "@/lib/utils"
 import { canRemoveBranding, canShowDiscountBanner } from "@/permissions"
@@ -175,38 +173,38 @@ async function generateBannerJS(
       throw new Error("Discount data is invalid")
     }
 
-    const { renderToStaticMarkup } = await import("react-dom/server")
-    
     // Safely access customization properties
     const locationMessage = product.customization.location_message || ''
     const bannerContainer = product.customization.banner_container || 'body'
+    const backgroundColor = product.customization.background_color || '#ffffff'
+    const textColor = product.customization.text_color || '#000000'
+    const fontSize = product.customization.font_size || '16px'
+    const bannerRadius = product.customization.banner_radius || '0px'
+    const isSticky = product.customization.sticky || false
     
-    // Create the banner HTML with proper error handling
-    let bannerHTML
-    try {
-      bannerHTML = renderToStaticMarkup(
-        createElement(BannerPreview, {
-          location_message: locationMessage,
-          mappings: {
-            country: country.name,
-            coupon: discount.coupon,
-            discount: (discount.percentage * 100).toString(),
-          },
-          customization: product.customization,
-          canRemoveBranding,
-        })
-      )
-      console.log("Banner HTML generated successfully")
-    } catch (error) {
-      console.error("Error generating banner HTML:", error)
-      throw new Error("Failed to render banner HTML")
-    }
+    // Create a simple banner HTML string
+    const bannerHTML = `
+      <div style="
+        background-color: ${backgroundColor};
+        color: ${textColor};
+        font-size: ${fontSize};
+        border-radius: ${bannerRadius};
+        padding: 10px;
+        text-align: center;
+        ${isSticky ? 'position: sticky; top: 0;' : ''}
+      ">
+        ${locationMessage.replace('{country}', country.name)
+          .replace('{coupon}', discount.coupon)
+          .replace('{discount}', (discount.percentage * 100).toString())}
+        ${!canRemoveBranding ? '<div style="font-size: 12px; margin-top: 5px;">Powered by Your Brand</div>' : ''}
+      </div>
+    `.trim()
 
     return `
       window.addEventListener('load', function() {
         try {
           const inject = document.createElement("div");
-          inject.innerHTML = '${bannerHTML}';
+          inject.innerHTML = '${bannerHTML.replace(/'/g, "\\'")}';
           const injectingContainer = document.querySelector("${bannerContainer}");
           if (injectingContainer) {
             injectingContainer.prepend(inject);
