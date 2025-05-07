@@ -1,11 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server"
 
+import { isPrivatePath, isPublicPath, isValidRoute } from '@/lib/routeConfig'
 import { getSessionIdFromCookie, getValidatedSession, getSessionCookieOptions, updateSessionExpiration } from '@/lib/session'
 
-const publicPaths = ['/', '/sign-in', '/sign-up']
-const _adminPaths: string[] = [] 
-
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  
+  if (!isValidRoute(pathname)) {
+    return NextResponse.rewrite(new URL('/not-found', request.url))
+  }
+  
   const response = (await middlewareAuth(request)) ?? NextResponse.next()
   return response
 }
@@ -14,10 +18,7 @@ async function middlewareAuth(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Handle public paths
-  if (publicPaths.includes(pathname)) {
-    // For root path, always allow access
-    if (pathname === '/') return null
-    
+  if (isPublicPath(pathname)) {
     const sessionId = await getSessionIdFromCookie()
     if (sessionId) {
       const session = await getValidatedSession(sessionId)
@@ -27,32 +28,34 @@ async function middlewareAuth(request: NextRequest) {
     }
     return null
   }
+  
 
-  // Handle protected paths (non-public, non-admin)
-  const sessionId = await getSessionIdFromCookie()
-  if (!sessionId) {
-    return NextResponse.redirect(new URL('/sign-in', request.url))
-  }
+  if (isPrivatePath(pathname)) {
+    const sessionId = await getSessionIdFromCookie()
+    if (!sessionId) {
+      return NextResponse.redirect(new URL('/sign-in', request.url))
+    }
 
-  const session = await getValidatedSession(sessionId)
-  if (!session) {
-    // Clear the expired session cookie
-    const response = NextResponse.redirect(new URL('/sign-in', request.url))
-    response.cookies.delete('session-key')
+    const session = await getValidatedSession(sessionId)
+    if (!session) {
+      // Clear the expired session cookie
+      const response = NextResponse.redirect(new URL('/sign-in', request.url))
+      response.cookies.delete('session-key')
+      return response
+    }
+
+    // Update session expiration for valid session
+    await updateSessionExpiration(sessionId)
+    const cookieOptions = await getSessionCookieOptions()
+    const response = NextResponse.next()
+    response.cookies.set({
+      ...cookieOptions,
+      value: sessionId
+    })
     return response
   }
-
-  // Update session expiration for valid session
-  await updateSessionExpiration(sessionId)
   
-  // Update session cookie expiration
-  const response = NextResponse.next()
-  const cookieOptions = await getSessionCookieOptions()
-  response.cookies.set({
-    ...cookieOptions,
-    value: sessionId
-  })
-  return response
+  return null
 }
 
 export const config = {
