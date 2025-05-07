@@ -1,12 +1,11 @@
 export const runtime = 'edge';
 
-import { notFound } from "next/navigation"
 import { NextRequest } from "next/server"
 import { createElement } from "react"
 
 import { BannerPreview } from "@/features/customization/components/BannerPreview"
 import { getProductForBanner , createProductView } from "@/features/products/db"
-import { removeTrailingSlash } from "@/lib/utils"
+import { catchError, removeTrailingSlash } from "@/lib/utils"
 import { canRemoveBranding, canShowDiscountBanner } from "@/permissions"
 
 interface NextRequestWithGeo extends NextRequest {
@@ -33,63 +32,106 @@ export async function GET(
     })
     
     const countryCode = getCountryCode(request)
-    if (countryCode == null) return notFound()
     console.log("countryCode", countryCode)
-    
+
+    if (countryCode == null) {
+      console.log("No country code found, returning 404")
+      return errorResponse("Unable to determine country location. Please ensure location services are enabled.")
+    }
+
     const normalizedUrl = removeTrailingSlash(requestingUrl).replace("localhost", "127.0.0.1")
-    console.log("normalizedUrl", normalizedUrl)
-    const result = await getProductForBanner({
+
+    const { data: result, error } = await catchError(getProductForBanner({
       id: productId,
       countryCode,
       url: normalizedUrl,
-    })
+    }))
     
-    if (!result || !result.product) return notFound()
+    if (error) {
+      console.error("Error in getProductForBanner:", error)
+      return errorResponse( "Unable to retrieve product information. Please try again later.")
+    }
     
+    if (!result?.product) {
+      console.log("No result returned from getProductForBanner")
+      return errorResponse("The requested product could not be found.")
+    }
+
     const { product, discount, country } = result
-    console.log("product", product, "discount", discount, "country", country)
-    
     if (!country || !discount) {
-      return new Response("No Discount can be applied for this product/location", { status: 203 });
+      console.log("No country or discount available")
+      return errorResponse("No discount can be applied for this product/location.")
     }
-    
+
     console.log({
-      country,
+      product,
       discount,
+      country,
     })
 
-    try {
-      await createProductView({
-        productId: product.id,
-        countryId: country.id,
-      })
-    } catch (error) {
-      console.error("Error creating product view:", error)
-      // Continue execution even if view creation fails
+    const { error: createProductViewError } = await catchError(createProductView({
+      productId: product.id,
+      countryId: country.id,
+    }))
+
+    if (createProductViewError) {
+      console.error("Error creating product view:", createProductViewError)
     }
 
-    const canShowBanner = await canShowDiscountBanner(product.user_id)
-    console.log("canShowBanner", canShowBanner)
-    if (!canShowBanner) return notFound()
+    const { data: canShowBanner, error: canShowBannerError } = await catchError(canShowDiscountBanner(product.user_id))
+    if (canShowBannerError) {
+      console.error("Error checking if can show banner:", canShowBannerError)
+    }
     
-    const bannerJS = await generateBannerJS(
-      product,
-      country,
-      discount,
-      await canRemoveBranding(product.user_id)
-    )
-    console.log("bannerJS", bannerJS)
+    if (!canShowBanner) {
+      console.log("Cannot show banner for this user")
+      return new Response("Cannot show banner for this user", { status: 203 })
+    }
+    
+    const { data: canRemoveBrand, error: canRemoveBrandError } = await catchError(canRemoveBranding(product.user_id))
+    if (canRemoveBrandError) {
+      console.error("Error checking if can remove branding:", canRemoveBrandError)
+    }
+    
+    const { data: bannerJS, error: bannerJSError } =
+      await catchError(
+        generateBannerJS(
+          product,
+          country,
+          discount,
+          canRemoveBrand ?? false
+        )
+      )
+    
+    if (bannerJSError) {
+      console.error("Error generating banner JS:", bannerJSError)
+    }
+    
+    console.log("Banner JS generated successfully")
+    
+    
     return new Response(bannerJS, {
       headers: {
         "Content-Type": "application/javascript",
       },
     })
   } catch (error) {
-    console.error("Error in banner API:", error)
+    console.error("Unhandled error in banner API:", error)
     return new Response("Error generating banner", { status: 500 })
   }
 }
 
+const errorResponse = (message: string) => {
+  return new Response(JSON.stringify({
+    error: "Error generating banner",
+    message: message
+  }), { 
+    status: 203,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
 async function generateBannerJS(
   product: {
     id: string;
@@ -113,37 +155,81 @@ async function generateBannerJS(
   discount: { coupon: string; percentage: number },
   canRemoveBranding: boolean
 ) {
-  const { renderToStaticMarkup } = await import("react-dom/server")
-  return `
+  try {
+    console.log("Starting generateBannerJS")
+    
+    // Validate required product properties
+    if (!product.customization) {
+      console.error("Missing product customization")
+      throw new Error("Product customization is missing")
+    }
+    
+    // Validate country and discount
+    if (!country || !country.name) {
+      console.error("Invalid country data")
+      throw new Error("Country data is invalid")
+    }
+    
+    if (!discount || typeof discount.percentage !== 'number' || !discount.coupon) {
+      console.error("Invalid discount data")
+      throw new Error("Discount data is invalid")
+    }
+
+    const { renderToStaticMarkup } = await import("react-dom/server")
+    
+    // Safely access customization properties
+    const locationMessage = product.customization.location_message || ''
+    const bannerContainer = product.customization.banner_container || 'body'
+    
+    // Create the banner HTML with proper error handling
+    let bannerHTML
+    try {
+      bannerHTML = renderToStaticMarkup(
+        createElement(BannerPreview, {
+          location_message: locationMessage,
+          mappings: {
+            country: country.name,
+            coupon: discount.coupon,
+            discount: (discount.percentage * 100).toString(),
+          },
+          customization: product.customization,
+          canRemoveBranding,
+        })
+      )
+      console.log("Banner HTML generated successfully")
+    } catch (error) {
+      console.error("Error generating banner HTML:", error)
+      throw new Error("Failed to render banner HTML")
+    }
+
+    return `
       window.addEventListener('load', function() {
-        const inject = document.createElement("div");
-        inject.innerHTML = '${renderToStaticMarkup(
-          createElement(BannerPreview, {
-            location_message: product.customization.location_message,
-            mappings: {
-              country: country.name,
-              coupon: discount.coupon,
-              discount: (discount.percentage * 100).toString(),
-            },
-            customization: product.customization,
-            canRemoveBranding,
-          })
-        )}';
-        const injectingContainer = document.querySelector("${
-          product.customization.banner_container
-        }");
-        if (injectingContainer) {
-          injectingContainer.prepend(inject);
-        } else {
-          console.log('The banner injection container is not found');
+        try {
+          const inject = document.createElement("div");
+          inject.innerHTML = '${bannerHTML}';
+          const injectingContainer = document.querySelector("${bannerContainer}");
+          if (injectingContainer) {
+            injectingContainer.prepend(inject);
+          } else {
+            console.log('The banner injection container is not found');
+          }
+        } catch (e) {
+          console.error('Error injecting banner:', e);
         }
       });
     `.replace(/(\r\n|\n|\r)/g, "")
+  } catch (error) {
+    console.error("Error in generateBannerJS:", error)
+    throw error
+  }
 }
 
 function getCountryCode(request: NextRequestWithGeo) {
-  if (request.geo?.country != null) return request.geo.country
-  if (process.env.NODE_ENV === "development") {
-    return process.env.TEST_COUNTRY_CODE
-  }
+    if (request.geo?.country) {
+      console.log("Using geo country code:", request.geo.country)
+      return request.geo.country
+    } else { 
+      return null
+    }
+
 }
