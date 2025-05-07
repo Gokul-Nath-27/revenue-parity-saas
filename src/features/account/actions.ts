@@ -223,8 +223,46 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
 }
 
 export async function oAuthSignIn(provider: OAuthProvider) {
-  const oAuthClient = getOAuthClient(provider)
-  redirect(oAuthClient.createAuthUrl())
+  const oAuthClient = getOAuthClient(provider);
+  
+  const authUrlOptions: { nonce?: string } = {};
+  let nonce: string | undefined = undefined;
+
+  const cookieStore = await cookies();
+
+  if (provider === "google") {
+    nonce = crypto.randomBytes(32).toString("hex");
+    authUrlOptions.nonce = nonce;
+    cookieStore.set("oauth_nonce", nonce, {
+      httpOnly: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 10, // 10 minutes, same as state and code_verifier
+      sameSite: "lax",
+    });
+  }
+
+  const { authUrl, state, codeVerifier } = oAuthClient.createAuthUrl(authUrlOptions);
+
+  // Store state in an HTTPOnly cookie
+  cookieStore.set("oauth_state", state, {
+    httpOnly: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 10, // 10 minutes
+    sameSite: "lax", // Explicitly set SameSite for state cookie
+  });
+
+  // Store code_verifier in an HTTPOnly cookie for PKCE
+  cookieStore.set("oauth_code_verifier", codeVerifier, {
+    httpOnly: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
+    path: "/", // Ensure it's available for the callback path
+    maxAge: 60 * 10, // Should have the same lifetime as the state
+    sameSite: "lax", // Lax is appropriate here
+  });
+
+  redirect(authUrl);
 }
 
 export async function resetPassword(
