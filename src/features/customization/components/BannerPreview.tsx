@@ -1,12 +1,16 @@
+"use client"
+
+import { useBanner } from './BannerContext';
+
 type BannerPreviewProps = {
-  location_message: string;
+  location_message?: string;
   canRemoveBranding: boolean;
   mappings: {
     discount: string;
     coupon: string;
     country: string;
   };
-  customization: {
+  customization?: {
     location_message: string;
     banner_container: string;
     background_color: string;
@@ -18,14 +22,22 @@ type BannerPreviewProps = {
   }
 }
 
-
 export function BannerPreview({
-  location_message,
   canRemoveBranding,
-  customization,
   mappings,
+  customization: propCustomization,
 }: BannerPreviewProps) {
+
+  const { customization: contextCustomization } = useBanner();
+
+  const customization = contextCustomization || propCustomization;
+
+  if (!customization) {
+    return null;
+  }
+
   const {
+    location_message,
     background_color,
     text_color,
     font_size,

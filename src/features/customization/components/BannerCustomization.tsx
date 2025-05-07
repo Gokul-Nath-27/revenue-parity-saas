@@ -28,14 +28,12 @@ export default async function BannerCustomization({ productId }: { productId: st
         <div className="space-y-2">
           <h3 className="text-md font-semibold">Preview</h3>
           <BannerPreview
-            location_message={customization.location_message}
             canRemoveBranding={canRemoveBranding}
-            customization={customization}
             mappings={{
               discount: '30',
               coupon: 'INDIA30',
               country: 'India',
-            }}  
+            }}
           />
         </div>
 
