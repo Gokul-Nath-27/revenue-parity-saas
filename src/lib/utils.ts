@@ -127,3 +127,5 @@ export async function generateBannerJS(
     throw error
   }
 }
+
+export const baseUrl = process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV;

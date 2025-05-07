@@ -1,0 +1,1 @@
+ALTER TABLE "users" RENAME COLUMN "resetPasswordToken" TO "reset_password_token";

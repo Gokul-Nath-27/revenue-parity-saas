@@ -1,14 +1,4 @@
-import { ArrowLeft } from "lucide-react"
-import { Metadata } from "next"
-import Link from "next/link"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
-export const metadata: Metadata = {
-  title: "Forgot Password - RevenueParity",
-  description: "Forgot your password? Reset it here",
-};
+import ForgotPasswordForm from "@/features/account/componets/forget-password-form"
 
 export default function ForgotPasswordPage() {
   return (
@@ -21,33 +11,7 @@ export default function ForgotPasswordPage() {
               Enter your email address and we&apos;ll send you a link to reset your password
             </p>
           </div>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
-                placeholder="m@example.com"
-                type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Send reset link
-            </Button>
-            <div className="text-center">
-              <Link href="/sign-in" className="inline-flex items-center text-sm text-primary hover:underline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to sign in
-              </Link>
-            </div>
-          </div>
+          <ForgotPasswordForm />
         </div>
       </main>
     </div>

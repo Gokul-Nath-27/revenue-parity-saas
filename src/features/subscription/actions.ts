@@ -4,7 +4,7 @@ import Stripe from "stripe"
 
 import { PaidTierNames, subscriptionTiers } from "@/data/subscriptionTiers"
 import { UserSubscriptionType } from "@/drizzle/schemas/subscription"
-import { catchError } from "@/lib/utils"
+import { catchError, baseUrl } from "@/lib/utils"
 import { withAuthUserId } from "@/lib/with-auth"
 
 import { getUserById } from "../account/db"
@@ -14,11 +14,6 @@ import { getUserSubscriptionFromDb } from "./db"
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
-const baseUrl = process.env.NODE_ENV === "production"
-  ? process.env.BASE_URL
-  : process.env.BASE_URL_DEV
-
-  console.log("baseUrl", baseUrl, process.env.NODE_ENV)
 
 
 export const getUserSubscription = cache(withAuthUserId(async (userId) => {

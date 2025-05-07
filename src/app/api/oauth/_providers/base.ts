@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import { OAuthProvider } from "@/drizzle/schemas/enums";
+import { baseUrl } from "@/lib/utils";
 
 import { createGithubOAuthClient, GitHubEmail } from "./github";
 import { createGoogleOAuthClient } from "./google";
-
 // Type definitions
 type OAuthUrls = {
   auth: string;
@@ -50,9 +50,6 @@ export class OAuthClient<T> {
   }
 
   private get redirectUrl() {
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? process.env.BASE_URL
-      : process.env.BASE_URL_DEV;
     
     return new URL(`/api/oauth/${this.provider}`, baseUrl);
   }
