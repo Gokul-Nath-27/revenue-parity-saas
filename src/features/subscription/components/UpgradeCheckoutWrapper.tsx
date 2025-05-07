@@ -1,8 +1,7 @@
+
+import { getUserSubscription } from '@/features/subscription/actions'
+import UpgradeCheckoutClient from '@/features/subscription/components/UpgradeCheckoutClient'
 import { catchError } from '@/lib/utils'
-
-import { getUserSubscription } from '../actions'
-
-import UpgradeCheckoutClient from './UpgradeCheckoutClient'
 
 export default async function UpgradeCheckoutWrapper({ tier }: { tier: string }) {
   const { data: subscription, error } = await catchError(getUserSubscription())

@@ -2,17 +2,17 @@ import { Suspense } from "react";
 
 import DashboardHeader from "@/components/layout/dashboard-header";
 import {
+  LineChartSkeleton,
+  HorizontalBarChartSkeleton,
+  VerticalBarChartSkeleton,
+  DonutChartSkeleton
+} from "@/features/analytics/components/charts/chart-skeletons";
+import {
   VisitorsByParityGroupData,
   VisitorsByCountryData,
   VisitorsByDayData,
   MostViewedProductsData
 } from "@/features/analytics/components/server-charts";
-import {
-  LineChartSkeleton,
-  HorizontalBarChartSkeleton,
-  VerticalBarChartSkeleton,
-  DonutChartSkeleton
-} from "@/features/analytics/components/skeletons/chart-skeletons";
 export default function AnalyticsPage() {
   return (
     <div className="flex h-full w-full flex-col gap-6">

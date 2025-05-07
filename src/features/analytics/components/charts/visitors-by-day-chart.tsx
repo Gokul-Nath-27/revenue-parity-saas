@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 import type { VisitorsByDayData } from "@/features/analytics/actions";
 
-import { LineChartSkeleton as EmptyDataChart } from "../skeletons/chart-skeletons";
+import { LineChartSkeleton as EmptyDataChart } from "./chart-skeletons";
 
 interface VisitorsByDayChartProps {
   data: VisitorsByDayData[];

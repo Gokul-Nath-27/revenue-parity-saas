@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 import type { VisitorsByParityGroupData } from "@/features/analytics/actions";
 
-import { DonutChartSkeleton as EmptyDataChart } from "../skeletons/chart-skeletons";
+import { DonutChartSkeleton as EmptyDataChart } from "./chart-skeletons";
 
 interface VisitorsByParityGroupChartProps {
   data: VisitorsByParityGroupData[];

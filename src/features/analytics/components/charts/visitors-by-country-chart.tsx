@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 import type { VisitorsByCountryData } from "@/features/analytics/actions";
 
-import { VerticalBarChartSkeleton as EmptyDataChart } from "../skeletons/chart-skeletons";
+import { VerticalBarChartSkeleton as EmptyDataChart } from "./chart-skeletons";
 
 interface VisitorsByCountryChartProps {
   data: VisitorsByCountryData[];

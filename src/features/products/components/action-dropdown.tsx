@@ -1,6 +1,8 @@
+"use client"
 import { EllipsisVertical, Pencil } from 'lucide-react'
 import Link from 'next/link'
 
+import LinkStatus from '@/components/loading-indicator'
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { DeleteProductModal } from "./delete-product-modal"
+
 export function ProductActions({ id }: { id: string }) {
   return (
     <>
@@ -21,10 +24,11 @@ export function ProductActions({ id }: { id: string }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <Link href={`/dashboard/products/${id}?tab=site`}>
-            <DropdownMenuItem>
+          <Link href={`/dashboard/products/${id}?tab=site`} prefetch={false}>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Pencil />
               Edit
+              <LinkStatus />
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />

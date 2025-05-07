@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/chart";
 
 import type { MostViewedProductData } from "../../actions";
-import { HorizontalBarChartSkeleton as EmptyDataChart } from "../skeletons/chart-skeletons";
+
+import { HorizontalBarChartSkeleton as EmptyDataChart } from "./chart-skeletons";
 
 
 interface MostViewedProductsChartProps {
