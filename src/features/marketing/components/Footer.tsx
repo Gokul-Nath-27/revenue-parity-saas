@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import Logo from '@/components/layout/Logo';
-
+import { scrollNavigations } from '@/features/marketing/components/Navbar';
 const year = new Date().getFullYear();
 
 const Footer = () => {
@@ -32,11 +32,11 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2">
-              {['Features', 'Pricing', 'Testimonials', 'Case Studies', 'API'].map((item, index) => (
+              {scrollNavigations.map((item, index) => (
                 <li key={index}>
-                  <a href="#" className="text-muted-foreground hover:text-white transition">
-                    {item}
-                  </a>
+                  <Link href={item.href} className="text-muted-foreground hover:text-white transition">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

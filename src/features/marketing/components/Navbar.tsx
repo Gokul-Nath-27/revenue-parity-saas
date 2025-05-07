@@ -1,10 +1,27 @@
-"use client";
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 import Logo from '@/components/layout/Logo';
 import { Button } from '@/components/ui/button';
+export const scrollNavigations = [
+  {
+    href: '#features',
+    label: 'Features',
+  },
+  {
+    label: 'Pricing',
+    href: '#pricing',
+  },
+  {
+    label: 'Banner Builder',
+    href: '#banner',
+  },
+  {
+    label: 'How it works',
+    href: '#setup',
+  },
+]
 
 const Navbar = () => {
   return (
@@ -16,10 +33,11 @@ const Navbar = () => {
         <Logo to="/" />
 
         <div className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm text-muted-foreground hover:text-white transition">Features</a>
-          <a href="#setup" className="text-sm text-muted-foreground hover:text-white transition">How It Works</a>
-          <a href="#banner" className="text-sm text-muted-foreground hover:text-white transition">Banner Builder</a>
-          <a href="#pricing" className="text-sm text-muted-foreground hover:text-white transition">Pricing</a>
+          {scrollNavigations.map((item, index) => (
+            <Link href={item.href} key={index} className="text-sm text-muted-foreground hover:text-white transition">
+              {item.label}
+            </Link>
+          ))}
         </div>
 
         <div className="flex items-center gap-3">
@@ -43,21 +61,11 @@ const Navbar = () => {
       <div className="mobile-menu md:hidden">
         <div className="container border-t px-4 py-4">
           <nav className="flex flex-col space-y-4">
-            <Link href="#features" className="text-sm font-medium text-foreground transition-colors">
-              Features
-            </Link>
-            <Link
-              href="#setup"
-              className="text-sm font-medium text-foreground transition-colors"
-            >
-              How It Works
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium text-foreground transition-colors">
-              Pricing
-            </Link>
-            <Link href="#banner" className="text-sm font-medium text-foreground transition-colors">
-              Banner Builder
-            </Link>
+            {scrollNavigations.map((item, index) => (
+              <Link href={item.href} key={index} className="text-sm font-medium text-foreground transition-colors">
+                {item.label}
+              </Link>
+            ))}
           </nav>
           <div className="mt-4">
             <Link href="/sign-in">
