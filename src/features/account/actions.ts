@@ -53,7 +53,48 @@ async function sendPasswordResetEmail(email: string, token: string): Promise<voi
     to: email,
     subject: 'Reset your password',
     text: `Hello,\n\nYou requested a password reset. Click the link below to reset your password:\n${resetLink}\n\nIf you did not request this, please ignore this email.\n\nThis link will expire in 10 minutes.`,
-    html: `<p>Hello,</p><p>You requested a password reset. Click the link below to reset your password:</p><p><a href="${resetLink}">Reset Password</a></p><p>If you did not request this, please ignore this email.</p><p>This link will expire in 10 minutes.</p>`,
+    html: `<body style="margin: 0; padding: 0; background-color: #252525; font-family: Arial, sans-serif;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td style="padding: 20px 0 30px 0;" align="center">
+        <img src="${baseUrl}/revenue-parity-logo.png" alt="Revenue Parity" width="200" style="display: block;" />
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 20px 30px 40px 30px; background-color: #2f2f2f; border-radius: 8px; text-align: center;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="color: #fbfbfb; font-size: 24px; font-weight: bold; padding-bottom: 20px;">
+              Reset Your Password
+            </td>
+          </tr>
+          <tr>
+            <td style="color: #e0e0e0; font-size: 16px; line-height: 24px; padding-bottom: 30px;">
+              Hello,<br><br>
+              You requested a password reset. Click the button below to reset your password.
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding-bottom: 30px;">
+              <a href="${resetLink}" style="background-color: #333333; color: #e9e9e9; text-decoration: none; padding: 15px 25px; border-radius: 5px; font-size: 16px; font-weight: bold; display: inline-block; border: 1px solid #444444;">Reset Password</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="color: #b0b0b0; font-size: 14px; line-height: 20px;">
+              If you did not request this, please ignore this email.<br>
+              This link will expire in 10 minutes.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 30px; text-align: center; color: #888888; font-size: 12px;">
+        &copy; ${new Date().getFullYear()} Revenue Parity. All rights reserved.
+      </td>
+    </tr>
+  </table>
+</body>`
   };
 
   try {
