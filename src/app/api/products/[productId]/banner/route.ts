@@ -3,14 +3,8 @@ export const runtime = 'edge';
 import { NextRequest } from "next/server"
 
 import { getProductForBanner , createProductView } from "@/features/products/db"
-import { catchError, removeTrailingSlash } from "@/lib/utils"
+import { catchError, generateBannerJS, removeTrailingSlash } from "@/lib/utils"
 import { canRemoveBranding, canShowDiscountBanner } from "@/permissions"
-
-interface NextRequestWithGeo extends NextRequest {
-  geo?: {
-    country?: string;
-  };
-}
 
 export async function GET(
   request: NextRequestWithGeo,
@@ -130,99 +124,13 @@ const errorResponse = (message: string) => {
     }
   })
 }
-async function generateBannerJS(
-  product: {
-    id: string;
-    user_id: string;
-    customization: {
-      id: string;
-      class_prefix: string | null;
-      product_id: string;
-      location_message: string;
-      background_color: string;
-      text_color: string;
-      banner_container: string;
-      sticky: boolean;
-      font_size: string;
-      banner_radius: string;
-      created_at: Date;
-      updated_at: Date;
-    };
-  },
-  country: { name: string },
-  discount: { coupon: string; percentage: number },
-  canRemoveBranding: boolean
-) {
-  try {
-    console.log("Starting generateBannerJS")
-    
-    // Validate required product properties
-    if (!product.customization) {
-      console.error("Missing product customization")
-      throw new Error("Product customization is missing")
-    }
-    
-    // Validate country and discount
-    if (!country || !country.name) {
-      console.error("Invalid country data")
-      throw new Error("Country data is invalid")
-    }
-    
-    if (!discount || typeof discount.percentage !== 'number' || !discount.coupon) {
-      console.error("Invalid discount data")
-      throw new Error("Discount data is invalid")
-    }
 
-    // Safely access customization properties
-    const locationMessage = product.customization.location_message || ''
-    const bannerContainer = product.customization.banner_container || 'body'
-    const backgroundColor = product.customization.background_color || '#ffffff'
-    const textColor = product.customization.text_color || '#000000'
-    const fontSize = product.customization.font_size || '16px'
-    const bannerRadius = product.customization.banner_radius || '0px'
-    const isSticky = product.customization.sticky || false
-    
-    // Create a simple banner HTML string
-    const bannerHTML = `
-      <div style="
-        background-color: ${backgroundColor};
-        color: ${textColor};
-        font-size: ${fontSize};
-        border-radius: ${bannerRadius};
-        padding: 10px;
-        text-align: center;
-        ${isSticky ? 'position: sticky; top: 0;' : ''}
-      ">
-        ${locationMessage.replace('{country}', country.name)
-          .replace('{coupon}', discount.coupon)
-          .replace('{discount}', (discount.percentage * 100).toString())}
-        ${!canRemoveBranding ? '<div style="font-size: 12px; margin-top: 5px;">Powered by Your Brand</div>' : ''}
-      </div>
-    `.trim()
-
-    return `
-      window.addEventListener('load', function() {
-        try {
-          const inject = document.createElement("div");
-          inject.innerHTML = '${bannerHTML.replace(/'/g, "\\'")}';
-          const injectingContainer = document.querySelector("${bannerContainer}");
-          if (injectingContainer) {
-            injectingContainer.prepend(inject);
-          } else {
-            console.log('The banner injection container is not found');
-          }
-        } catch (e) {
-          console.error('Error injecting banner:', e);
-        }
-      });
-    `.replace(/(\r\n|\n|\r)/g, "")
-  } catch (error) {
-    console.error("Error in generateBannerJS:", error)
-    throw error
-  }
+export function getCountryCode(request: NextRequestWithGeo) {
+  return request.geo?.country || process.env.TEST_COUNTRY_CODE || null
 }
 
-function getCountryCode(request: NextRequestWithGeo) {
-  console.log("request.geo", request.geo)
-  return request.geo?.country || process.env.TEST_COUNTRY_CODE || null
+interface NextRequestWithGeo extends NextRequest {
+  geo?: {
+    country?: string;
+  };
 }

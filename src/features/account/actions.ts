@@ -101,7 +101,14 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
 
   const user = await db.query.User.findFirst({
     where: eq(User.email, email),
-    columns: { email: true, password: true, salt: true, id: true, role: true },
+    columns: {
+      email: true,
+      password: true,
+      salt: true,
+      id: true,
+      role: true,
+      name: true
+    },
     with: {
       subscriptions: {
         columns: {
@@ -112,6 +119,7 @@ export async function signIn(prev: FormState, formData: FormData): Promise<FormS
   });
 
   const { success, data } = emailUserSchema.safeParse(user);
+  console.log("success", success, data)
   if (!success) {
     return { message: 'Invalid login credentials.' };
   }
