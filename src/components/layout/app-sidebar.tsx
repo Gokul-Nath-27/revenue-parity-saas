@@ -7,6 +7,7 @@ import {
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import Logo from "@/components/layout/Logo"
 import {
   Sidebar,
   SidebarContent,
@@ -25,7 +26,6 @@ import { generateIntials } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Skeleton } from "../ui/skeleton"
 
-import Branding from "./Branding"
 import NavMenu from "./nav-menu"
 
 
@@ -86,7 +86,7 @@ export function AppSidebar({ ...props }) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-3"
             >
-              <Branding />
+              <Logo to="/dashboard" />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

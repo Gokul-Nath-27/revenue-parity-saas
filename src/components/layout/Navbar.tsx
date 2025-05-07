@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import Logo from '@/assets/Icons/Logo';
+import Logo from '@/components/layout/Logo';
 
 const Navbar = () => {
   return (

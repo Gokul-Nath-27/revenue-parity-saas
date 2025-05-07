@@ -28,7 +28,7 @@ export function ProductActions({ id }: { id: string }) {
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Pencil />
               Edit
-              <LinkStatus />
+              <LinkStatus className='ml-auto' />
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />

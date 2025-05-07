@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 import DashboardHeader from "@/components/layout/dashboard-header";
@@ -13,6 +14,12 @@ import {
   VisitorsByDayData,
   MostViewedProductsData
 } from "@/features/analytics/components/server-charts";
+
+export const metadata: Metadata = {
+  title: "Analytics - RevenueParity",
+  description: "View your analytics dashboard",
+};
+
 export default function AnalyticsPage() {
   return (
     <div className="flex h-full w-full flex-col gap-6">

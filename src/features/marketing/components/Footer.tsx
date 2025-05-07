@@ -1,6 +1,8 @@
-
-import { GlobeIcon, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Twitter, Instagram, Linkedin } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
+
+import Logo from '@/components/layout/Logo';
 
 const year = new Date().getFullYear();
 
@@ -10,10 +12,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <GlobeIcon className="h-5 w-5 text-primary" />
-              <span className="font-bold text-xl">RevenueParity</span>
-            </div>
+            <Logo to="#" />
             <p className="text-muted-foreground mb-4">
               Helping digital creators maximize global revenue with smart pricing.
             </p>
@@ -48,9 +47,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {['Documentation', 'Guides', 'Blog', 'Support Center', 'Webinars'].map((item, index) => (
                 <li key={index}>
-                  <a href="#" className="text-muted-foreground hover:text-white transition">
+                  <Link href="/coming-soon" className="text-muted-foreground hover:text-white transition">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -61,9 +60,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {['About Us', 'Careers', 'Privacy Policy', 'Terms of Service', 'Contact'].map((item, index) => (
                 <li key={index}>
-                  <a href="#" className="text-muted-foreground hover:text-white transition">
+                  <Link href="/coming-soon" className="text-muted-foreground hover:text-white transition">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -75,15 +74,12 @@ const Footer = () => {
             © {year} RevenueParity. All rights reserved.
           </p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="text-sm text-muted-foreground hover:text-white transition">
+            <Link href="/coming-soon" className="text-sm text-muted-foreground hover:text-white transition">
               Privacy
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-white transition">
+            </Link>
+            <Link href="/coming-soon" className="text-sm text-muted-foreground hover:text-white transition">
               Terms
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-white transition">
-              Cookies
-            </a>
+            </Link>
           </div>
         </div>
       </div>

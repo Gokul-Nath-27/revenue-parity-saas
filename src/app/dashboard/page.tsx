@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 import DashboardHeader from "@/components/layout/dashboard-header";
@@ -9,6 +10,12 @@ import { HasPermission } from "@/features/products/components/has-permission";
 import ProductContent from "@/features/products/components/product-content";
 import { AddProductDialog } from "@/features/products/components/product-dialog";
 import { ProductSkeleton } from "@/features/products/components/product-skeleton";
+
+
+export const metadata: Metadata = {
+  title: "Dashboard - RevenueParity",
+  description: "Manage your digital products",
+};
 
 export default async function DashboardPage() {
   return (

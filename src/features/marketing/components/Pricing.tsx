@@ -1,9 +1,29 @@
 import { Star, Check, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
-
+import LinkStatus from "@/components/loading-indicator";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
+import { cn } from "@/lib/utils";
+export default function PricingSection() {
+  return (
+    <div id="pricing-section" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {subscriptionTiersInOrder.map((tier) => (
+        <PricingCard
+          key={tier.name}
+          title={tier.name}
+          price={tier.priceInDollars === 0 ? "Free" : `$${tier.priceInDollars}`}
+          description={tier.description}
+          features={tier.features}
+          buttonText={tier.marketingLayout.buttonText}
+          buttonVariant={tier.marketingLayout.buttonVariant}
+          popular={tier.isPopular}
+        />
+      ))}
+    </div>
+  );
+}
 
 const PricingCard = ({
   title,
@@ -54,28 +74,12 @@ const PricingCard = ({
     </CardContent>
 
     <CardFooter className="pt-4">
-      <Button variant={buttonVariant} size="lg" className="w-full gap-2 font-medium">
-        {buttonText} {buttonVariant === "default" && <ArrowRight className="h-4 w-4" />}
-      </Button>
+      <Link href="/sign-up" className="w-full">
+        <Button variant={buttonVariant} size="lg" className="w-full gap-2 font-medium justify-center items-center">
+          {buttonText} {buttonVariant === "default" && <ArrowRight className="h-4 w-4" />}
+          <LinkStatus className={cn(popular ? "spinner-dark-mode" : "")} />
+        </Button>
+      </Link>
     </CardFooter>
   </Card>
 );
-
-export default function PricingSection() {
-  return (
-    <div id="pricing-section" className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      {subscriptionTiersInOrder.map((tier) => (
-        <PricingCard
-          key={tier.name}
-          title={tier.name}
-          price={tier.priceInDollars === 0 ? "Free" : `$${tier.priceInDollars}`}
-          description={tier.description}
-          features={tier.features}
-          buttonText={tier.marketingLayout.buttonText}
-          buttonVariant={tier.marketingLayout.buttonVariant}
-          popular={tier.isPopular}
-        />
-      ))}
-    </div>
-  );
-}

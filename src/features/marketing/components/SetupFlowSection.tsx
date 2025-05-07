@@ -1,32 +1,34 @@
 
 import { ArrowRight, Globe, Code, Settings, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
+import LinkStatus from '@/components/loading-indicator';
 import { Button } from '@/components/ui/button';
+const steps = [
+  {
+    icon: <Settings className="h-10 w-10 text-primary" />,
+    title: "Enter Product Details",
+    description: "Add your digital product information including pricing, currencies, and available regions.",
+  },
+  {
+    icon: <Code className="h-10 w-10 text-primary" />,
+    title: "Connect Your Domain",
+    description: "Easily integrate with your existing website or storefront with our simple embed code.",
+  },
+  {
+    icon: <Globe className="h-10 w-10 text-primary" />,
+    title: "Activate Global Pricing",
+    description: "Turn on automatic regional pricing and watch your global sales increase instantly.",
+  },
+  {
+    icon: <CheckCircle className="h-10 w-10 text-primary" />,
+    title: "Start Selling Globally",
+    description: "Your products are now optimized for each market with fair, localized pricing.",
+  }
+];
 
 const SetupFlowSection = () => {
-  const steps = [
-    {
-      icon: <Settings className="h-10 w-10 text-primary" />,
-      title: "Enter Product Details",
-      description: "Add your digital product information including pricing, currencies, and available regions.",
-    },
-    {
-      icon: <Code className="h-10 w-10 text-primary" />,
-      title: "Connect Your Domain",
-      description: "Easily integrate with your existing website or storefront with our simple embed code.",
-    },
-    {
-      icon: <Globe className="h-10 w-10 text-primary" />,
-      title: "Activate Global Pricing",
-      description: "Turn on automatic regional pricing and watch your global sales increase instantly.",
-    },
-    {
-      icon: <CheckCircle className="h-10 w-10 text-primary" />,
-      title: "Start Selling Globally",
-      description: "Your products are now optimized for each market with fair, localized pricing.",
-    }
-  ];
 
   return (
     <section id="setup" className="py-24 relative">
@@ -73,9 +75,12 @@ const SetupFlowSection = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <Button size="lg" className="bg-primary hover:bg-primary/90">
-            Get Started Now
-          </Button>
+          <Link href="/sign-up">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              Get Started Now
+              <LinkStatus className="spinner-dark-mode" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

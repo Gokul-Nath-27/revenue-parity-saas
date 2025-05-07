@@ -1,9 +1,9 @@
 import { Globe, TrendingUp, Banknote, CheckCircle } from 'lucide-react';
 import React from 'react';
 
-import { Button } from '@/components/ui/button';
 
 const chartData = (() => Array.from({ length: 30 }).map(() => 20 + Math.random() * 80))();
+
 const stats = [
   { value: '40%', label: 'Average Revenue Increase' },
   { value: '120+', label: 'Supported Countries' },
@@ -92,12 +92,6 @@ const GlobalProfitSection = () => {
                   </li>
                 ))}
               </ul>
-
-              <div className="pt-6">
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
-                  Start Maximizing Revenue
-                </Button>
-              </div>
             </div>
           </div>
 

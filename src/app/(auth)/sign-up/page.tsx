@@ -1,7 +1,13 @@
+import { Metadata } from "next";
 import { Suspense } from "react"
 
 import AuthFormSkeleton from "@/components/AuthFormSkeleton"
 import SignupForm from "@/features/account/componets/signup-form"
+
+export const metadata: Metadata = {
+  title: "Sign Up - RevenueParity",
+  description: "Create an account to get started",
+};
 
 export default async function SignupPage() {
   return (

@@ -1,4 +1,5 @@
 
+import { Metadata } from "next"
 import { Suspense } from "react"
 
 import DashboardHeader from "@/components/layout/dashboard-header"
@@ -7,6 +8,11 @@ import ManageSubscriptionWrapper, { ManageSubscriptionSkeleton } from "@/feature
 import PricingGroup from "@/features/subscription/components/PricingGroup"
 import UsageStats, { UsageStatsSkeleton } from "@/features/subscription/components/UsageStats"
 import UserInformation, { UserInformationSkeleton } from "@/features/subscription/components/UserInformation"
+
+export const metadata: Metadata = {
+  title: "Subscription - RevenueParity",
+  description: "Manage your subscription",
+};
 
 export default async function SubscriptionPage() {
   return (

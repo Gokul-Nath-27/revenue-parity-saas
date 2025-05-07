@@ -1,8 +1,14 @@
 import { ArrowLeft } from "lucide-react"
+import { Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+
+export const metadata: Metadata = {
+  title: "Reset Password - RevenueParity",
+  description: "Reset your password",
+};
 
 export default function ResetPasswordPage() {
   return (

@@ -1,7 +1,9 @@
 "use client";
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
+import LinkStatus from '@/components/loading-indicator';
 import { Button } from '@/components/ui/button';
 
 import TiltCard from './TiltCard';
@@ -33,12 +35,17 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 gap-2">
-                Start Free — No Credit Card <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline">
-                See How It Works
-              </Button>
+              <Link href="/sign-up">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 gap-2">
+                  Start Free — No Credit Card <ArrowRight className="h-4 w-4" />
+                  <LinkStatus className="spinner-dark-mode" />
+                </Button>
+              </Link>
+              <Link href="#setup">
+                <Button size="lg" variant="outline">
+                  See How It Works
+                </Button>
+              </Link>
             </div>
 
             <div className="mt-8 text-sm text-muted-foreground">
@@ -68,7 +75,7 @@ const HeroSection = () => {
                       <p className="text-xs text-white/70">Based on your location</p>
                       <p className="text-sm font-semibold">30% OFF with code: <span className="text-primary">INDIA30</span></p>
                     </div>
-                    <Button size="sm" variant="secondary">Apply</Button>
+                    <Button size="sm" variant="secondary" className="cursor-default">Apply</Button>
                   </div>
                 </div>
 
@@ -91,8 +98,8 @@ const HeroSection = () => {
                     <span className="text-xl font-bold">$49.99</span>
                     <span className="text-muted-foreground text-sm line-through">$79.99</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">30% OFF</span>
-                  </div>  
-                  <Button className="w-full bg-primary hover:bg-primary/90">Purchase Now</Button>
+                  </div>
+                  <Button className="w-full bg-primary hover:bg-primary/90 cursor-default">Purchase Now</Button>
                 </div>
 
                 {/* Decorative Elements */}

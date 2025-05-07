@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 
@@ -10,6 +11,11 @@ import BannerCustomizationLoading from '@/features/customization/components/Bann
 import ParityGroupFormWrapper from '@/features/discounts/components/ParityGroupFormWrapper';
 import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
+
+export const metadata: Metadata = {
+  title: "Edit Product - RevenueParity",
+  description: "Edit your product settings",
+};
 
 type EditProductPageProps = {
   params: Promise<{ productId: string }>;
