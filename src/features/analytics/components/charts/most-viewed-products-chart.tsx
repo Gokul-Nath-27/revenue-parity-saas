@@ -3,7 +3,6 @@
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
-  ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -11,18 +10,12 @@ import {
 import type { MostViewedProductData } from "../../actions";
 
 import { HorizontalBarChartSkeleton as EmptyDataChart } from "./chart-skeletons";
+import { ChartWrapper } from "./chart-wrapper";
 
 
 interface MostViewedProductsChartProps {
   data: MostViewedProductData[];
 }
-
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-    color: "#f59e0b",
-  },
-} as const;
 
 export function MostViewedProductsChart({
   data,
@@ -38,30 +31,25 @@ export function MostViewedProductsChart({
   }
 
   return (
-    <div className="rounded-lg border p-4">
-      <h2 className="mb-4 text-lg font-semibold">
-        Most Viewed Products
-      </h2>
-      <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-        <BarChart data={data} accessibilityLayer layout="vertical">
-          <CartesianGrid horizontal={false} />
-          <XAxis type="number" />
-          <YAxis
-            dataKey="name"
-            type="category"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            width={150}
-          />
-          <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-          <Bar
-            dataKey="visitors"
-            fill="var(--color-visitors)"
-            radius={4}
-          />
-        </BarChart>
-      </ChartContainer>
-    </div>
+    <ChartWrapper title="Most Viewed Products">
+      <BarChart data={data} accessibilityLayer layout="vertical">
+        <CartesianGrid horizontal={false} />
+        <XAxis type="number" />
+        <YAxis
+          dataKey="name"
+          type="category"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          width={150}
+        />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <Bar
+          dataKey="visitors"
+          fill="var(--color-visitors)"
+          radius={4}
+        />
+      </BarChart>
+    </ChartWrapper >
   );
 } 

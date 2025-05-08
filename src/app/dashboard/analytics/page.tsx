@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
   return (
     <div className="flex h-full w-full flex-col gap-6">
       <DashboardHeader title="Analytics Dashboard" description="This is the analytics dashboard of your products.">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6">
           {/* Visitors by Day Chart */}
           <Suspense fallback={<LineChartSkeleton />}>
             <VisitorsByDayData />
