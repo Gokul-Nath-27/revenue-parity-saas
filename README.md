@@ -207,8 +207,8 @@ To facilitate a smooth onboarding experience for developers and enable local con
 **Installation**:
 1.  Clone the repository:
     ```bash
-    git clone <your-repository-url>
-    cd revenue-parity-project
+    git clone https://github.com/Gokul-Nath-27/revenue-parity-saas
+    cd revenue-parity-saas
     ```
 2.  Install dependencies:
     ```bash
