@@ -7,7 +7,7 @@ import { baseUrl } from "@/lib/utils";
 
 import { createGithubOAuthClient, GitHubEmail } from "./github";
 import { createGoogleOAuthClient } from "./google";
-// Type definitions
+
 type OAuthUrls = {
   auth: string;
   token: string;
@@ -28,7 +28,6 @@ type OAuthClientConfig<T> = {
   userInfo: UserInfo<T>;
 };
 
-// Helper function to Base64URL encode a buffer
 function base64URLEncode(buffer: Buffer): string {
   return buffer.toString('base64')
     .replace(/\+/g, '-')
@@ -36,44 +35,40 @@ function base64URLEncode(buffer: Buffer): string {
     .replace(/=/g, '');
 }
 
-// Helper function to generate a code verifier for PKCE
 function generateCodeVerifier(): string {
   return base64URLEncode(crypto.randomBytes(32));
 }
 
-// Helper function to generate a code challenge for PKCE
 function generateCodeChallenge(verifier: string): string {
   const hash = crypto.createHash('sha256').update(verifier).digest();
   return base64URLEncode(hash);
 }
 
-// --- JWT Types and Validation Helpers ---
 interface JwtHeader {
-  alg: string; // Algorithm, e.g., "RS256"
+  alg: string;
   kid: string; // Key ID
-  typ?: string; // Type, e.g., "JWT"
+  typ?: string;
 }
 
+// Contains standard claims (iss, sub, aud, exp, iat, nonce)
+// and potentially provider-specific claims like email, name, etc.
 interface JwtPayload {
-  iss: string;       // Issuer
-  sub: string;       // Subject (user ID)
-  aud: string;       // Audience (your client ID)
-  exp: number;       // Expiration time (seconds since epoch)
-  iat: number;       // Issued at time (seconds since epoch)
-  nonce?: string;     // Nonce (must match nonce sent in auth request)
+  iss: string;
+  sub: string;
+  aud: string;
+  exp: number;
+  iat: number;
+  nonce?: string;
   email?: string;
   email_verified?: boolean;
   name?: string;
   given_name?: string;
   family_name?: string;
   picture?: string;
-  [key: string]: unknown; // Use unknown for stricter typing of arbitrary claims
+  [key: string]: unknown;
 }
 
-/**
- * Decodes a JWT string into its header, payload, and signature parts.
- * Does not verify the signature.
- */
+
 function decodeJwt(token: string): { header: JwtHeader; payload: JwtPayload; signature: string; encodedHeaderAndPayload: string } | null {
   try {
     const [encodedHeader, encodedPayload, signature] = token.split('.');
@@ -89,65 +84,124 @@ function decodeJwt(token: string): { header: JwtHeader; payload: JwtPayload; sig
   }
 }
 
+// --- Google JWKS Fetching & Caching ---
+
+interface Jwk {
+  kty: string;
+  use?: string;
+  kid?: string;
+  alg?: string;
+  n?: string; // Modulus
+  e?: string; // Exponent
+  [key: string]: unknown;
+}
+
+interface Jwks {
+  keys: Jwk[];
+}
+
+interface CachedJwks {
+  jwks: Jwks;
+  expiresAt: number; // ms
+}
+
+let googleJwksCache: CachedJwks | null = null;
+
+let googleJwksUri: string | null = null;
+
+const GOOGLE_OIDC_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration";
+const DEFAULT_JWKS_CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours fallback
+
 /**
- * !!! SIMULATED FUNCTION - NEEDS PRODUCTION-READY IMPLEMENTATION FOR JWKS FETCHING & CACHING !!!
- * Fetches Google's OIDC discovery document, then JWKS, and finds the public key for the given Key ID (kid).
- * This function simulates fetching by using a hardcoded JWKS for demonstration.
- * In a real scenario, it MUST fetch from Google's `jwks_uri`, cache keys respecting HTTP cache headers,
- * and handle key rotation.
+ * @param headerValue The string value of the Cache-Control header.
+ * @returns Max age in ms
+ */
+function getMaxAgeFromCacheControl(headerValue: string | null): number | null {
+  if (!headerValue) return null;
+  const maxAgeMatch = headerValue.match(/max-age=(\\d+)/);
+  if (maxAgeMatch && maxAgeMatch[1]) {
+    return parseInt(maxAgeMatch[1], 10) * 1000;
+  }
+  return null;
+}
+
+async function fetchAndCacheGoogleJwks(): Promise<Jwks | null> {
+  try {
+    if (!googleJwksUri) {
+      const discoveryResponse = await fetch(GOOGLE_OIDC_DISCOVERY_URL);
+      if (!discoveryResponse.ok) {
+        console.error(`[JWKS] Failed to fetch Google OIDC discovery document: ${discoveryResponse.status}`);
+        return null;
+      }
+      const discoveryData = await discoveryResponse.json();
+      if (!discoveryData.jwks_uri || typeof discoveryData.jwks_uri !== 'string') {
+        console.error("[JWKS] jwks_uri not found or invalid in Google OIDC discovery document.");
+        return null;
+      }
+      googleJwksUri = discoveryData.jwks_uri;
+    }
+
+    if (!googleJwksUri) {
+        console.error("[JWKS] Cannot fetch JWKS because jwks_uri is null.");
+        return null;
+    }
+
+    const jwksResponse = await fetch(googleJwksUri);
+    if (!jwksResponse.ok) {
+      console.error(`[JWKS] Failed to fetch Google JWKS from ${googleJwksUri}: ${jwksResponse.status}`);
+      return null;
+    }
+
+    const jwksData: Jwks = await jwksResponse.json();
+    const cacheControl = jwksResponse.headers.get("Cache-Control");
+    const expiresIn = getMaxAgeFromCacheControl(cacheControl);
+    
+    const expiresAt = Date.now() + (expiresIn || DEFAULT_JWKS_CACHE_DURATION_MS);
+
+    googleJwksCache = { jwks: jwksData, expiresAt };
+    console.log(`[JWKS] Google JWKS fetched and cached. Expires at: ${new Date(expiresAt).toISOString()}`);
+    return jwksData;
+
+  } catch (error) {
+    console.error("[JWKS] Error fetching or caching Google JWKS:", error);
+    return googleJwksCache ? googleJwksCache.jwks : null;
+  }
+}
+
+/**
+ * Finds the public key for the given Key ID (kid).
  * @param kid The Key ID from the ID Token header.
  * @returns A Promise resolving to a crypto.KeyObject or null if not found/error.
  */
 async function getGooglePublicKey(kid: string): Promise<crypto.KeyObject | null> {
-  // Directly using the JWKS content you provided.
-  // In production: fetch this from the `jwks_uri` found in Google's OIDC discovery document.
-  // `jwks_uri` is "https://www.googleapis.com/oauth2/v3/certs"
-  const googleJwks = {
-    "keys": [
-      {
-        "kty": "RSA",
-        "use": "sig",
-        "e": "AQAB",
-        "n": "03Cww27F2O7JxB5Ji9iT9szfKZ4MK-iPzVpQkdLjCuGKfpjaCVAz9zIQ0-7gbZ-8cJRaSLfByWTGMIHRYiX2efdjz1Z9jck0DK9W3mapFrBPvM7AlRni4lPlwUigDd8zxAMDCheqyK3vCOLFW-1xYHt_YGwv8b0dP7rjujarEYlWjeppO_QMNtXdKdT9eZtBEcj_9ms9W0aLdCFNR5AAR3y0kLkKR1H4DW7vncB46rqCJLenhlCbcW0MZ3asqcjqBQ2t9QMRnY83Zf_pNEsCcXlKp4uOQqEvzjAc9ZSr2sOmd_ESZ_3jMlNkCZ4J41TuG-My5illFcW5LajSKvxD3w",
-        "alg": "RS256",
-        "kid": "07b80a365428525f8bf7cd0846d74a8ee4ef3625"
-      },
-      {
-        "kty": "RSA",
-        "use": "sig",
-        "e": "AQAB",
-        "n": "u4iUh27zU1-gEDT4Mh3dvAIi-F8GVi70EogmEpAIbTcVzPbK6vty_bpGsj5j2A8FzBDCIvhyRTdULAPEUHt3W1BraI23c1YUOjWD8rKqvy4Uf2mAuvdHTRE9OZPpRD2lLnBWylj2rVKhdl1IZi_CzvOyL6G6UhwYTlVeWR2houA1o8o3WUBC26SkXpH6mQrueCAPqfyJRumZToiIqnpGb0mfdHPRVE0IT_0OLZjpG-lLldFu4sUPbEgp-hr6kVXYY2-Mh_LuRwFcdhBArjo6X5P3jlIbyOuabuj79nNsIJ-qZEwRqn5lL_wddZ8-3-3sfGgu5t8i-YECOcECPLhbzw",
-        "alg": "RS256",
-        "kid": "e14c37d6e5c756e8b72fdb5004c0cc356337924e"
-      }
-    ]
-  };
+  let currentJwks: Jwks | null = null;
 
-  // --- PRODUCTION NOTES for fetching and caching JWKS: ---
-  // 1. Fetch Google OIDC discovery: https://accounts.google.com/.well-known/openid-configuration (as you did)
-  // 2. Get `jwks_uri` (which is https://www.googleapis.com/oauth2/v3/certs).
-  // 3. Fetch the JWKS from this `jwks_uri`.
-  // 4. Implement a cache for these keys. The HTTP response from Google for the JWKS URI will contain
-  //    Cache-Control or Expires headers. Respect these to know how long to cache the keys.
-  //    Keys should be refreshed before they expire from your cache, or on-demand if a new `kid` is seen.
-  // 5. Handle potential errors during fetching (network issues, Google service unavailable).
-  // --- 
+  if (googleJwksCache && Date.now() < googleJwksCache.expiresAt) {
+    console.log("[JWKS] Using cached Google JWKS.");
+    currentJwks = googleJwksCache.jwks;
+  } else {
+    console.log("[JWKS] Cache miss or expired. Fetching Google JWKS...");
+    currentJwks = await fetchAndCacheGoogleJwks();
+  }
 
-  const key = googleJwks.keys.find(k => k.kid === kid);
+  if (!currentJwks || !currentJwks.keys) {
+    console.error("[getGooglePublicKey] No JWKS available to find key for KID:", kid);
+    return null;
+  }
+  
+  const key = currentJwks.keys.find(k => k.kid === kid);
 
   if (!key) {
-    console.error(`[getGooglePublicKey] Key not found for KID: ${kid} in the (simulated) JWKS.`);
+    console.error(`[getGooglePublicKey] Key not found for KID: ${kid} in the fetched/cached JWKS.`);
     return null;
   }
 
-  if (key.kty !== 'RSA' || key.alg !== 'RS256') {
-    console.error(`[getGooglePublicKey] Key with KID: ${kid} is not an RSA RS256 key.`);
+  if (key.kty !== 'RSA' ) {
+    console.error(`[getGooglePublicKey] Key with KID: ${kid} is not an RSA key (kty: ${key.kty}).`);
     return null;
   }
 
   try {
-    // Construct the JWK object for crypto.createPublicKey
-    // We only need kty, n, and e for an RSA public key from JWK format.
     const jwkForCrypto = {
         kty: key.kty,
         n: key.n,
@@ -159,8 +213,6 @@ async function getGooglePublicKey(kid: string): Promise<crypto.KeyObject | null>
     return null;
   }
 }
-
-// --- End JWT Validation Helpers ---
 
 export class OAuthClient<T> {
   private readonly provider: OAuthProvider;
@@ -227,146 +279,121 @@ export class OAuthClient<T> {
       client_secret: this.clientSecret,
       code_verifier: codeVerifier,
     });
-
-    // Remove Google-specific parameters if they are not needed universally
-    // or handle them per provider
+  
     if (this.provider === "google") {
-      body.set("access_type", "offline"); // Example: Keep for Google if needed
-      body.set("approval_prompt", "force"); // Example: Keep for Google if needed
+      body.set("access_type", "offline");
+      body.set("approval_prompt", "force");
     }
-
+  
     const res = await fetch(this.urls.token, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
       },
-      body: body,
+      body,
     });
+  
     if (!res.ok) {
-      // Provide more context on token fetch errors
       const errorBody = await res.text();
-      throw new Error(`Failed to fetch token: ${res.status} ${res.statusText} - ${errorBody}`);
+      throw new Error(`Token fetch failed: ${res.status} ${res.statusText} - ${errorBody}`);
     }
+  
     const rawData = await res.json();
-
     const parsedToken = this.tokenSchema.safeParse(rawData);
+  
     if (!parsedToken.success) {
       throw new InvalidTokenError(parsedToken.error);
     }
+  
     const tokenType = parsedToken.data.token_type || 'Bearer';
-    
-    let validatedIdTokenClaims: JwtPayload | undefined = undefined;
-    if (parsedToken.data.id_token && this.provider === 'google') { // Process only for Google for now
-      const decoded = decodeJwt(parsedToken.data.id_token);
-      if (!decoded) {
-        throw new Error("Failed to decode ID Token.");
-      }
+    let validatedIdTokenClaims: JwtPayload | undefined;
+  
+    const idToken = parsedToken.data.id_token;
+  
+    if (idToken && this.provider === 'google') {
+      const decoded = decodeJwt(idToken);
+      if (!decoded) throw new Error("Invalid ID Token.");
+  
       const { header, payload, signature, encodedHeaderAndPayload } = decoded;
-
-      // 1. Fetch Public Key (CRITICAL: Implement getGooglePublicKey robustly)
       const publicKey = await getGooglePublicKey(header.kid);
+  
       if (!publicKey) {
-        console.error(`[ID Token Validation] Public key not found for KID: ${header.kid}. Cannot verify signature.`);
-        throw new Error("ID Token signature verification failed: Public key unavailable.");
+        console.error(`No public key for KID: ${header.kid}`);
+        throw new Error("Signature verification failed.");
       }
-
-      // 2. Verify Signature (CRITICAL)
-      const verifier = crypto.createVerify('RSA-SHA256'); // Google uses RS256 for ID tokens
+  
+      const verifier = crypto.createVerify('RSA-SHA256');
       verifier.update(encodedHeaderAndPayload);
       const isSignatureValid = verifier.verify(publicKey, signature, 'base64url');
-
+  
       if (!isSignatureValid) {
-        console.error("[ID Token Validation] Signature verification failed.");
-        throw new Error("ID Token signature invalid.");
+        console.error("Invalid signature.");
+        throw new Error("Signature invalid.");
       }
-      console.log("[ID Token Validation] Signature verified successfully.");
-
-      // 3. Validate Claims
-      const nowInSeconds = Math.floor(Date.now() / 1000);
-
-      // ISS (Issuer)
-      if (payload.iss !== 'https://accounts.google.com' && payload.iss !== 'accounts.google.com') {
-        throw new Error(`ID Token validation failed: Invalid issuer '${payload.iss}'.`);
+  
+      const now = Math.floor(Date.now() / 1000);
+  
+      if (!['https://accounts.google.com', 'accounts.google.com'].includes(payload.iss)) {
+        throw new Error(`Invalid issuer: ${payload.iss}`);
       }
-
-      // AUD (Audience)
+  
       if (payload.aud !== this.clientId) {
-        throw new Error(`ID Token validation failed: Invalid audience '${payload.aud}'. Expected '${this.clientId}'.`);
+        throw new Error(`Invalid audience: ${payload.aud}`);
       }
-
-      // EXP (Expiration Time)
-      if (payload.exp <= nowInSeconds) {
-        throw new Error(`ID Token validation failed: Token expired at ${new Date(payload.exp * 1000)}.`);
+  
+      if (payload.exp <= now) {
+        throw new Error(`Token expired: ${new Date(payload.exp * 1000)}`);
       }
-
-      // IAT (Issued At) - Optional: check if issued too far in the past (e.g., >1hr)
-      if (payload.iat > nowInSeconds + 300) { // Allow 5 mins clock skew for iat in future
-          throw new Error(`ID Token validation failed: Issued at time '${new Date(payload.iat * 1000)}' is in the future.`);
+  
+      if (payload.iat > now + 300) {
+        throw new Error(`'iat' in future: ${new Date(payload.iat * 1000)}`);
       }
-
-      // NONCE
+  
       if (!nonceFromCookie) {
-        throw new Error("ID Token validation failed: Nonce from cookie is missing for Google OIDC flow.");
+        throw new Error("Missing nonce.");
       }
+  
       if (payload.nonce !== nonceFromCookie) {
-        throw new Error("ID Token validation failed: Nonce mismatch. Potential replay attack.");
+        throw new Error("Nonce mismatch.");
       }
-      console.log("[ID Token Validation] All claims validated successfully.");
-
-      validatedIdTokenClaims = payload; // ID Token is validated
-
-    } else if (parsedToken.data.id_token && this.provider !== 'google') {
-      // For other potential OIDC providers, similar validation would be needed.
-      console.warn(`ID Token received for non-Google provider '${this.provider}', but validation is not implemented for it.`);
+  
+      validatedIdTokenClaims = payload;
+  
+    } else if (idToken && this.provider !== 'google') {
+      console.warn(`Received ID Token for '${this.provider}', but no validation implemented.`);
     }
-
+  
     return {
       accessToken: parsedToken.data.access_token,
-      tokenType: tokenType,
-      _idToken: parsedToken.data.id_token, // Renamed to satisfy linter, raw token still available
-      idTokenClaims: validatedIdTokenClaims, 
+      tokenType,
+      _idToken: idToken,
+      idTokenClaims: validatedIdTokenClaims,
     };
   }
+  
 
   /* Step 3: */
   async fetchUser(code: string, codeVerifier: string, nonceFromCookie?: string) {
-    // _idToken is available here if needed, but idTokenClaims is primary for user info
     const { accessToken, tokenType, /* _idToken, */ idTokenClaims } = await this.fetchToken(code, codeVerifier, nonceFromCookie);
 
-    // For OIDC providers like Google, if ID token claims are validated and sufficient,
-    // use them directly to construct the user object. This is preferred.
     if (idTokenClaims && this.provider === 'google') {
       console.log("[fetchUser] Using validated ID Token claims for Google user.");
-      // Map OpenID Connect standard claims to your internal user structure.
-      // Common OIDC claims: sub (subject/ID), email, email_verified, name, picture, given_name, family_name.
-      // Ensure your googleUserSchema and parser in google.ts can handle these or adapt.
-      
-      // Construct an object that matches the expected input for your userInfo.parser
-      // based on standard OIDC claims available in idTokenClaims.
       const userFromIdToken = {
-        id: idTokenClaims.sub, // Standard OIDC subject claim for user ID
+        id: idTokenClaims.sub,
         email: idTokenClaims.email,
         name: idTokenClaims.name || `${idTokenClaims.given_name || ''} ${idTokenClaims.family_name || ''}`.trim() || idTokenClaims.email,
         picture: idTokenClaims.picture,
-        // email_verified: idTokenClaims.email_verified, // Important: You should capture and use this!
-        // Potentially add other fields if your googleUserSchema expects them from idTokenClaims
       };
       
-      // Validate this constructed object against your schema before parsing
-      // This ensures the claims map correctly to what your parser expects.
       const parsedDataFromIdToken = this.userDataSchema.safeParse(userFromIdToken);
 
       if (parsedDataFromIdToken.success) {
-         // Potentially pass idTokenClaims.email_verified to connectUserToAccount
         return this.userInfo.parser(parsedDataFromIdToken.data);
       } else {
         console.warn("[fetchUser] Failed to parse user data constructed from ID Token claims for Google. Falling back to /userinfo.", parsedDataFromIdToken.error);
-        // Fallback to userinfo endpoint if parsing fails or claims are insufficient.
       }
     }
-
-    // Fallback or for non-OIDC providers / if ID token claims were not sufficient:
     console.log(`[fetchUser] Provider ${this.provider}: fetching from userinfo endpoint.`);
     const userResponse = await fetch(this.urls.user, {
       headers: {
@@ -383,7 +410,7 @@ export class OAuthClient<T> {
 
     const rawData = await userResponse.json() as z.infer<typeof this.userInfo.schema>;
 
-    if (this.provider === 'github') {  // this is cause, github made the email not a public info to access even we provide the scope
+    if (this.provider === 'github') {
       const emailResponse = await fetch('https://api.github.com/user/emails', {
         headers: {
           Authorization: `${tokenType} ${accessToken}`,

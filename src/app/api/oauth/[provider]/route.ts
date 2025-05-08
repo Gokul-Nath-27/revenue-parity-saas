@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { oAuthProviders } from "@/drizzle/schemas/enums";
-import { connectUserToAccount  } from '@/features/account/db';
+import { connectUserToAccount } from '@/features/account/db';
 import { createSession } from "@/lib/session";
 
 import { getOAuthClient } from "../_providers/base";
@@ -17,7 +17,7 @@ export async function GET(
   { params }: { params: Promise<{ provider: string }> }
 ) {
   const cookieStore = await cookies();
-  let storedNonce: string | undefined = undefined;
+  let storedNonce: string | undefined;
 
   try {
     const { provider: oauthProvider } = await params;
@@ -54,7 +54,6 @@ export async function GET(
       );
     }
 
-    // Validate the provider
     if (!oauthProvider || oauthProvider === "[provider]") {
       return NextResponse.json(
         { error: "Invalid OAuth provider" },

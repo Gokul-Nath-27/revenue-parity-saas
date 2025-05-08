@@ -226,7 +226,7 @@ export async function oAuthSignIn(provider: OAuthProvider) {
   const oAuthClient = getOAuthClient(provider);
   
   const authUrlOptions: { nonce?: string } = {};
-  let nonce: string | undefined = undefined;
+  let nonce: string | undefined;
 
   const cookieStore = await cookies();
 
@@ -237,7 +237,7 @@ export async function oAuthSignIn(provider: OAuthProvider) {
       httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 10, // 10 minutes, same as state and code_verifier
+      maxAge: 60 * 10,
       sameSite: "lax",
     });
   }
@@ -249,17 +249,17 @@ export async function oAuthSignIn(provider: OAuthProvider) {
     httpOnly: process.env.NODE_ENV === "production",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 10, // 10 minutes
-    sameSite: "lax", // Explicitly set SameSite for state cookie
+    maxAge: 60 * 10,
+    sameSite: "lax",
   });
 
   // Store code_verifier in an HTTPOnly cookie for PKCE
   cookieStore.set("oauth_code_verifier", codeVerifier, {
     httpOnly: process.env.NODE_ENV === "production",
     secure: process.env.NODE_ENV === "production",
-    path: "/", // Ensure it's available for the callback path
-    maxAge: 60 * 10, // Should have the same lifetime as the state
-    sameSite: "lax", // Lax is appropriate here
+    path: "/",
+    maxAge: 60 * 10,
+    sameSite: "lax",
   });
 
   redirect(authUrl);
