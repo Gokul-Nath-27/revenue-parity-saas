@@ -12,7 +12,9 @@
     "migrate": "drizzle-kit migrate",
     "push": "drizzle-kit push",
     "prepare": "husky",
-    "updateCountryGroups": "tsx --env-file=.env ./src/tasks/updateCountryGroups.ts",
+    "seed:country-groups": "tsx --env-file=.env ./src/tasks/country-groups.ts",
+    "seed:guest": "tsx --env-file=.env ./src/tasks/seed-guest.ts",
+    "seed:guest-down": "tsx --env-file=.env ./src/tasks/seed-down-guest.ts",
     "stripe": "stripe listen --forward-to localhost:3000/api/webhook/stripe"
   },
   "lint-staged": {
@@ -40,7 +42,6 @@
     "@uiw/react-color-colorful": "^2.5.3",
     "@upstash/redis": "^1.34.8",
     "@vercel/speed-insights": "^1.2.0",
-    "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.41.0",

@@ -74,7 +74,7 @@ Revenue Parity is built as a full-stack application leveraging Next.js 15.3, uti
 
 *   **Authentication**:
     *   **Custom Implementation**: Revenue Parity employs a robust custom authentication system.
-        *   **Credentials-based**: Secure sign-up and sign-in using email and password. Passwords are hashed using `bcryptjs` (via custom wrappers in `src/lib/auth.ts` for `generateSalt`, `gethashedPassword`, and `checkCredential`).
+        *   **Credentials-based**: Secure sign-up and sign-in using email and password. Passwords are hashed using `crypto` (via custom wrappers in `src/lib/auth.ts` for `generateSalt`, `gethashedPassword`, and `checkCredential`).
         *   **OAuth 2.0**: Supports sign-in via Google and GitHub. Implemented with PKCE flow for enhanced security. OAuth provider logic is managed in `src/app/api/oauth/_providers/` and callback handling in `src/app/api/oauth/[provider]/route.ts`.
         *   **Session Management**: Custom session management (`src/lib/session.ts`) utilizing Redis (Upstash) for storing session data and secure HTTPOnly cookies (`session-key`) for session IDs. Sessions have defined expiration and are updated on activity.
     *   **Justification**: A custom solution provides fine-grained control over authentication flows, session storage (leveraging Redis for scalability), and direct integration with the application's specific needs (e.g., user schema, permissions). This approach allows for tailored security measures like PKCE for OAuth and robust credential handling.
@@ -256,12 +256,77 @@ To facilitate a smooth onboarding experience for developers and enable local con
     ```bash
     pnpm run updateCountryGroups
     ```
-6.  Run the development server:
+6.  Set up OAuth providers (for social login):
+    * **GitHub OAuth:**
+      1. Go to GitHub Developer Settings > OAuth Apps > New OAuth App
+      2. Set Homepage URL to `http://localhost:3000`
+      3. Set Authorization callback URL to `http://localhost:3000/api/oauth/github`
+      4. Copy the Client ID and generate a Client Secret
+      5. Add to your `.env.local`:
+         ```
+         GITHUB_CLIENT_ID_DEV=your_github_client_id
+         GITHUB_CLIENT_SECRET_DEV=your_github_client_secret
+         ```
+
+    * **Google OAuth:**
+      1. Go to Google Cloud Console > Create Project > APIs & Services > OAuth consent screen
+      2. Set up the consent screen, then go to Credentials > Create OAuth client ID
+      3. Set Application type to "Web application"
+      4. Add `http://localhost:3000/api/oauth/google` as an authorized redirect URI
+      5. Copy the Client ID and Client Secret
+      6. Add to your `.env.local`:
+         ```
+         GOOGLE_CLIENT_ID=your_google_client_id
+         GOOGLE_CLIENT_SECRET=your_google_client_secret
+         ```
+
+7.  Set up email sending (optional, for password resets and notifications):
+    * For Gmail:
+      1. Enable 2-Factor Authentication on your Gmail account
+      2. Generate an App Password: Google Account > Security > App Passwords
+      3. Add to your `.env.local`:
+         ```
+         GMAIL_USER=your_gmail_address
+         GMAIL_APP_PASSWORD=your_app_password
+         ```
+
+8.  (Optional) Create a demo guest user for testing:
+    ```bash
+    pnpm run seed:guest
+    ```
+    This creates a guest account you can use to explore the application without registration.
+
+9.  Run the development server:
     ```bash
     pnpm run dev
     ```
     The application should now be running on `http://localhost:3000`.
-7.  (Optional) Inspect the local database using Drizzle Studio:
+7.  Set up Stripe for local development:
+    ```bash
+    # Install Stripe CLI from https://stripe.com/docs/stripe-cli
+    # Then authenticate with your Stripe account
+    stripe login
+    
+    # In a separate terminal, run the Stripe webhook listener
+    pnpm run stripe
+    ```
+    This will forward Stripe webhook events to your local server, enabling testing of payment flows and subscription events during development.
+
+    **Stripe Product & Price Configuration:**
+    1. In your Stripe Dashboard, create two Products:
+       - A "Standard" subscription product
+       - A "Premium" subscription product
+    2. For each product, create a recurring Price:
+       - Standard: $20/month
+       - Premium: $49/month
+    3. Copy the Price IDs from Stripe and add them to your `.env.local`:
+       ```
+       NEXT_PUBLIC_STRIPE_STANDARD_PLAN_STRIPE_PRICE_ID=price_xxx...
+       NEXT_PUBLIC_STRIPE_PREMIUM_PLAN_STRIPE_PRICE_ID=price_yyy...
+       ```
+    4. These price IDs are used in `src/data/subscriptionTiers.ts` to link the application's subscription tiers to the Stripe payment system.
+
+8.  (Optional) Inspect the local database using Drizzle Studio:
     ```bash
     pnpm run studio
     ```
