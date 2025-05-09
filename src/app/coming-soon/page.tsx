@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ComingSoon() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-black text-white px-4">
       <div className="text-center max-w-lg">
         <h1 className="text-4xl font-bold mb-4">🚧 Coming Soon</h1>
         <p className="text-lg mb-6">

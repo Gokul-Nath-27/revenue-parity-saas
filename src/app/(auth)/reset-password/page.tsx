@@ -2,7 +2,7 @@ import ResetPasswordForm from "@/features/account/componets/reset-password-form"
 
 export default function ResetPasswordPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex min-h-dvh w-full flex-col">
       <main className="flex flex-1 flex-col items-center justify-center p-6">
         <div className="w-full max-w-md space-y-6">
           <div className="space-y-2 text-center">
