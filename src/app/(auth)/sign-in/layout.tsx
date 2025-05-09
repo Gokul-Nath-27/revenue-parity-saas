@@ -14,7 +14,7 @@ export default function SignInLayout({
 
 const SampleUser = () => {
   return (
-    <div className="flex flex-col gap-2 items-center justify-center w-full max-w-sm absolute bottom-1/12">
+    <div className="flex flex-col gap-2 items-center justify-center w-full">
       <h3 className="text-md font-bold text-primary text-center">
         Sample User account
       </h3>
