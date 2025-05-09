@@ -30,7 +30,7 @@ export default function ParityGroupForm({
 
 
   return (
-    <form className="grid md:grid-cols-2 gap-6 relative" action={formAction}>
+    <form className="flex flex-col gap-6 md:grid md:grid-cols-2" action={formAction}>
       <input type="hidden" name="productId" value={productId} />
       {countryGroups.map((group) => (
         <ParityGroupCard

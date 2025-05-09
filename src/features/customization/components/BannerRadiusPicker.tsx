@@ -23,9 +23,9 @@ export function BannerRadiusPicker() {
           disabled={!canCustomizeBanner}
           className={cn(
             'px-3 py-1 border',
-            { 'border-primary bg-primary/10': banner_radius === radius, 'border-muted': banner_radius !== radius },
             style
           )}
+          variant={banner_radius === radius ? 'default' : 'outline'}
           onClick={() => setBanner({ banner_radius: radius })}
         >
           {label}

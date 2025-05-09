@@ -9,6 +9,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import BannerCustomization from '@/features/customization/components/BannerCustomization';
 import BannerCustomizationLoading from '@/features/customization/components/BannerCustomizationSkeleton';
 import ParityGroupFormWrapper from '@/features/discounts/components/ParityGroupFormWrapper';
+import ParityFormSkeleton from '@/features/discounts/components/parity-form-skeleton';
 import SiteConfigPanel from '@/features/products/components/EditProduct/SiteConfigPannel';
 import { ProductCustomizationSkeleton } from '@/features/products/components/product-customization-skeleton';
 
@@ -42,8 +43,8 @@ export default async function EditProductPage({ params, searchParams }: EditProd
 
   return (
     <Tabs defaultValue={tab} className='relative'>
-      <div className='flex items-center gap-2 st'>
-        <Link href="/dashboard">
+      <div className='flex items-center gap-2'>
+        <Link href="/dashboard" className='hidden md:block'>
           <Button variant="ghost">
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -71,7 +72,7 @@ export default async function EditProductPage({ params, searchParams }: EditProd
 
       <TabsContent value="discounts" className="space-y-4">
         <TabHeadingWrapper tabHeaders={tabHeadingConfig.discounts}>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<ParityFormSkeleton />}>
             <ParityGroupFormWrapper productId={productId} />
           </Suspense>
         </TabHeadingWrapper>
