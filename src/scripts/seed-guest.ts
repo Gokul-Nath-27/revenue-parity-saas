@@ -166,7 +166,7 @@ async function createProductsForUser(userId: string) {
     const name = productNames[i];
     const domainPrefix = name.toLowerCase().replace(/\s+/g, "-");
     const domainSuffix = domainSuffixes[i % domainSuffixes.length];
-    const domain = `${domainPrefix}.${domainSuffix}.com`;
+    const domain = `https://${domainPrefix}.${domainSuffix}.com`;
     
     const [product] = await db.insert(Product).values({
       user_id: userId,
@@ -226,7 +226,6 @@ async function createVisitData(productIds: string[], countries: Country[]) {
   
     console.log(`Creating ${visitCount} visits for product ${index + 1}`);
     
-    // Create visits for this product
     for (let i = 0; i < visitCount; i++) {
       const country = countries[randomInt(0, countries.length - 1)];
       

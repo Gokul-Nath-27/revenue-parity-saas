@@ -17,13 +17,13 @@ const Footer = () => {
               Helping digital creators maximize global revenue with smart pricing.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-muted-foreground hover:text-white transition">
+              <a href="#" className="text-muted-foreground hover:text-white transition" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-white transition">
+              <a href="#" className="text-muted-foreground hover:text-white transition" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-white transition">
+              <a href="#" className="text-muted-foreground hover:text-white transition" aria-label="Linkedin">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>

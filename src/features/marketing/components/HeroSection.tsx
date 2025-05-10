@@ -92,7 +92,7 @@ const HeroSection = () => {
                       <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-1">Advanced Creator Course</h3>
+                  <h2 className="text-lg font-semibold mb-1">Advanced Creator Course</h2>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xl font-bold">$49.99</span>
                     <span className="text-muted-foreground text-sm line-through">$79.99</span>

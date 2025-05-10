@@ -61,6 +61,7 @@ const BannerBuilderSection = () => {
                           key={i}
                           className={`w-8 h-8 cursor-pointer rounded-full bg-gradient-to-r ${color} ${bannerColor === color ? 'ring-2 ring-white' : 'ring-1 ring-white/20'}`}
                           onClick={() => setBannerColor(color)}
+                          aria-label={`Select ${color} color`}
                         />
                       ))}
                     </div>

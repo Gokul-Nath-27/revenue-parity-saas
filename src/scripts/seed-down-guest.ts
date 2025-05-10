@@ -18,7 +18,6 @@ async function removeGuestUserData() {
 
   console.log(`Found guest user with ID: ${guestUser.id}`);
   
-  // Since User → Product doesn't have cascade defined, we need to delete products manually
   console.log("Removing products...");
   await db.delete(Product)
     .where(eq(Product.user_id, guestUser.id));
