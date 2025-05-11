@@ -12,7 +12,7 @@ export default function SignInLayout({
 }
 
 
-const SampleUser = () => {
+export function SampleUser() {
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
       <h3 className="text-md font-bold text-primary text-center">
